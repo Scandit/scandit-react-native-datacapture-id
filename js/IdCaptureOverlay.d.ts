@@ -1,6 +1,6 @@
 import { DataCaptureOverlay, DataCaptureView } from 'scandit-react-native-datacapture-core/js/DataCaptureView';
 import { DefaultSerializeable } from 'scandit-react-native-datacapture-core/js/private/Serializeable';
-import { IdLayout, IdLayoutStyle, IdLayoutLineStyle } from './Enums';
+import { IdLayout, IdLayoutLineStyle, IdLayoutStyle } from './Enums';
 import { IdCapture } from './IdCapture';
 export declare class IdCaptureOverlay extends DefaultSerializeable implements DataCaptureOverlay {
     private type;

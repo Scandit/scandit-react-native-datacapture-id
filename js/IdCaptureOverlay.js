@@ -53,6 +53,7 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
         },
         set: function (style) {
             this._idLayoutStyle = style;
+            this.idCapture.didChange();
         },
         enumerable: false,
         configurable: true
@@ -63,6 +64,7 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
         },
         set: function (lineStyle) {
             this._idLayoutLineStyle = lineStyle;
+            this.idCapture.didChange();
         },
         enumerable: false,
         configurable: true
