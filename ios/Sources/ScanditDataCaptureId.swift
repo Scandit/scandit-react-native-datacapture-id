@@ -20,6 +20,10 @@ class ScanditDataCaptureId: RCTEventEmitter {
     var hasListeners = false
     internal let didCaptureIdLock =
         CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didCapture.rawValue)
+    internal let didLocalizeIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didLocalize.rawValue)
+    internal let didRejectIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
 
     @objc override class func requiresMainQueueSetup() -> Bool {
         return false
@@ -36,6 +40,8 @@ class ScanditDataCaptureId: RCTEventEmitter {
 
     internal func unlockLocks() {
         didCaptureIdLock.reset()
+        didLocalizeIdLock.reset()
+        didRejectIdLock.reset()
     }
 
     @objc(reset:reject:)

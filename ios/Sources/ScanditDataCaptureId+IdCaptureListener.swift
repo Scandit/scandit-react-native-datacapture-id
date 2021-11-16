@@ -18,9 +18,39 @@ extension ScanditDataCaptureId: IdCaptureListener {
         idCapture.isEnabled = value
     }
 
+    func idCapture(_ idCapture: IdCapture,
+                   didLocalizeIn session: IdCaptureSession,
+                   frameData: FrameData) {
+        let body = ["session": session.jsonString]
+        guard let value = didLocalizeIdLock.wait(afterDoing: {
+            return sendEvent(withName: .didLocalize, body: body)
+        }) else { return }
+        idCapture.isEnabled = value
+    }
+
+    func idCapture(_ idCapture: IdCapture,
+                   didRejectIn session: IdCaptureSession,
+                   frameData: FrameData) {
+        let body = ["session": session.jsonString]
+        guard let value = didRejectIdLock.wait(afterDoing: {
+            return sendEvent(withName: .didReject, body: body)
+        }) else { return }
+        idCapture.isEnabled = value
+    }
+
     @objc(finishDidCaptureCallback:)
     func finishDidCaptureCallback(enabled: Bool) {
         didCaptureIdLock.unlock(value: enabled)
+    }
+
+    @objc(finishDidLocalizeCallback:)
+    func finishDidLocalizeCallback(enabled: Bool) {
+        didLocalizeIdLock.unlock(value: enabled)
+    }
+
+    @objc(finishDidRejectCallback:)
+    func finishDidRejectCallback(enabled: Bool) {
+        didRejectIdLock.unlock(value: enabled)
     }
 
     func idCapture(_ idCapture: IdCapture,

@@ -10,6 +10,8 @@ var EventEmitter = new react_native_1.NativeEventEmitter(NativeModule);
 var IdCaptureListenerEventName;
 (function (IdCaptureListenerEventName) {
     IdCaptureListenerEventName["didCapture"] = "idCaptureListener-didCapture";
+    IdCaptureListenerEventName["didLocalize"] = "idCaptureListener-didLocalize";
+    IdCaptureListenerEventName["didReject"] = "idCaptureListener-didReject";
     IdCaptureListenerEventName["didFail"] = "idCaptureListener-didFail";
 })(IdCaptureListenerEventName || (IdCaptureListenerEventName = {}));
 var IdCaptureListenerProxy = /** @class */ (function () {
@@ -29,6 +31,18 @@ var IdCaptureListenerProxy = /** @class */ (function () {
             NativeModule.finishDidCaptureCallback(_this.mode.isEnabled);
         });
         this.nativeListeners.push(didCaptureListener);
+        var didLocalizeListener = EventEmitter.addListener(IdCaptureListenerEventName.didLocalize, function (body) {
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
+            _this.notifyListenersOfDidLocalize(session);
+            NativeModule.finishDidLocalizeCallback(_this.mode.isEnabled);
+        });
+        this.nativeListeners.push(didLocalizeListener);
+        var didRejectListener = EventEmitter.addListener(IdCaptureListenerEventName.didReject, function (body) {
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
+            _this.notifyListenersOfDidReject(session);
+            NativeModule.finishDidRejectCallback(_this.mode.isEnabled);
+        });
+        this.nativeListeners.push(didRejectListener);
         var didFailListener = EventEmitter.addListener(IdCaptureListenerEventName.didFail, function (body) {
             var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidFail(session);
@@ -46,6 +60,28 @@ var IdCaptureListenerProxy = /** @class */ (function () {
         mode.listeners.forEach(function (listener) {
             if (listener.didCaptureId) {
                 listener.didCaptureId(_this.mode, session);
+            }
+        });
+        mode.isInListenerCallback = false;
+    };
+    IdCaptureListenerProxy.prototype.notifyListenersOfDidLocalize = function (session) {
+        var _this = this;
+        var mode = this.mode;
+        mode.isInListenerCallback = true;
+        mode.listeners.forEach(function (listener) {
+            if (listener.didLocalizeId) {
+                listener.didLocalizeId(_this.mode, session);
+            }
+        });
+        mode.isInListenerCallback = false;
+    };
+    IdCaptureListenerProxy.prototype.notifyListenersOfDidReject = function (session) {
+        var _this = this;
+        var mode = this.mode;
+        mode.isInListenerCallback = true;
+        mode.listeners.forEach(function (listener) {
+            if (listener.didRejectId) {
+                listener.didRejectId(_this.mode, session);
             }
         });
         mode.isInListenerCallback = false;

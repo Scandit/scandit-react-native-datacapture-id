@@ -6,5 +6,7 @@ export declare class IdCaptureListenerProxy {
     subscribeListener(): void;
     unsubscribeListener(): void;
     private notifyListenersOfDidCapture;
+    private notifyListenersOfDidLocalize;
+    private notifyListenersOfDidReject;
     private notifyListenersOfDidFail;
 }

@@ -20,6 +20,20 @@ var IdCaptureSession = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(IdCaptureSession.prototype, "localizedOnlyId", {
+        get: function () {
+            return this._localizedOnlyId;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureSession.prototype, "newlyRejectedId", {
+        get: function () {
+            return this._newlyRejectedId;
+        },
+        enumerable: false,
+        configurable: true
+    });
     IdCaptureSession.fromJSON = function (json) {
         var session = new IdCaptureSession();
         if (json.newlyCapturedId) {

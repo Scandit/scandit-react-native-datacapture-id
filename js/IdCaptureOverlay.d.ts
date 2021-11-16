@@ -1,5 +1,6 @@
 import { DataCaptureOverlay, DataCaptureView } from 'scandit-react-native-datacapture-core/js/DataCaptureView';
 import { DefaultSerializeable } from 'scandit-react-native-datacapture-core/js/private/Serializeable';
+import { Brush } from 'scandit-react-native-datacapture-core/js/Common';
 import { IdLayout, IdLayoutLineStyle, IdLayoutStyle } from './Enums';
 import { IdCapture } from './IdCapture';
 export declare class IdCaptureOverlay extends DefaultSerializeable implements DataCaptureOverlay {
@@ -9,6 +10,12 @@ export declare class IdCaptureOverlay extends DefaultSerializeable implements Da
     private _idLayout;
     private _idLayoutStyle;
     private _idLayoutLineStyle;
+    private _defaultCapturedBrush;
+    private _defaultLocalizedBrush;
+    private _defaultRejectedBrush;
+    private _capturedBrush;
+    private _localizedBrush;
+    private _rejectedBrush;
     static withIdCapture(idCapture: IdCapture): IdCaptureOverlay;
     static withIdCaptureForView(idCapture: IdCapture, view: DataCaptureView | null): IdCaptureOverlay;
     private constructor();
@@ -17,4 +24,13 @@ export declare class IdCaptureOverlay extends DefaultSerializeable implements Da
     set idLayoutStyle(style: IdLayoutStyle);
     get idLayoutLineStyle(): IdLayoutLineStyle;
     set idLayoutLineStyle(lineStyle: IdLayoutLineStyle);
+    get capturedBrush(): Brush;
+    set capturedBrush(brush: Brush);
+    get localizedBrush(): Brush;
+    set localizedBrush(brush: Brush);
+    get rejectedBrush(): Brush;
+    set rejectedBrush(brush: Brush);
+    get defaultCapturedBrush(): Brush;
+    get defaultLocalizedBrush(): Brush;
+    get defaultRejectedBrush(): Brush;
 }

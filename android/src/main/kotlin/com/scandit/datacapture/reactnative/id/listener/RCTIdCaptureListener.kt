@@ -20,12 +20,32 @@ class RCTIdCaptureListener(
 
     private val onIdCaptured =
         EventWithResult<Boolean>(ID_CAPTURE_DID_CAPTURE, eventEmitter)
+    private val onIdLocalized =
+        EventWithResult<Boolean>(ID_CAPTURE_DID_LOCALIZE, eventEmitter)
+    private val onIdRejected =
+        EventWithResult<Boolean>(ID_CAPTURE_DID_REJECT, eventEmitter)
 
     override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdCaptured.emitForResult(params, mode.isEnabled)
+        mode.isEnabled = enabled
+    }
+
+    override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        val params = writableMap {
+            putString(FIELD_SESSION, session.toJson())
+        }
+        val enabled = onIdLocalized.emitForResult(params, mode.isEnabled)
+        mode.isEnabled = enabled
+    }
+
+    override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        val params = writableMap {
+            putString(FIELD_SESSION, session.toJson())
+        }
+        val enabled = onIdRejected.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
     }
 
@@ -45,8 +65,18 @@ class RCTIdCaptureListener(
         onIdCaptured.onResult(enabled)
     }
 
+    fun finishDidLocalizeCallback(enabled: Boolean) {
+        onIdLocalized.onResult(enabled)
+    }
+
+    fun finishDidRejectCallback(enabled: Boolean) {
+        onIdRejected.onResult(enabled)
+    }
+
     companion object {
         const val ID_CAPTURE_DID_CAPTURE = "idCaptureListener-didCapture"
+        const val ID_CAPTURE_DID_LOCALIZE = "idCaptureListener-didLocalize"
+        const val ID_CAPTURE_DID_REJECT = "idCaptureListener-didReject"
         const val ID_CAPTURE_DID_FAIL = "idCaptureListener-didFail"
         const val FIELD_SESSION = "session"
     }

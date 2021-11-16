@@ -16,10 +16,12 @@ import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializer
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializerListener
+import com.scandit.datacapture.id.ui.overlay.IdCaptureOverlay
 import com.scandit.datacapture.reactnative.core.data.defaults.SerializableCameraSettingsDefaults
 import com.scandit.datacapture.reactnative.core.deserializers.Deserializers
 import com.scandit.datacapture.reactnative.core.deserializers.TreeLifecycleObserver
 import com.scandit.datacapture.reactnative.core.utils.LazyEventEmitter
+import com.scandit.datacapture.reactnative.id.data.defaults.IdCaptureOverlayDefaults
 import com.scandit.datacapture.reactnative.id.data.defaults.SerializableIdCaptureDefaults
 import com.scandit.datacapture.reactnative.id.data.defaults.SerializableIdDefaults
 import com.scandit.datacapture.reactnative.id.listener.RCTIdCaptureListener
@@ -78,6 +80,16 @@ class ScanditDataCaptureIdModule(
         idCaptureListener.finishDidCaptureCallback(enabled)
     }
 
+    @ReactMethod
+    fun finishDidLocalizeCallback(enabled: Boolean) {
+        idCaptureListener.finishDidLocalizeCallback(enabled)
+    }
+
+    @ReactMethod
+    fun finishDidRejectCallback(enabled: Boolean) {
+        idCaptureListener.finishDidRejectCallback(enabled)
+    }
+
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to DEFAULTS.toWritableMap()
     )
@@ -93,8 +105,13 @@ class ScanditDataCaptureIdModule(
         private val DEFAULTS: SerializableIdDefaults by lazy {
             SerializableIdDefaults(
                 SerializableIdCaptureDefaults(
-                    SerializableCameraSettingsDefaults(
+                    recommendedCameraSettings = SerializableCameraSettingsDefaults(
                         IdCapture.createRecommendedCameraSettings()
+                    ),
+                    idCaptureOverlayDefaults = IdCaptureOverlayDefaults(
+                        IdCaptureOverlay.defaultCapturedBrush(),
+                        IdCaptureOverlay.defaultLocalizedBrush(),
+                        IdCaptureOverlay.defaultRejectedBrush(),
                     )
                 )
             )

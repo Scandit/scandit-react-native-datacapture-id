@@ -8,6 +8,8 @@ import Foundation
 
 enum ScanditDataCaptureIdEvent: String, CaseIterable {
     case didCapture = "idCaptureListener-didCapture"
+    case didLocalize = "idCaptureListener-didLocalize"
+    case didReject = "idCaptureListener-didReject"
     case didFail = "idCaptureListener-didFail"
 }
 

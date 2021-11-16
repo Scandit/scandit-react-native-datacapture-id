@@ -21,6 +21,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdCaptureOverlay = void 0;
 var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
+var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
+var Defaults_1 = require("./private/Defaults");
 var Enums_1 = require("./Enums");
 var IdCaptureOverlay = /** @class */ (function (_super) {
     __extends(IdCaptureOverlay, _super);
@@ -30,6 +32,12 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
         _this._idLayout = Enums_1.IdLayout.Auto;
         _this._idLayoutStyle = Enums_1.IdLayoutStyle.Rounded;
         _this._idLayoutLineStyle = Enums_1.IdLayoutLineStyle.Light;
+        _this._defaultCapturedBrush = new Common_1.Brush(Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.fillColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeWidth);
+        _this._defaultLocalizedBrush = new Common_1.Brush(Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.fillColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeWidth);
+        _this._defaultRejectedBrush = new Common_1.Brush(Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.fillColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeColor, Defaults_1.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeWidth);
+        _this._capturedBrush = _this._defaultCapturedBrush;
+        _this._localizedBrush = _this._defaultLocalizedBrush;
+        _this._rejectedBrush = _this._defaultRejectedBrush;
         return _this;
     }
     IdCaptureOverlay.withIdCapture = function (idCapture) {
@@ -69,6 +77,60 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(IdCaptureOverlay.prototype, "capturedBrush", {
+        get: function () {
+            return this._capturedBrush;
+        },
+        set: function (brush) {
+            this._capturedBrush = brush;
+            this.idCapture.didChange();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureOverlay.prototype, "localizedBrush", {
+        get: function () {
+            return this._localizedBrush;
+        },
+        set: function (brush) {
+            this._localizedBrush = brush;
+            this.idCapture.didChange();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureOverlay.prototype, "rejectedBrush", {
+        get: function () {
+            return this._rejectedBrush;
+        },
+        set: function (brush) {
+            this._rejectedBrush = brush;
+            this.idCapture.didChange();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureOverlay.prototype, "defaultCapturedBrush", {
+        get: function () {
+            return this._defaultCapturedBrush;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureOverlay.prototype, "defaultLocalizedBrush", {
+        get: function () {
+            return this._defaultLocalizedBrush;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(IdCaptureOverlay.prototype, "defaultRejectedBrush", {
+        get: function () {
+            return this._defaultRejectedBrush;
+        },
+        enumerable: false,
+        configurable: true
+    });
     __decorate([
         Serializeable_1.ignoreFromSerialization
     ], IdCaptureOverlay.prototype, "idCapture", void 0);
@@ -84,6 +146,15 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
     __decorate([
         Serializeable_1.nameForSerialization('idLayoutLineStyle')
     ], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
+    __decorate([
+        Serializeable_1.nameForSerialization('capturedBrush')
+    ], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
+    __decorate([
+        Serializeable_1.nameForSerialization('localizedBrush')
+    ], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
+    __decorate([
+        Serializeable_1.nameForSerialization('rejectedBrush')
+    ], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
     return IdCaptureOverlay;
 }(Serializeable_1.DefaultSerializeable));
 exports.IdCaptureOverlay = IdCaptureOverlay;

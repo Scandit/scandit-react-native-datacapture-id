@@ -18,10 +18,21 @@ extension ScanditDataCaptureId {
     }
 
     var idCaptureDefaults: [String: Any] {
-        return ["RecommendedCameraSettings": recommendedCameraSettings]
+        return [
+            "RecommendedCameraSettings": recommendedCameraSettings,
+            "IdCaptureOverlayDefaults": idCaptureOverlayDefaults
+        ]
     }
 
     var recommendedCameraSettings: [AnyHashable: Any] {
         return IdCapture.recommendedCameraSettings.rntsdc_dictionary
+    }
+
+    var idCaptureOverlayDefaults: [AnyHashable: Any] {
+        return [
+            "defaultCapturedBrush": IdCaptureOverlay.defaultCapturedBrush.rntsdc_dictionary,
+            "defaultLocalizedBrush": IdCaptureOverlay.defaultLocalizedBrush.rntsdc_dictionary,
+            "defaultRejectedBrush": IdCaptureOverlay.defaultRejectedBrush.rntsdc_dictionary
+        ]
     }
 }
