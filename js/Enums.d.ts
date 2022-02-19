@@ -55,7 +55,8 @@ export declare enum DocumentType {
     ProofOfAgeCard = "proofOfAgeCard",
     RefugeeId = "refugeeId",
     TribalId = "tribalId",
-    VeteranId = "veteranId"
+    VeteranId = "veteranId",
+    CitizenshipCertificate = "citizenshipCertificate"
 }
 export declare enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",

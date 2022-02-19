@@ -11,6 +11,7 @@ import com.scandit.datacapture.core.data.FrameData
 import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.IdCaptureSession
+import com.scandit.datacapture.reactnative.core.ScanditDataCaptureCoreModule
 import com.scandit.datacapture.reactnative.core.utils.EventWithResult
 import com.scandit.datacapture.reactnative.core.utils.writableMap
 
@@ -26,27 +27,33 @@ class RCTIdCaptureListener(
         EventWithResult<Boolean>(ID_CAPTURE_DID_REJECT, eventEmitter)
 
     override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        ScanditDataCaptureCoreModule.lastFrame = data
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdCaptured.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
+        ScanditDataCaptureCoreModule.lastFrame = null
     }
 
     override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        ScanditDataCaptureCoreModule.lastFrame = data
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdLocalized.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
+        ScanditDataCaptureCoreModule.lastFrame = null
     }
 
     override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        ScanditDataCaptureCoreModule.lastFrame = data
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdRejected.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
+        ScanditDataCaptureCoreModule.lastFrame = null
     }
 
     override fun onErrorEncountered(
@@ -55,10 +62,12 @@ class RCTIdCaptureListener(
         session: IdCaptureSession,
         data: FrameData
     ) {
+        ScanditDataCaptureCoreModule.lastFrame = data
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         eventEmitter.emit(ID_CAPTURE_DID_FAIL, params)
+        ScanditDataCaptureCoreModule.lastFrame = null
     }
 
     fun finishDidCaptureCallback(enabled: Boolean) {

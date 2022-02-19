@@ -1,4 +1,5 @@
 import { CapturedResultType, DocumentType, IdImageType, SupportedSides } from './Enums';
+import { Quadrilateral } from 'scandit-react-native-datacapture-core/js/Common';
 export declare class DateResult {
     private json;
     get day(): number;
@@ -186,5 +187,15 @@ export declare class SouthAfricaDlBarcodeResult {
     get driverRestrictionCodes(): number[];
     get professionalDrivingPermit(): ProfessionalDrivingPermit | null;
     get vehicleRestrictions(): VehicleRestriction[];
+    private static fromJSON;
+}
+export declare class LocalizedOnlyId {
+    private _location;
+    get location(): Quadrilateral;
+    private static fromJSON;
+}
+export declare class RejectedId {
+    private _location;
+    get location(): Quadrilateral;
     private static fromJSON;
 }

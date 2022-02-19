@@ -39,6 +39,12 @@ var IdCaptureSession = /** @class */ (function () {
         if (json.newlyCapturedId) {
             session._newlyCapturedId = CapturedId_1.CapturedId.fromJSON(json.newlyCapturedId);
         }
+        if (json.localizedOnlyId) {
+            session._localizedOnlyId = CapturedId_1.LocalizedOnlyId.fromJSON(json.localizedOnlyId);
+        }
+        if (json.newlyRejectedId) {
+            session._newlyRejectedId = CapturedId_1.LocalizedOnlyId.fromJSON(json.newlyRejectedId);
+        }
         session._frameSequenceId = json.frameSequenceId;
         session._error = json.error ? IdCapture_Related_1.IdCaptureError.fromJSON(json.error) : null;
         return session;

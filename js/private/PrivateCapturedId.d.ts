@@ -1,5 +1,5 @@
-import { AAMVABarcodeResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, DateResult, MRZResult, ProfessionalDrivingPermit, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
-import { AAMVABarcodeResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, DateResultJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { AAMVABarcodeResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
+import { AAMVABarcodeResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
 export interface PrivateDateResult {
     fromJSON(json: DateResultJSON | null): DateResult;
 }
@@ -35,4 +35,10 @@ export interface PrivateSouthAfricaDlBarcodeResult {
 }
 export interface PrivateCapturedId {
     fromJSON(json: CapturedIdJSON): CapturedId;
+}
+export interface PrivateLocalizedId {
+    fromJSON(json: LocalizedIdJSON): LocalizedOnlyId;
+}
+export interface PrivateRejectedId {
+    fromJSON(json: RejectedIdJSON): RejectedId;
 }

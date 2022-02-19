@@ -6,11 +6,15 @@
 
 import Foundation
 import ScanditIdCapture
+import ScanditDataCaptureCore
 
 extension ScanditDataCaptureId: IdCaptureListener {
     func idCapture(_ idCapture: IdCapture,
                    didCaptureIn session: IdCaptureSession,
                    frameData: FrameData) {
+        ScanditDataCaptureCore.lastFrame = frameData
+        defer { ScanditDataCaptureCore.lastFrame = nil }
+        
         let body = ["session": session.jsonString]
         guard let value = didCaptureIdLock.wait(afterDoing: {
             return sendEvent(withName: .didCapture, body: body)
@@ -21,6 +25,9 @@ extension ScanditDataCaptureId: IdCaptureListener {
     func idCapture(_ idCapture: IdCapture,
                    didLocalizeIn session: IdCaptureSession,
                    frameData: FrameData) {
+        ScanditDataCaptureCore.lastFrame = frameData
+        defer { ScanditDataCaptureCore.lastFrame = nil }
+        
         let body = ["session": session.jsonString]
         guard let value = didLocalizeIdLock.wait(afterDoing: {
             return sendEvent(withName: .didLocalize, body: body)
@@ -31,6 +38,9 @@ extension ScanditDataCaptureId: IdCaptureListener {
     func idCapture(_ idCapture: IdCapture,
                    didRejectIn session: IdCaptureSession,
                    frameData: FrameData) {
+        ScanditDataCaptureCore.lastFrame = frameData
+        defer { ScanditDataCaptureCore.lastFrame = nil }
+        
         let body = ["session": session.jsonString]
         guard let value = didRejectIdLock.wait(afterDoing: {
             return sendEvent(withName: .didReject, body: body)
@@ -56,6 +66,9 @@ extension ScanditDataCaptureId: IdCaptureListener {
     func idCapture(_ idCapture: IdCapture,
                    didfail session: IdCaptureSession,
                    frameData: FrameData) {
+        ScanditDataCaptureCore.lastFrame = frameData
+        defer { ScanditDataCaptureCore.lastFrame = nil }
+
         let body = ["session": session.jsonString]
         sendEvent(withName: .didFail, body: body)
     }

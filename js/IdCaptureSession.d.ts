@@ -1,5 +1,4 @@
-import { CapturedId } from './CapturedId';
-import { LocalizedOnlyId, RejectedId } from './IdCapture+Related';
+import { CapturedId, LocalizedOnlyId, RejectedId } from './CapturedId';
 export declare class IdCaptureSession {
     private _newlyCapturedId;
     get newlyCapturedId(): CapturedId | null;

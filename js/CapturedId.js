@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
 var DateResult = /** @class */ (function () {
     function DateResult() {
     }
@@ -862,4 +863,40 @@ var SouthAfricaDlBarcodeResult = /** @class */ (function () {
     return SouthAfricaDlBarcodeResult;
 }());
 exports.SouthAfricaDlBarcodeResult = SouthAfricaDlBarcodeResult;
+var LocalizedOnlyId = /** @class */ (function () {
+    function LocalizedOnlyId() {
+    }
+    Object.defineProperty(LocalizedOnlyId.prototype, "location", {
+        get: function () {
+            return this._location;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    LocalizedOnlyId.fromJSON = function (json) {
+        var result = new LocalizedOnlyId();
+        result._location = Common_1.Quadrilateral.fromJSON(json.location);
+        return result;
+    };
+    return LocalizedOnlyId;
+}());
+exports.LocalizedOnlyId = LocalizedOnlyId;
+var RejectedId = /** @class */ (function () {
+    function RejectedId() {
+    }
+    Object.defineProperty(RejectedId.prototype, "location", {
+        get: function () {
+            return this._location;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    RejectedId.fromJSON = function (json) {
+        var result = new RejectedId();
+        result._location = Common_1.Quadrilateral.fromJSON(json.location);
+        return result;
+    };
+    return RejectedId;
+}());
+exports.RejectedId = RejectedId;
 //# sourceMappingURL=CapturedId.js.map

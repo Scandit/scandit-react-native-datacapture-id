@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RejectedId = exports.LocalizedOnlyId = exports.IdCaptureError = void 0;
+exports.IdCaptureError = void 0;
 var IdCaptureError = /** @class */ (function () {
     function IdCaptureError() {
     }
@@ -27,30 +27,4 @@ var IdCaptureError = /** @class */ (function () {
     return IdCaptureError;
 }());
 exports.IdCaptureError = IdCaptureError;
-var LocalizedOnlyId = /** @class */ (function () {
-    function LocalizedOnlyId() {
-    }
-    Object.defineProperty(LocalizedOnlyId.prototype, "location", {
-        get: function () {
-            return this._location;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return LocalizedOnlyId;
-}());
-exports.LocalizedOnlyId = LocalizedOnlyId;
-var RejectedId = /** @class */ (function () {
-    function RejectedId() {
-    }
-    Object.defineProperty(RejectedId.prototype, "location", {
-        get: function () {
-            return this._location;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return RejectedId;
-}());
-exports.RejectedId = RejectedId;
 //# sourceMappingURL=IdCapture+Related.js.map
