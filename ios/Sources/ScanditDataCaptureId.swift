@@ -49,4 +49,10 @@ class ScanditDataCaptureId: RCTEventEmitter {
         captureMode?.reset()
         resolve(nil)
     }
+
+    @objc(verifyCapturedId:capturedIdJSON:reject:)
+    func verifyCapturedId(capturedIdJSON: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        let capturedId = CapturedId(jsonString: capturedIdJSON)
+        resolve(AAMVAVizBarcodeComparisonVerifier.init().verify(capturedId).jsonString)
+    }
 }

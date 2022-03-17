@@ -1,5 +1,6 @@
-import { AAMVABarcodeResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
-import { AAMVABarcodeResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { AAMVABarcodeResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
+import { AAMVABarcodeResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { ComparisonCheckResult } from 'Enums';
 export interface PrivateDateResult {
     fromJSON(json: DateResultJSON | null): DateResult;
 }
@@ -41,4 +42,29 @@ export interface PrivateLocalizedId {
 }
 export interface PrivateRejectedId {
     fromJSON(json: RejectedIdJSON): RejectedId;
+}
+export interface PrivateStringComparisonCheck {
+    fromJSON(json: StringComparisonCheckJSON): StringComparisonCheck;
+}
+export interface PrivateDateComparisonCheck {
+    fromJSON(json: DateComparisonCheckJSON): DateComparisonCheck;
+}
+export interface PrivateAamvaVizBarcodeComparisonResult {
+    fromJSON(json: AamvaVizBarcodeComparisonResultJSON): AamvaVizBarcodeComparisonResult;
+}
+export declare class StringComparisonCheck implements ComparisonCheck<string> {
+    private json;
+    get vizValue(): string | null;
+    get aamvaBarcodeValue(): string | null;
+    get checkResult(): ComparisonCheckResult;
+    get resultDescription(): string;
+    private static fromJSON;
+}
+export declare class DateComparisonCheck implements ComparisonCheck<DateResult> {
+    private json;
+    get vizValue(): DateResult | null;
+    get aamvaBarcodeValue(): DateResult | null;
+    get checkResult(): ComparisonCheckResult;
+    get resultDescription(): string;
+    private static fromJSON;
 }

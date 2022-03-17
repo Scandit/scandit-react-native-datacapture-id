@@ -14,7 +14,7 @@ extension ScanditDataCaptureId: IdCaptureListener {
                    frameData: FrameData) {
         ScanditDataCaptureCore.lastFrame = frameData
         defer { ScanditDataCaptureCore.lastFrame = nil }
-        
+
         let body = ["session": session.jsonString]
         guard let value = didCaptureIdLock.wait(afterDoing: {
             return sendEvent(withName: .didCapture, body: body)
@@ -27,7 +27,7 @@ extension ScanditDataCaptureId: IdCaptureListener {
                    frameData: FrameData) {
         ScanditDataCaptureCore.lastFrame = frameData
         defer { ScanditDataCaptureCore.lastFrame = nil }
-        
+
         let body = ["session": session.jsonString]
         guard let value = didLocalizeIdLock.wait(afterDoing: {
             return sendEvent(withName: .didLocalize, body: body)
@@ -40,7 +40,7 @@ extension ScanditDataCaptureId: IdCaptureListener {
                    frameData: FrameData) {
         ScanditDataCaptureCore.lastFrame = frameData
         defer { ScanditDataCaptureCore.lastFrame = nil }
-        
+
         let body = ["session": session.jsonString]
         guard let value = didRejectIdLock.wait(afterDoing: {
             return sendEvent(withName: .didReject, body: body)

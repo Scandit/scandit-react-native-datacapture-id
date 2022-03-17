@@ -35,6 +35,9 @@ export declare enum DocumentType {
     SocialSecurityCard = "socialSecurityCard",
     HealthInsuranceCard = "healthInsuranceCard",
     Passport = "passport",
+    DiplomaticPassport = "diplomaticPassport",
+    ServicePassport = "servicePassport",
+    TemporaryPassport = "temporaryPassport",
     Visa = "visa",
     SPass = "sPass",
     AddressCard = "addressCard",
@@ -98,4 +101,9 @@ export declare enum IdLayoutStyle {
 export declare enum IdLayoutLineStyle {
     Light = "light",
     Bold = "bold"
+}
+export declare enum ComparisonCheckResult {
+    Passed = "Passed",
+    Skipped = "Skipped",
+    Failed = "Failed"
 }

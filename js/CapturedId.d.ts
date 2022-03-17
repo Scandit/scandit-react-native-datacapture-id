@@ -1,5 +1,6 @@
 import { CapturedResultType, DocumentType, IdImageType, SupportedSides } from './Enums';
 import { Quadrilateral } from 'scandit-react-native-datacapture-core/js/Common';
+import { ComparisonCheckResult } from './Enums';
 export declare class DateResult {
     private json;
     get day(): number;
@@ -30,6 +31,7 @@ export declare class CapturedId {
     get nationality(): string | null;
     get address(): string | null;
     get capturedResultType(): CapturedResultType;
+    get capturedResultTypes(): CapturedResultType[];
     get documentType(): DocumentType;
     get issuingCountryIso(): string | null;
     get issuingCountry(): string | null;
@@ -147,6 +149,7 @@ export declare class VIZResult {
     get employer(): string | null;
     get issuingAuthority(): string | null;
     get issuingJurisdiction(): string | null;
+    get issuingJurisdictionIso(): string | null;
     get maritalStatus(): string | null;
     get personalIdNumber(): string | null;
     get placeOfBirth(): string | null;
@@ -198,4 +201,28 @@ export declare class RejectedId {
     private _location;
     get location(): Quadrilateral;
     private static fromJSON;
+}
+export interface ComparisonCheck<T> {
+    readonly aamvaBarcodeValue: T | null;
+    readonly checkResult: ComparisonCheckResult;
+    readonly resultDescription: string;
+    readonly vizValue: T | null;
+}
+export declare class AamvaVizBarcodeComparisonResult {
+    private json;
+    get checksPassed(): boolean;
+    get resultDescription(): string;
+    get issuingCountryIsoMatch(): ComparisonCheck<string>;
+    get issuingJurisdictionIsoMatch(): ComparisonCheck<string>;
+    get documentNumbersMatch(): ComparisonCheck<string>;
+    get fullNamesMatch(): ComparisonCheck<string>;
+    get datesOfBirthMatch(): ComparisonCheck<DateResult>;
+    get datesOfExpiryMatch(): ComparisonCheck<DateResult>;
+    get datesOfIssueMatch(): ComparisonCheck<DateResult>;
+    private static fromJSON;
+}
+export declare class AamvaVizBarcodeComparisonVerifier {
+    private proxy;
+    static create(): AamvaVizBarcodeComparisonVerifier;
+    verify(capturedId: CapturedId): Promise<AamvaVizBarcodeComparisonResult>;
 }

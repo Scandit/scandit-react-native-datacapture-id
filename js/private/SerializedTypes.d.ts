@@ -1,4 +1,5 @@
 import { QuadrilateralJSON } from 'scandit-react-native-datacapture-core/js/private/PrivateCommon';
+import { ComparisonCheckResult } from '../Enums';
 export interface DateResultJSON {
     day: number;
     month: number;
@@ -20,6 +21,7 @@ export interface ImageInfoJSON {
 }
 export interface CapturedIdJSON {
     capturedResultType: string;
+    capturedResultTypes: string[];
     firstName: string | null;
     lastName: string | null;
     fullName: string;
@@ -150,7 +152,8 @@ export interface VIZResultJSON {
     documentAdditionalNumber: string | null;
     employer: string | null;
     issuingAuthority: string | null;
-    issuingJurisdiction: string | null;
+    issuingJurisdiction: string;
+    issuingJurisdictionIso: string;
     maritalStatus: string | null;
     personalIdNumber: string | null;
     placeOfBirth: string | null;
@@ -177,4 +180,27 @@ export interface IdCaptureSessionJSON {
     newlyRejectedId: RejectedIdJSON;
     frameSequenceId: number;
     error: IdCaptureErrorJSON;
+}
+export interface ComparisonCheckJSON {
+    checkResult: ComparisonCheckResult;
+    resultDescription: string;
+}
+export interface StringComparisonCheckJSON extends ComparisonCheckJSON {
+    vizValue: string | null;
+    aamvaBarcodeValue: string | null;
+}
+export interface DateComparisonCheckJSON extends ComparisonCheckJSON {
+    vizValue: DateResultJSON | null;
+    aamvaBarcodeValue: DateResultJSON | null;
+}
+export interface AamvaVizBarcodeComparisonResultJSON {
+    checksPassed: boolean;
+    resultDescription: string;
+    issuingCountryIsoMatch: StringComparisonCheckJSON;
+    issuingJurisdictionIsoMatch: StringComparisonCheckJSON;
+    documentNumbersMatch: StringComparisonCheckJSON;
+    fullNamesMatch: StringComparisonCheckJSON;
+    datesOfBirth: DateComparisonCheckJSON;
+    datesOfExpiry: DateComparisonCheckJSON;
+    datesOfIssue: DateComparisonCheckJSON;
 }

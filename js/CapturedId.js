@@ -1,7 +1,16 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+var PrivateCapturedId_1 = require("./private/PrivateCapturedId");
 var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
+var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
+var IdCaptureProxy_1 = require("./native/IdCaptureProxy");
 var DateResult = /** @class */ (function () {
     function DateResult() {
     }
@@ -126,6 +135,13 @@ var CapturedId = /** @class */ (function () {
     });
     Object.defineProperty(CapturedId.prototype, "capturedResultType", {
         get: function () { return this.json.capturedResultType; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(CapturedId.prototype, "capturedResultTypes", {
+        get: function () {
+            return this.json.capturedResultTypes;
+        },
         enumerable: false,
         configurable: true
     });
@@ -687,6 +703,11 @@ var VIZResult = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(VIZResult.prototype, "issuingJurisdictionIso", {
+        get: function () { return this.json.issuingJurisdictionIso; },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(VIZResult.prototype, "maritalStatus", {
         get: function () { return this.json.maritalStatus; },
         enumerable: false,
@@ -899,4 +920,110 @@ var RejectedId = /** @class */ (function () {
     return RejectedId;
 }());
 exports.RejectedId = RejectedId;
+var AamvaVizBarcodeComparisonResult = /** @class */ (function () {
+    function AamvaVizBarcodeComparisonResult() {
+    }
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "checksPassed", {
+        get: function () { return this.json.checksPassed; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "resultDescription", {
+        get: function () { return this.json.resultDescription; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "issuingCountryIsoMatch", {
+        get: function () {
+            return PrivateCapturedId_1.StringComparisonCheck
+                .fromJSON(this.json.issuingCountryIsoMatch);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "issuingJurisdictionIsoMatch", {
+        get: function () {
+            return PrivateCapturedId_1.StringComparisonCheck
+                .fromJSON(this.json.issuingJurisdictionIsoMatch);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "documentNumbersMatch", {
+        get: function () {
+            return PrivateCapturedId_1.StringComparisonCheck
+                .fromJSON(this.json.documentNumbersMatch);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "fullNamesMatch", {
+        get: function () {
+            return PrivateCapturedId_1.StringComparisonCheck
+                .fromJSON(this.json.fullNamesMatch);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "datesOfBirthMatch", {
+        get: function () {
+            return PrivateCapturedId_1.DateComparisonCheck
+                .fromJSON(this.json.datesOfBirth);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "datesOfExpiryMatch", {
+        get: function () {
+            return PrivateCapturedId_1.DateComparisonCheck
+                .fromJSON(this.json.datesOfExpiry);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AamvaVizBarcodeComparisonResult.prototype, "datesOfIssueMatch", {
+        get: function () {
+            return PrivateCapturedId_1.DateComparisonCheck
+                .fromJSON(this.json.datesOfIssue);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    AamvaVizBarcodeComparisonResult.fromJSON = function (json) {
+        var result = new AamvaVizBarcodeComparisonResult();
+        result.json = json;
+        return result;
+    };
+    return AamvaVizBarcodeComparisonResult;
+}());
+exports.AamvaVizBarcodeComparisonResult = AamvaVizBarcodeComparisonResult;
+var AamvaVizBarcodeComparisonVerifier = /** @class */ (function () {
+    function AamvaVizBarcodeComparisonVerifier() {
+        this.proxy = new IdCaptureProxy_1.IdCaptureProxy();
+    }
+    AamvaVizBarcodeComparisonVerifier.create = function () {
+        return new AamvaVizBarcodeComparisonVerifier();
+    };
+    AamvaVizBarcodeComparisonVerifier.prototype.verify = function (capturedId) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.proxy
+                .verifyCapturedId(JSON.stringify(capturedId))
+                .then(function (json) {
+                if (!json) {
+                    resolve();
+                }
+                else {
+                    resolve(AamvaVizBarcodeComparisonResult
+                        .fromJSON(JSON.parse(json)));
+                }
+            }, reject);
+        });
+    };
+    __decorate([
+        Serializeable_1.ignoreFromSerialization
+    ], AamvaVizBarcodeComparisonVerifier.prototype, "proxy", void 0);
+    return AamvaVizBarcodeComparisonVerifier;
+}());
+exports.AamvaVizBarcodeComparisonVerifier = AamvaVizBarcodeComparisonVerifier;
 //# sourceMappingURL=CapturedId.js.map

@@ -6,6 +6,7 @@
 
 package com.scandit.datacapture.reactnative.id
 
+import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
@@ -88,6 +89,11 @@ class ScanditDataCaptureIdModule(
     @ReactMethod
     fun finishDidRejectCallback(enabled: Boolean) {
         idCaptureListener.finishDidRejectCallback(enabled)
+    }
+
+    @ReactMethod
+    fun verifyCapturedId(capturedIdJSON: String, promise: Promise) {
+        idCaptureListener.verifyCapturedId(capturedIdJSON, promise)
     }
 
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(

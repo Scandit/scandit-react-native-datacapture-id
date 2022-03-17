@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdLayoutLineStyle = exports.IdLayoutStyle = exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
+exports.ComparisonCheckResult = exports.IdLayoutLineStyle = exports.IdLayoutStyle = exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
 var CapturedResultType;
 (function (CapturedResultType) {
     CapturedResultType["AAMVABarcodeResult"] = "aamvaBarcodeResult";
@@ -40,6 +40,9 @@ var DocumentType;
     DocumentType["SocialSecurityCard"] = "socialSecurityCard";
     DocumentType["HealthInsuranceCard"] = "healthInsuranceCard";
     DocumentType["Passport"] = "passport";
+    DocumentType["DiplomaticPassport"] = "diplomaticPassport";
+    DocumentType["ServicePassport"] = "servicePassport";
+    DocumentType["TemporaryPassport"] = "temporaryPassport";
     DocumentType["Visa"] = "visa";
     DocumentType["SPass"] = "sPass";
     DocumentType["AddressCard"] = "addressCard";
@@ -110,4 +113,10 @@ var IdLayoutLineStyle;
     IdLayoutLineStyle["Light"] = "light";
     IdLayoutLineStyle["Bold"] = "bold";
 })(IdLayoutLineStyle = exports.IdLayoutLineStyle || (exports.IdLayoutLineStyle = {}));
+var ComparisonCheckResult;
+(function (ComparisonCheckResult) {
+    ComparisonCheckResult["Passed"] = "Passed";
+    ComparisonCheckResult["Skipped"] = "Skipped";
+    ComparisonCheckResult["Failed"] = "Failed";
+})(ComparisonCheckResult = exports.ComparisonCheckResult || (exports.ComparisonCheckResult = {}));
 //# sourceMappingURL=Enums.js.map

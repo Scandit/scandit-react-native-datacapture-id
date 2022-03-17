@@ -16,6 +16,9 @@ var IdCaptureProxy = /** @class */ (function () {
     IdCaptureProxy.prototype.reset = function () {
         return NativeModule.reset();
     };
+    IdCaptureProxy.prototype.verifyCapturedId = function (capturedId) {
+        return NativeModule.verifyCapturedId(capturedId);
+    };
     return IdCaptureProxy;
 }());
 exports.IdCaptureProxy = IdCaptureProxy;
