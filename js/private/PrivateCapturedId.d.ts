@@ -1,6 +1,9 @@
 import { AAMVABarcodeResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
-import { AAMVABarcodeResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { AAMVABarcodeResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, CommonCapturedIdFieldsJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
 import { ComparisonCheckResult } from 'Enums';
+export interface PrivateCommonCapturedIdFields {
+    fromJSON(json: CommonCapturedIdFieldsJSON | null): CommonCapturedIdFields;
+}
 export interface PrivateDateResult {
     fromJSON(json: DateResultJSON | null): DateResult;
 }
@@ -66,5 +69,22 @@ export declare class DateComparisonCheck implements ComparisonCheck<DateResult> 
     get aamvaBarcodeValue(): DateResult | null;
     get checkResult(): ComparisonCheckResult;
     get resultDescription(): string;
+    private static fromJSON;
+}
+export declare class CommonCapturedIdFields {
+    private json;
+    get firstName(): string | null;
+    get lastName(): string | null;
+    get fullName(): string;
+    get sex(): string | null;
+    get dateOfBirth(): DateResult | null;
+    get nationality(): string | null;
+    get address(): string | null;
+    get documentType(): string | null;
+    get documentNumber(): string | null;
+    get issuingCountry(): string | null;
+    get issuingCountryIso(): string | null;
+    get dateOfExpiry(): DateResult | null;
+    get dateOfIssue(): DateResult | null;
     private static fromJSON;
 }

@@ -23,6 +23,7 @@ export declare class VehicleRestriction {
 }
 export declare class CapturedId {
     private json;
+    private commonCapturedFields;
     get firstName(): string | null;
     get lastName(): string | null;
     get fullName(): string;

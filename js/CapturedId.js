@@ -97,39 +97,39 @@ var CapturedId = /** @class */ (function () {
     function CapturedId() {
     }
     Object.defineProperty(CapturedId.prototype, "firstName", {
-        get: function () { return this.json.firstName; },
+        get: function () { return this.commonCapturedFields.firstName; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "lastName", {
-        get: function () { return this.json.lastName; },
+        get: function () { return this.commonCapturedFields.lastName; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "fullName", {
-        get: function () { return this.json.fullName; },
+        get: function () { return this.commonCapturedFields.fullName; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "sex", {
-        get: function () { return this.json.sex; },
+        get: function () { return this.commonCapturedFields.sex; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "dateOfBirth", {
         get: function () {
-            return DateResult.fromJSON(this.json.dateOfBirth);
+            return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "nationality", {
-        get: function () { return this.json.nationality; },
+        get: function () { return this.commonCapturedFields.nationality; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "address", {
-        get: function () { return this.json.address; },
+        get: function () { return this.commonCapturedFields.address; },
         enumerable: false,
         configurable: true
     });
@@ -146,35 +146,35 @@ var CapturedId = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "documentType", {
-        get: function () { return this.json.documentType; },
+        get: function () { return this.commonCapturedFields.documentType; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "issuingCountryIso", {
-        get: function () { return this.json.issuingCountryIso; },
+        get: function () { return this.commonCapturedFields.issuingCountryIso; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "issuingCountry", {
-        get: function () { return this.json.issuingCountry; },
+        get: function () { return this.commonCapturedFields.issuingCountry; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "documentNumber", {
-        get: function () { return this.json.documentNumber; },
+        get: function () { return this.commonCapturedFields.documentNumber; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "dateOfExpiry", {
         get: function () {
-            return DateResult.fromJSON(this.json.dateOfExpiry);
+            return DateResult.fromJSON(this.commonCapturedFields.dateOfExpiry);
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(CapturedId.prototype, "dateOfIssue", {
         get: function () {
-            return DateResult.fromJSON(this.json.dateOfIssue);
+            return DateResult.fromJSON(this.commonCapturedFields.dateOfIssue);
         },
         enumerable: false,
         configurable: true
@@ -268,6 +268,30 @@ var CapturedId = /** @class */ (function () {
     CapturedId.fromJSON = function (json) {
         var result = new CapturedId();
         result.json = json;
+        if (json.aamvaBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.aamvaBarcodeResult);
+        }
+        if (json.argentinaIdBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.argentinaIdBarcodeResult);
+        }
+        if (json.colombiaIdBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.colombiaIdBarcodeResult);
+        }
+        if (json.mrzResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.mrzResult);
+        }
+        if (json.southAfricaIdBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.southAfricaIdBarcodeResult);
+        }
+        if (json.southAfricaDlBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.southAfricaDlBarcodeResult);
+        }
+        if (json.usUniformedServicesBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.usUniformedServicesBarcodeResult);
+        }
+        if (json.vizResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.vizResult);
+        }
         return result;
     };
     CapturedId.prototype.idImageOfType = function (type) {

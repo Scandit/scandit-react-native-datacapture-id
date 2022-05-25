@@ -14,6 +14,21 @@ export interface VehicleRestrictionJSON {
     vehicleRestriction: string;
     dateOfIssue: DateResultJSON;
 }
+export interface CommonCapturedIdFieldsJSON {
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string;
+    sex: string | null;
+    dateOfBirth: DateResultJSON | null;
+    nationality: string | null;
+    address: string | null;
+    documentType: string | null;
+    documentNumber: string | null;
+    issuingCountry: string | null;
+    issuingCountryIso: string | null;
+    dateOfExpiry: DateResultJSON | null;
+    dateOfIssue: DateResultJSON | null;
+}
 export interface ImageInfoJSON {
     face: string;
     idFront: string;
