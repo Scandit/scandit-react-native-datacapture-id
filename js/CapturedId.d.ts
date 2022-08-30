@@ -1,6 +1,7 @@
 import { CapturedResultType, DocumentType, IdImageType, SupportedSides } from './Enums';
 import { Quadrilateral } from 'scandit-react-native-datacapture-core/js/Common';
 import { ComparisonCheckResult } from './Enums';
+import { DataCaptureContext } from 'scandit-react-native-datacapture-core';
 export declare class DateResult {
     private json;
     get day(): number;
@@ -45,6 +46,8 @@ export declare class CapturedId {
     get argentinaIdBarcodeResult(): ArgentinaIdBarcodeResult | null;
     private _colombiaIdBarcodeResult;
     get colombiaIdBarcodeResult(): ColombiaIdBarcodeResult | null;
+    private _colombiaDlBarcodeResult;
+    get colombiaDlBarcodeResult(): ColombiaDlBarcodeResult | null;
     private _mrzResult;
     get mrzResult(): MRZResult | null;
     private _southAfricaIdBarcodeResult;
@@ -173,6 +176,12 @@ export declare class ColombiaIdBarcodeResult {
     get bloodType(): string;
     private static fromJSON;
 }
+export declare class ColombiaDlBarcodeResult {
+    private json;
+    get categories(): string[];
+    get identificationType(): string;
+    private static fromJSON;
+}
 export declare class SouthAfricaIdBarcodeResult {
     private json;
     get countryOfBirth(): string;
@@ -226,4 +235,16 @@ export declare class AamvaVizBarcodeComparisonVerifier {
     private proxy;
     static create(): AamvaVizBarcodeComparisonVerifier;
     verify(capturedId: CapturedId): Promise<AamvaVizBarcodeComparisonResult>;
+}
+export declare class AamvaCloudVerificationResult {
+    private json;
+    get allChecksPassed(): boolean;
+    static create(allChecksPassed: boolean): AamvaCloudVerificationResult;
+    private static fromJSON;
+}
+export declare class AamvaCloudVerifier {
+    private proxy;
+    private context;
+    static create(context: DataCaptureContext): Promise<AamvaCloudVerifier>;
+    verify(capturedId: CapturedId): Promise<AamvaCloudVerificationResult>;
 }

@@ -54,6 +54,7 @@ export interface CapturedIdJSON {
     aamvaBarcodeResult: AAMVABarcodeResultJSON | null;
     argentinaIdBarcodeResult: ArgentinaIdBarcodeResultJSON | null;
     colombiaIdBarcodeResult: ColombiaIdBarcodeResultJSON | null;
+    colombiaDlBarcodeResult: ColombiaDlBarcodeResultJSON | null;
     mrzResult: MRZResultJSON | null;
     southAfricaDlBarcodeResult: SouthAfricaDlBarcodeResultJSON | null;
     southAfricaIdBarcodeResult: SouthAfricaIdBarcodeResultJSON | null;
@@ -92,12 +93,19 @@ export interface AAMVABarcodeResultJSON {
         [key: string]: string;
     };
 }
+export interface AamvaCloudVerificationResultJSON {
+    allChecksPassed: boolean;
+}
 export interface ArgentinaIdBarcodeResultJSON {
     documentCopy: string;
     personalIdNumber: string;
 }
 export interface ColombiaIdBarcodeResultJSON {
     bloodType: string;
+}
+export interface ColombiaDlBarcodeResultJSON {
+    categories: string[];
+    identificationType: string;
 }
 export interface MRZResultJSON {
     documentCode: string;

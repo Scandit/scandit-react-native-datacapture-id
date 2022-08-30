@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 var PrivateCapturedId_1 = require("./private/PrivateCapturedId");
 var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
 var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
@@ -212,6 +212,17 @@ var CapturedId = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(CapturedId.prototype, "colombiaDlBarcodeResult", {
+        get: function () {
+            if (this._colombiaDlBarcodeResult == null && this.json.colombiaDlBarcodeResult != null) {
+                this._colombiaDlBarcodeResult = ColombiaDlBarcodeResult.
+                    fromJSON(this.json.colombiaDlBarcodeResult);
+            }
+            return this._colombiaDlBarcodeResult;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(CapturedId.prototype, "mrzResult", {
         get: function () {
             if (this._mrzResult == null && this.json.mrzResult != null) {
@@ -276,6 +287,9 @@ var CapturedId = /** @class */ (function () {
         }
         if (json.colombiaIdBarcodeResult) {
             result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.colombiaIdBarcodeResult);
+        }
+        if (json.colombiaDlBarcodeResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.colombiaDlBarcodeResult);
         }
         if (json.mrzResult) {
             result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.mrzResult);
@@ -822,6 +836,27 @@ var ColombiaIdBarcodeResult = /** @class */ (function () {
     return ColombiaIdBarcodeResult;
 }());
 exports.ColombiaIdBarcodeResult = ColombiaIdBarcodeResult;
+var ColombiaDlBarcodeResult = /** @class */ (function () {
+    function ColombiaDlBarcodeResult() {
+    }
+    Object.defineProperty(ColombiaDlBarcodeResult.prototype, "categories", {
+        get: function () { return this.json.categories; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ColombiaDlBarcodeResult.prototype, "identificationType", {
+        get: function () { return this.json.identificationType; },
+        enumerable: false,
+        configurable: true
+    });
+    ColombiaDlBarcodeResult.fromJSON = function (json) {
+        var result = new ColombiaDlBarcodeResult();
+        result.json = json;
+        return result;
+    };
+    return ColombiaDlBarcodeResult;
+}());
+exports.ColombiaDlBarcodeResult = ColombiaDlBarcodeResult;
 var SouthAfricaIdBarcodeResult = /** @class */ (function () {
     function SouthAfricaIdBarcodeResult() {
     }
@@ -1030,9 +1065,13 @@ var AamvaVizBarcodeComparisonVerifier = /** @class */ (function () {
     };
     AamvaVizBarcodeComparisonVerifier.prototype.verify = function (capturedId) {
         var _this = this;
+        // Necessary for not exposing internal API on CapturedId, while only passing the private "json" property
+        // to native iOS and Android.
+        var capturedIdAsString = JSON.stringify(capturedId);
+        var capturedIdJsonData = JSON.parse(capturedIdAsString).json;
         return new Promise(function (resolve, reject) {
             _this.proxy
-                .verifyCapturedId(JSON.stringify(capturedId))
+                .verifyCapturedId(JSON.stringify(capturedIdJsonData))
                 .then(function (json) {
                 if (!json) {
                     resolve();
@@ -1050,4 +1089,67 @@ var AamvaVizBarcodeComparisonVerifier = /** @class */ (function () {
     return AamvaVizBarcodeComparisonVerifier;
 }());
 exports.AamvaVizBarcodeComparisonVerifier = AamvaVizBarcodeComparisonVerifier;
+var AamvaCloudVerificationResult = /** @class */ (function () {
+    function AamvaCloudVerificationResult() {
+    }
+    Object.defineProperty(AamvaCloudVerificationResult.prototype, "allChecksPassed", {
+        get: function () { return this.json.allChecksPassed; },
+        enumerable: false,
+        configurable: true
+    });
+    AamvaCloudVerificationResult.create = function (allChecksPassed) {
+        var result = new AamvaCloudVerificationResult();
+        result.json.allChecksPassed = allChecksPassed;
+        return result;
+    };
+    AamvaCloudVerificationResult.fromJSON = function (json) {
+        var result = new AamvaCloudVerificationResult();
+        result.json = json;
+        return result;
+    };
+    return AamvaCloudVerificationResult;
+}());
+exports.AamvaCloudVerificationResult = AamvaCloudVerificationResult;
+var AamvaCloudVerifier = /** @class */ (function () {
+    function AamvaCloudVerifier() {
+        this.proxy = new IdCaptureProxy_1.IdCaptureProxy();
+    }
+    AamvaCloudVerifier.create = function (context) {
+        var verifier = new AamvaCloudVerifier();
+        return new Promise(function (resolve, reject) {
+            verifier
+                .proxy
+                .createContextForCloudVerification(context)
+                .then(function () {
+                verifier.context = context;
+                resolve(verifier);
+            }, reject);
+        });
+    };
+    AamvaCloudVerifier.prototype.verify = function (capturedId) {
+        var _this = this;
+        // Necessary for not exposing internal API on CapturedId, while only passing the private "json" property
+        // to native iOS and Android.
+        var capturedIdAsString = JSON.stringify(capturedId);
+        var capturedIdJsonData = JSON.parse(capturedIdAsString).json;
+        return new Promise(function (resolve, reject) {
+            _this.proxy
+                .verifyCapturedIdAsync(JSON.stringify(capturedIdJsonData))
+                .then(function (json) {
+                if (!json) {
+                    resolve();
+                }
+                else {
+                    resolve(AamvaCloudVerificationResult
+                        .fromJSON(JSON.parse(json)));
+                }
+            }, reject);
+        });
+    };
+    __decorate([
+        Serializeable_1.ignoreFromSerialization
+    ], AamvaCloudVerifier.prototype, "proxy", void 0);
+    return AamvaCloudVerifier;
+}());
+exports.AamvaCloudVerifier = AamvaCloudVerifier;
 //# sourceMappingURL=CapturedId.js.map

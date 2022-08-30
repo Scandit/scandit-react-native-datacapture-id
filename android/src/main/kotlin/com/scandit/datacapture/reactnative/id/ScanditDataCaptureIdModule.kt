@@ -96,6 +96,17 @@ class ScanditDataCaptureIdModule(
         idCaptureListener.verifyCapturedId(capturedIdJSON, promise)
     }
 
+    @Suppress("UNUSED_PARAMETER")
+    @ReactMethod
+    fun createContextForCloudVerification(contextJSON: String, promise: Promise) {
+        idCaptureListener.createContextForCloudVerification(promise)
+    }
+
+    @ReactMethod
+    fun verifyCapturedIdAsync(capturedIdJSON: String, promise: Promise) {
+        idCaptureListener.verifyCapturedIdAsync(capturedIdJSON, promise)
+    }
+
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to DEFAULTS.toWritableMap()
     )

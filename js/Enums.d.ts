@@ -2,6 +2,7 @@ export declare enum CapturedResultType {
     AAMVABarcodeResult = "aamvaBarcodeResult",
     ArgentinaIdBarcodeResult = "argentinaIdBarcodeResult",
     ColombiaIdBarcodeResult = "colombiaIdBarcodeResult",
+    ColombiaDlBarcodeResult = "colombiaDlBarcodeResult",
     MRZResult = "mrzResult",
     SouthAfricaDlBarcodeResult = "southAfricaDlBarcodeResult",
     SouthAfricaIdBarcodeResult = "southAfricaIdBarcodeResult",
@@ -59,12 +60,14 @@ export declare enum DocumentType {
     RefugeeId = "refugeeId",
     TribalId = "tribalId",
     VeteranId = "veteranId",
-    CitizenshipCertificate = "citizenshipCertificate"
+    CitizenshipCertificate = "citizenshipCertificate",
+    MyNumberCard = "myNumberCard"
 }
 export declare enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",
     ArgentinaIdBarcode = "argentinaIdBarcode",
     ColombiaIdBarcode = "colombiaIdBarcode",
+    ColombiaDlBarcode = "colombiaDlBarcode",
     DLVIZ = "dlViz",
     IdCardMRZ = "idCardMrz",
     IdCardVIZ = "idCardViz",

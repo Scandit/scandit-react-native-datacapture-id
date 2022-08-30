@@ -11,6 +11,7 @@ import ScanditDataCaptureCore
 @objc(ScanditDataCaptureId)
 class ScanditDataCaptureId: RCTEventEmitter {
     var captureMode: IdCapture?
+    var cloudVerifier: AamvaCloudVerifier?
 
     override init() {
         super.init()
@@ -54,5 +55,30 @@ class ScanditDataCaptureId: RCTEventEmitter {
     func verifyCapturedId(capturedIdJSON: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         let capturedId = CapturedId(jsonString: capturedIdJSON)
         resolve(AAMVAVizBarcodeComparisonVerifier.init().verify(capturedId).jsonString)
+    }
+
+    @objc(createContextForCloudVerification:context:reject:)
+    func createContextForCloudVerification(context: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        if (ScanditDataCaptureCore.dataCaptureContext == nil) {
+            return reject("createContextForCloudVerification", "Data Capture Context not available", nil)
+        }
+
+        cloudVerifier = AamvaCloudVerifier.init(context: ScanditDataCaptureCore.dataCaptureContext!)
+        resolve(nil)
+    }
+
+    @objc(verifyCapturedIdAsync:capturedIdJSON:reject:)
+    func verifyCapturedIdAsync(capturedIdJSON: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        let capturedId = CapturedId(jsonString: capturedIdJSON)
+        do {
+          try cloudVerifier?.verify(capturedId, completionHandler: { result, error in
+            if (error != nil) {
+                return reject("OnConnectionFailure", nil, error)
+            }
+            resolve(result?.jsonString)
+          })
+        } catch let error as NSError {
+          return reject("OnConnectionFailure", error.localizedDescription, error)
+        }
     }
 }

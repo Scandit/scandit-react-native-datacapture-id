@@ -1,5 +1,5 @@
-import { AAMVABarcodeResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
-import { AAMVABarcodeResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, CommonCapturedIdFieldsJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { AAMVABarcodeResult, AamvaCloudVerificationResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ColombiaIdBarcodeResult, ColombiaDlBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
+import { AAMVABarcodeResultJSON, AamvaCloudVerificationResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ColombiaIdBarcodeResultJSON, ColombiaDlBarcodeResultJSON, CommonCapturedIdFieldsJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
 import { ComparisonCheckResult } from 'Enums';
 export interface PrivateCommonCapturedIdFields {
     fromJSON(json: CommonCapturedIdFieldsJSON | null): CommonCapturedIdFields;
@@ -16,11 +16,17 @@ export interface PrivateVehicleRestriction {
 export interface PrivateAAMVABarcodeResult {
     fromJSON(json: AAMVABarcodeResultJSON): AAMVABarcodeResult;
 }
+export interface PrivateAamvaCloudVerificationResult {
+    fromJSON(json: AamvaCloudVerificationResultJSON): AamvaCloudVerificationResult;
+}
 export interface PrivateArgentinaIdBarcodeResult {
     fromJSON(json: ArgentinaIdBarcodeResultJSON): ArgentinaIdBarcodeResult;
 }
 export interface PrivateColombiaIdBarcodeResult {
     fromJSON(json: ColombiaIdBarcodeResultJSON): ColombiaIdBarcodeResult;
+}
+export interface PrivateColombiaDlBarcodeResult {
+    fromJSON(json: ColombiaDlBarcodeResultJSON): ColombiaDlBarcodeResult;
 }
 export interface PrivateMRZResult {
     fromJSON(json: MRZResultJSON): MRZResult;
