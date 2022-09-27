@@ -7,7 +7,9 @@ export declare enum CapturedResultType {
     SouthAfricaDlBarcodeResult = "southAfricaDlBarcodeResult",
     SouthAfricaIdBarcodeResult = "southAfricaIdBarcodeResult",
     USUniformedServicesBarcodeResult = "usUniformedServicesBarcodeResult",
-    VIZResult = "vizResult"
+    VIZResult = "vizResult",
+    ChinaMainlandTravelPermitMRZResult = "chinaMainlandTravelPermitMrzResult",
+    ChinaExitEntryPermitMRZResult = "chinaExitEntryPermitMrzResult"
 }
 export declare enum DocumentType {
     None = "none",
@@ -76,7 +78,9 @@ export declare enum IdDocumentType {
     SouthAfricaIdBarcode = "southAfricaIdBarcode",
     SwissDLMRZ = "swissDlMrz",
     USUSIdBarcode = "usUsIdBarcode",
-    VisaMRZ = "visaMrz"
+    VisaMRZ = "visaMrz",
+    ChinaMainlandTravelPermitMRZ = "chinaMainlandTravelPermitMrz",
+    ChinaExitEntryPermitMRZ = "chinaExitEntryPermitMrz"
 }
 export declare enum SupportedSides {
     FrontOnly = "frontOnly",

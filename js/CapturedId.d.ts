@@ -58,6 +58,10 @@ export declare class CapturedId {
     get usUniformedServicesBarcodeResult(): USUniformedServicesBarcodeResult | null;
     private _vizResult;
     get vizResult(): VIZResult | null;
+    private _chinaMainlandTravelPermitMRZResult;
+    get chinaMainlandTravelPermitMRZResult(): ChinaMainlandTravelPermitMRZResult | null;
+    private _chinaExitEntryPermitMRZResult;
+    get chinaExitEntryPermitMRZResult(): ChinaExitEntryPermitMRZResult | null;
     private static fromJSON;
     idImageOfType(type: IdImageType): string | null;
 }
@@ -200,6 +204,24 @@ export declare class SouthAfricaDlBarcodeResult {
     get driverRestrictionCodes(): number[];
     get professionalDrivingPermit(): ProfessionalDrivingPermit | null;
     get vehicleRestrictions(): VehicleRestriction[];
+    private static fromJSON;
+}
+export declare class ChinaMainlandTravelPermitMRZResult {
+    private json;
+    get documentCode(): string;
+    get capturedMrz(): string;
+    get personalIdNumber(): string;
+    get renewalTimes(): number;
+    get gbkName(): string;
+    get omittedCharacterCountInGBKName(): number;
+    get omittedNameCount(): number;
+    get issuingAuthorityCode(): string | null;
+    private static fromJSON;
+}
+export declare class ChinaExitEntryPermitMRZResult {
+    private json;
+    get documentCode(): string;
+    get capturedMrz(): string;
     private static fromJSON;
 }
 export declare class LocalizedOnlyId {

@@ -60,6 +60,8 @@ export interface CapturedIdJSON {
     southAfricaIdBarcodeResult: SouthAfricaIdBarcodeResultJSON | null;
     usUniformedServicesBarcodeResult: USUniformedServicesBarcodeResultJSON | null;
     vizResult: VIZResultJSON | null;
+    chinaMainlandTravelPermitMrzResult: ChinaMainlandTravelPermitMRZResultJSON | null;
+    chinaExitEntryPermitMrzResult: ChinaExitEntryPermitMRZResultJSON | null;
 }
 export interface AAMVABarcodeResultJSON {
     aamvaVersion: number;
@@ -226,4 +228,18 @@ export interface AamvaVizBarcodeComparisonResultJSON {
     datesOfBirth: DateComparisonCheckJSON;
     datesOfExpiry: DateComparisonCheckJSON;
     datesOfIssue: DateComparisonCheckJSON;
+}
+export interface ChinaMainlandTravelPermitMRZResultJSON {
+    documentCode: string;
+    capturedMrz: string;
+    personalIdNumber: string;
+    renewalTimes: number;
+    gbkName: string;
+    omittedCharacterCountInGBKName: number;
+    omittedNameCount: number;
+    issuingAuthorityCode: string | null;
+}
+export interface ChinaExitEntryPermitMRZResultJSON {
+    documentCode: string;
+    capturedMrz: string;
 }

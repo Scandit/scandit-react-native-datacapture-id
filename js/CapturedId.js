@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.ChinaExitEntryPermitMRZResult = exports.ChinaMainlandTravelPermitMRZResult = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 var PrivateCapturedId_1 = require("./private/PrivateCapturedId");
 var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
 var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
@@ -276,6 +276,30 @@ var CapturedId = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(CapturedId.prototype, "chinaMainlandTravelPermitMRZResult", {
+        get: function () {
+            if (this._chinaMainlandTravelPermitMRZResult == null && this.json.chinaMainlandTravelPermitMrzResult != null) {
+                this._chinaMainlandTravelPermitMRZResult =
+                    ChinaMainlandTravelPermitMRZResult
+                        .fromJSON(this.json.chinaMainlandTravelPermitMrzResult);
+            }
+            return this._chinaMainlandTravelPermitMRZResult;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(CapturedId.prototype, "chinaExitEntryPermitMRZResult", {
+        get: function () {
+            if (this._chinaExitEntryPermitMRZResult == null && this.json.chinaExitEntryPermitMrzResult != null) {
+                this._chinaExitEntryPermitMRZResult =
+                    ChinaExitEntryPermitMRZResult
+                        .fromJSON(this.json.chinaExitEntryPermitMrzResult);
+            }
+            return this._chinaExitEntryPermitMRZResult;
+        },
+        enumerable: false,
+        configurable: true
+    });
     CapturedId.fromJSON = function (json) {
         var result = new CapturedId();
         result.json = json;
@@ -305,6 +329,12 @@ var CapturedId = /** @class */ (function () {
         }
         if (json.vizResult) {
             result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.vizResult);
+        }
+        if (json.chinaMainlandTravelPermitMrzResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.chinaMainlandTravelPermitMrzResult);
+        }
+        if (json.chinaExitEntryPermitMrzResult) {
+            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.chinaExitEntryPermitMrzResult);
         }
         return result;
     };
@@ -943,6 +973,78 @@ var SouthAfricaDlBarcodeResult = /** @class */ (function () {
     return SouthAfricaDlBarcodeResult;
 }());
 exports.SouthAfricaDlBarcodeResult = SouthAfricaDlBarcodeResult;
+var ChinaMainlandTravelPermitMRZResult = /** @class */ (function () {
+    function ChinaMainlandTravelPermitMRZResult() {
+    }
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "documentCode", {
+        get: function () { return this.json.documentCode; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "capturedMrz", {
+        get: function () { return this.json.capturedMrz; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "personalIdNumber", {
+        get: function () { return this.json.personalIdNumber; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "renewalTimes", {
+        get: function () { return this.json.renewalTimes; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "gbkName", {
+        get: function () { return this.json.gbkName; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "omittedCharacterCountInGBKName", {
+        get: function () { return this.json.omittedCharacterCountInGBKName; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "omittedNameCount", {
+        get: function () { return this.json.omittedNameCount; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "issuingAuthorityCode", {
+        get: function () { return this.json.issuingAuthorityCode; },
+        enumerable: false,
+        configurable: true
+    });
+    ChinaMainlandTravelPermitMRZResult.fromJSON = function (json) {
+        var result = new ChinaMainlandTravelPermitMRZResult();
+        result.json = json;
+        return result;
+    };
+    return ChinaMainlandTravelPermitMRZResult;
+}());
+exports.ChinaMainlandTravelPermitMRZResult = ChinaMainlandTravelPermitMRZResult;
+var ChinaExitEntryPermitMRZResult = /** @class */ (function () {
+    function ChinaExitEntryPermitMRZResult() {
+    }
+    Object.defineProperty(ChinaExitEntryPermitMRZResult.prototype, "documentCode", {
+        get: function () { return this.json.documentCode; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ChinaExitEntryPermitMRZResult.prototype, "capturedMrz", {
+        get: function () { return this.json.capturedMrz; },
+        enumerable: false,
+        configurable: true
+    });
+    ChinaExitEntryPermitMRZResult.fromJSON = function (json) {
+        var result = new ChinaExitEntryPermitMRZResult();
+        result.json = json;
+        return result;
+    };
+    return ChinaExitEntryPermitMRZResult;
+}());
+exports.ChinaExitEntryPermitMRZResult = ChinaExitEntryPermitMRZResult;
 var LocalizedOnlyId = /** @class */ (function () {
     function LocalizedOnlyId() {
     }

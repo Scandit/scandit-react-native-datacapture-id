@@ -12,6 +12,8 @@ var CapturedResultType;
     CapturedResultType["SouthAfricaIdBarcodeResult"] = "southAfricaIdBarcodeResult";
     CapturedResultType["USUniformedServicesBarcodeResult"] = "usUniformedServicesBarcodeResult";
     CapturedResultType["VIZResult"] = "vizResult";
+    CapturedResultType["ChinaMainlandTravelPermitMRZResult"] = "chinaMainlandTravelPermitMrzResult";
+    CapturedResultType["ChinaExitEntryPermitMRZResult"] = "chinaExitEntryPermitMrzResult";
 })(CapturedResultType = exports.CapturedResultType || (exports.CapturedResultType = {}));
 var DocumentType;
 (function (DocumentType) {
@@ -83,6 +85,8 @@ var IdDocumentType;
     IdDocumentType["SwissDLMRZ"] = "swissDlMrz";
     IdDocumentType["USUSIdBarcode"] = "usUsIdBarcode";
     IdDocumentType["VisaMRZ"] = "visaMrz";
+    IdDocumentType["ChinaMainlandTravelPermitMRZ"] = "chinaMainlandTravelPermitMrz";
+    IdDocumentType["ChinaExitEntryPermitMRZ"] = "chinaExitEntryPermitMrz";
 })(IdDocumentType = exports.IdDocumentType || (exports.IdDocumentType = {}));
 var SupportedSides;
 (function (SupportedSides) {
