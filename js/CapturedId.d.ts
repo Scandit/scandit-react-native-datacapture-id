@@ -261,7 +261,6 @@ export declare class AamvaVizBarcodeComparisonVerifier {
 export declare class AamvaCloudVerificationResult {
     private json;
     get allChecksPassed(): boolean;
-    static create(allChecksPassed: boolean): AamvaCloudVerificationResult;
     private static fromJSON;
 }
 export declare class AamvaCloudVerifier {

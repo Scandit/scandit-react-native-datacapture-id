@@ -69,6 +69,8 @@ var DocumentType;
     DocumentType["VeteranId"] = "veteranId";
     DocumentType["CitizenshipCertificate"] = "citizenshipCertificate";
     DocumentType["MyNumberCard"] = "myNumberCard";
+    DocumentType["MinorsPassport"] = "minorsPassport";
+    DocumentType["MinorsPublicServicesCard"] = "minorsPublicServicesCard";
 })(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {

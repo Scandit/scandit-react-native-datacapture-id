@@ -1199,11 +1199,6 @@ var AamvaCloudVerificationResult = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    AamvaCloudVerificationResult.create = function (allChecksPassed) {
-        var result = new AamvaCloudVerificationResult();
-        result.json.allChecksPassed = allChecksPassed;
-        return result;
-    };
     AamvaCloudVerificationResult.fromJSON = function (json) {
         var result = new AamvaCloudVerificationResult();
         result.json = json;
