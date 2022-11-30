@@ -27,7 +27,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
         CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
 
     @objc override class func requiresMainQueueSetup() -> Bool {
-        return false
+        return true
     }
 
     @objc override var methodQueue: DispatchQueue! {
