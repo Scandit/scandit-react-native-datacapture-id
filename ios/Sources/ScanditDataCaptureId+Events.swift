@@ -20,6 +20,7 @@ extension ScanditDataCaptureId {
 
     override func startObserving() {
         hasListeners = true
+        registerRNTContextListener()
     }
 
     override func stopObserving() {

@@ -13,6 +13,8 @@ class ScanditDataCaptureId: RCTEventEmitter {
     var captureMode: IdCapture?
     var cloudVerifier: AamvaCloudVerifier?
 
+    var context: DataCaptureContext?
+
     override init() {
         super.init()
         registerDeserializer()
@@ -59,26 +61,46 @@ class ScanditDataCaptureId: RCTEventEmitter {
 
     @objc(createContextForCloudVerification:context:reject:)
     func createContextForCloudVerification(context: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        if (ScanditDataCaptureCore.dataCaptureContext == nil) {
+        guard let context = self.context else {
             return reject("createContextForCloudVerification", "Data Capture Context not available", nil)
         }
 
-        cloudVerifier = AamvaCloudVerifier.init(context: ScanditDataCaptureCore.dataCaptureContext!)
+        cloudVerifier = AamvaCloudVerifier(context: context)
         resolve(nil)
     }
 
     @objc(verifyCapturedIdAsync:capturedIdJSON:reject:)
     func verifyCapturedIdAsync(capturedIdJSON: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let capturedId = CapturedId(jsonString: capturedIdJSON)
-        do {
-          try cloudVerifier?.verify(capturedId, completionHandler: { result, error in
-            if (error != nil) {
-                return reject("OnConnectionFailure", nil, error)
-            }
-            resolve(result?.jsonString)
-          })
-        } catch let error as NSError {
-          return reject("OnConnectionFailure", error.localizedDescription, error)
+        cloudVerifier?.verify(capturedId, completionHandler: { result, error in
+          if (error != nil) {
+              return reject("OnConnectionFailure", nil, error)
+          }
+          resolve(result?.jsonString)
+        })
+    }
+
+    deinit {
+        unregisterRNTContextListener()
+    }
+}
+
+extension ScanditDataCaptureId: RNTDataCaptureContextListener {
+    func didUpdate(dataCaptureContext: DataCaptureContext?) {
+        context = dataCaptureContext
+    }
+
+    func registerRNTContextListener() {
+        guard let coreModule = bridge.module(for: ScanditDataCaptureCore.self) as? ScanditDataCaptureCore else {
+            return
         }
+        coreModule.addRNTDataCaptureContextListener(self)
+    }
+
+    fileprivate func unregisterRNTContextListener() {
+        guard let coreModule = bridge.module(for: ScanditDataCaptureCore.self) as? ScanditDataCaptureCore else {
+            return
+        }
+        coreModule.removeRNTDataCaptureContextListener(self)
     }
 }

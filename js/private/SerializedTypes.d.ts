@@ -20,6 +20,8 @@ export interface CommonCapturedIdFieldsJSON {
     fullName: string;
     sex: string | null;
     dateOfBirth: DateResultJSON | null;
+    age: number | null;
+    isExpired: boolean | null;
     nationality: string | null;
     address: string | null;
     documentType: string | null;
@@ -42,6 +44,8 @@ export interface CapturedIdJSON {
     fullName: string;
     sex: string | null;
     dateOfBirth: DateResultJSON | null;
+    age: number | null;
+    isExpired: boolean | null;
     nationality: string | null;
     address: string | null;
     documentType: string;
@@ -62,9 +66,13 @@ export interface CapturedIdJSON {
     vizResult: VIZResultJSON | null;
     chinaMainlandTravelPermitMrzResult: ChinaMainlandTravelPermitMRZResultJSON | null;
     chinaExitEntryPermitMrzResult: ChinaExitEntryPermitMRZResultJSON | null;
+    chinaOneWayPermitBackMrzResult: ChinaOneWayPermitBackMrzResultJSON | null;
+    chinaOneWayPermitFrontMrzResult: ChinaOneWayPermitFrontMrzResultJSON | null;
+    apecBusinessTravelCardMrzResult: ApecBusinessTravelCardMrzResultJSON | null;
 }
 export interface AAMVABarcodeResultJSON {
     aamvaVersion: number;
+    isRealId: boolean;
     aliasFamilyName: string | null;
     aliasGivenName: string | null;
     aliasSuffixName: string | null;
@@ -234,7 +242,7 @@ export interface ChinaMainlandTravelPermitMRZResultJSON {
     capturedMrz: string;
     personalIdNumber: string;
     renewalTimes: number;
-    gbkName: string;
+    fullNameSimplifiedChinese: string;
     omittedCharacterCountInGBKName: number;
     omittedNameCount: number;
     issuingAuthorityCode: string | null;
@@ -242,4 +250,21 @@ export interface ChinaMainlandTravelPermitMRZResultJSON {
 export interface ChinaExitEntryPermitMRZResultJSON {
     documentCode: string;
     capturedMrz: string;
+}
+export interface ChinaOneWayPermitBackMrzResultJSON {
+    documentCode: string;
+    capturedMrz: string;
+    namesAreTruncated: boolean;
+}
+export interface ChinaOneWayPermitFrontMrzResultJSON {
+    documentCode: string;
+    capturedMrz: string;
+    fullNameSimplifiedChinese: string;
+}
+export interface ApecBusinessTravelCardMrzResultJSON {
+    documentCode: string;
+    capturedMrz: string;
+    passportIssuerIso: string;
+    passportNumber: string;
+    passportDateOfExpiry: DateResultJSON | null;
 }
