@@ -98,16 +98,6 @@ var CommonCapturedIdFields = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CommonCapturedIdFields.prototype, "age", {
-        get: function () { return this.json.age; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CommonCapturedIdFields.prototype, "isExpired", {
-        get: function () { return this.json.isExpired; },
-        enumerable: false,
-        configurable: true
-    });
     Object.defineProperty(CommonCapturedIdFields.prototype, "nationality", {
         get: function () { return this.json.nationality; },
         enumerable: false,

@@ -11,7 +11,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.scandit.datacapture.core.capture.DataCaptureContext
 import com.scandit.datacapture.core.capture.DataCaptureContextListener
 import com.scandit.datacapture.core.json.JsonValue
 import com.scandit.datacapture.id.capture.IdCapture
@@ -49,12 +48,6 @@ class ScanditDataCaptureIdModule(
     }
 
     var idCapture: IdCapture? = null
-        private set(value) {
-            field?.removeListener(this)
-            field = value?.also { it.addListener(this) }
-        }
-
-    private var dataCaptureContext: DataCaptureContext? = null
         private set(value) {
             field?.removeListener(this)
             field = value?.also { it.addListener(this) }
@@ -106,7 +99,7 @@ class ScanditDataCaptureIdModule(
     @Suppress("UNUSED_PARAMETER")
     @ReactMethod
     fun createContextForCloudVerification(contextJSON: String, promise: Promise) {
-        idCaptureListener.createContextForCloudVerification(promise, dataCaptureContext)
+        idCaptureListener.createContextForCloudVerification(promise)
     }
 
     @ReactMethod
@@ -121,11 +114,6 @@ class ScanditDataCaptureIdModule(
     override fun onTreeDestroyed() {
         idCaptureListener.finishDidCaptureCallback(false)
         idCapture = null
-        dataCaptureContext = null
-    }
-
-    override fun onTreeCreated(root: DataCaptureContext) {
-        dataCaptureContext = root
     }
 
     companion object {

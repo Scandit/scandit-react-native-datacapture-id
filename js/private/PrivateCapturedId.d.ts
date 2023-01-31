@@ -1,5 +1,5 @@
-import { AAMVABarcodeResult, AamvaCloudVerificationResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ColombiaIdBarcodeResult, ColombiaDlBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult, ChinaOneWayPermitBackMrzResult, ChinaOneWayPermitFrontMrzResult, ApecBusinessTravelCardMrzResult } from '../CapturedId';
-import { ApecBusinessTravelCardMrzResultJSON, AAMVABarcodeResultJSON, AamvaCloudVerificationResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ChinaExitEntryPermitMRZResultJSON, ChinaOneWayPermitBackMrzResultJSON, ChinaOneWayPermitFrontMrzResultJSON, ChinaMainlandTravelPermitMRZResultJSON, ColombiaIdBarcodeResultJSON, ColombiaDlBarcodeResultJSON, CommonCapturedIdFieldsJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
+import { AAMVABarcodeResult, AamvaCloudVerificationResult, AamvaVizBarcodeComparisonResult, ArgentinaIdBarcodeResult, CapturedId, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ColombiaIdBarcodeResult, ColombiaDlBarcodeResult, ComparisonCheck, DateResult, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, VehicleRestriction, VIZResult } from '../CapturedId';
+import { AAMVABarcodeResultJSON, AamvaCloudVerificationResultJSON, AamvaVizBarcodeComparisonResultJSON, ArgentinaIdBarcodeResultJSON, CapturedIdJSON, ChinaExitEntryPermitMRZResultJSON, ChinaMainlandTravelPermitMRZResultJSON, ColombiaIdBarcodeResultJSON, ColombiaDlBarcodeResultJSON, CommonCapturedIdFieldsJSON, DateComparisonCheckJSON, DateResultJSON, LocalizedIdJSON, MRZResultJSON, ProfessionalDrivingPermitJSON, RejectedIdJSON, SouthAfricaDlBarcodeResultJSON, SouthAfricaIdBarcodeResultJSON, StringComparisonCheckJSON, USUniformedServicesBarcodeResultJSON, VehicleRestrictionJSON, VIZResultJSON } from './SerializedTypes';
 import { ComparisonCheckResult } from 'Enums';
 export interface PrivateCommonCapturedIdFields {
     fromJSON(json: CommonCapturedIdFieldsJSON | null): CommonCapturedIdFields;
@@ -67,15 +67,6 @@ export interface PrivateChinaMainlandTravelPermitMrzResult {
 export interface PrivateChinaExitEntryPermitMRZResult {
     fromJSON(json: ChinaExitEntryPermitMRZResultJSON): ChinaExitEntryPermitMRZResult;
 }
-export interface PrivateChinaOneWayPermitBackMrzResult {
-    fromJSON(json: ChinaOneWayPermitBackMrzResultJSON): ChinaOneWayPermitBackMrzResult;
-}
-export interface PrivateChinaOneWayPermitFrontMrzResult {
-    fromJSON(json: ChinaOneWayPermitFrontMrzResultJSON): ChinaOneWayPermitFrontMrzResult;
-}
-export interface PrivateApecBusinessTravelCardMrzResult {
-    fromJSON(json: ApecBusinessTravelCardMrzResultJSON): ApecBusinessTravelCardMrzResult;
-}
 export declare class StringComparisonCheck implements ComparisonCheck<string> {
     private json;
     get vizValue(): string | null;
@@ -99,8 +90,6 @@ export declare class CommonCapturedIdFields {
     get fullName(): string;
     get sex(): string | null;
     get dateOfBirth(): DateResult | null;
-    get age(): number | null;
-    get isExpired(): boolean | null;
     get nationality(): string | null;
     get address(): string | null;
     get documentType(): string | null;

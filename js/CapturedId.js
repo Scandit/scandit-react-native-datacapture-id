@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.ApecBusinessTravelCardMrzResult = exports.ChinaOneWayPermitFrontMrzResult = exports.ChinaOneWayPermitBackMrzResult = exports.ChinaExitEntryPermitMRZResult = exports.ChinaMainlandTravelPermitMRZResult = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.ChinaExitEntryPermitMRZResult = exports.ChinaMainlandTravelPermitMRZResult = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 var PrivateCapturedId_1 = require("./private/PrivateCapturedId");
 var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
 var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
@@ -120,16 +120,6 @@ var CapturedId = /** @class */ (function () {
         get: function () {
             return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
         },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CapturedId.prototype, "age", {
-        get: function () { return this.json.age; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CapturedId.prototype, "isExpired", {
-        get: function () { return this.json.isExpired; },
         enumerable: false,
         configurable: true
     });
@@ -310,42 +300,6 @@ var CapturedId = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(CapturedId.prototype, "chinaOneWayPermitBackMrzResult", {
-        get: function () {
-            if (this._chinaOneWayPermitBackMrzResult == null && this.json.chinaOneWayPermitBackMrzResult != null) {
-                this._chinaOneWayPermitBackMrzResult =
-                    ChinaOneWayPermitBackMrzResult
-                        .fromJSON(this.json.chinaOneWayPermitBackMrzResult);
-            }
-            return this._chinaOneWayPermitBackMrzResult;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CapturedId.prototype, "chinaOneWayPermitFrontMrzResult", {
-        get: function () {
-            if (this._chinaOneWayPermitFrontMrzResult == null && this.json.chinaOneWayPermitFrontMrzResult != null) {
-                this._chinaOneWayPermitFrontMrzResult =
-                    ChinaOneWayPermitFrontMrzResult
-                        .fromJSON(this.json.chinaOneWayPermitFrontMrzResult);
-            }
-            return this._chinaOneWayPermitFrontMrzResult;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(CapturedId.prototype, "apecBusinessTravelCardMrzResult", {
-        get: function () {
-            if (this._apecBusinessTravelCardMrzResult == null && this.json.apecBusinessTravelCardMrzResult != null) {
-                this._apecBusinessTravelCardMrzResult =
-                    ApecBusinessTravelCardMrzResult
-                        .fromJSON(this.json.apecBusinessTravelCardMrzResult);
-            }
-            return this._apecBusinessTravelCardMrzResult;
-        },
-        enumerable: false,
-        configurable: true
-    });
     CapturedId.fromJSON = function (json) {
         var result = new CapturedId();
         result.json = json;
@@ -382,15 +336,6 @@ var CapturedId = /** @class */ (function () {
         if (json.chinaExitEntryPermitMrzResult) {
             result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.chinaExitEntryPermitMrzResult);
         }
-        if (json.chinaOneWayPermitBackMrzResult) {
-            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.chinaOneWayPermitBackMrzResult);
-        }
-        if (json.chinaOneWayPermitFrontMrzResult) {
-            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.chinaOneWayPermitFrontMrzResult);
-        }
-        if (json.apecBusinessTravelCardMrzResult) {
-            result.commonCapturedFields = PrivateCapturedId_1.CommonCapturedIdFields.fromJSON(json.apecBusinessTravelCardMrzResult);
-        }
         return result;
     };
     CapturedId.prototype.idImageOfType = function (type) {
@@ -422,11 +367,6 @@ var AAMVABarcodeResult = /** @class */ (function () {
     });
     Object.defineProperty(AAMVABarcodeResult.prototype, "aliasSuffixName", {
         get: function () { return this.json.aliasSuffixName; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(AAMVABarcodeResult.prototype, "isRealId", {
-        get: function () { return this.json.isRealId; },
         enumerable: false,
         configurable: true
     });
@@ -1056,8 +996,8 @@ var ChinaMainlandTravelPermitMRZResult = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "fullNameSimplifiedChinese", {
-        get: function () { return this.json.fullNameSimplifiedChinese; },
+    Object.defineProperty(ChinaMainlandTravelPermitMRZResult.prototype, "gbkName", {
+        get: function () { return this.json.gbkName; },
         enumerable: false,
         configurable: true
     });
@@ -1105,96 +1045,6 @@ var ChinaExitEntryPermitMRZResult = /** @class */ (function () {
     return ChinaExitEntryPermitMRZResult;
 }());
 exports.ChinaExitEntryPermitMRZResult = ChinaExitEntryPermitMRZResult;
-var ChinaOneWayPermitBackMrzResult = /** @class */ (function () {
-    function ChinaOneWayPermitBackMrzResult() {
-    }
-    Object.defineProperty(ChinaOneWayPermitBackMrzResult.prototype, "documentCode", {
-        get: function () { return this.json.documentCode; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ChinaOneWayPermitBackMrzResult.prototype, "namesAreTruncated", {
-        get: function () { return this.json.namesAreTruncated; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ChinaOneWayPermitBackMrzResult.prototype, "capturedMrz", {
-        get: function () { return this.json.capturedMrz; },
-        enumerable: false,
-        configurable: true
-    });
-    ChinaOneWayPermitBackMrzResult.fromJSON = function (json) {
-        var result = new ChinaOneWayPermitBackMrzResult();
-        result.json = json;
-        return result;
-    };
-    return ChinaOneWayPermitBackMrzResult;
-}());
-exports.ChinaOneWayPermitBackMrzResult = ChinaOneWayPermitBackMrzResult;
-var ChinaOneWayPermitFrontMrzResult = /** @class */ (function () {
-    function ChinaOneWayPermitFrontMrzResult() {
-    }
-    Object.defineProperty(ChinaOneWayPermitFrontMrzResult.prototype, "documentCode", {
-        get: function () { return this.json.documentCode; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ChinaOneWayPermitFrontMrzResult.prototype, "capturedMrz", {
-        get: function () { return this.json.capturedMrz; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ChinaOneWayPermitFrontMrzResult.prototype, "fullNameSimplifiedChinese", {
-        get: function () { return this.json.fullNameSimplifiedChinese; },
-        enumerable: false,
-        configurable: true
-    });
-    ChinaOneWayPermitFrontMrzResult.fromJSON = function (json) {
-        var result = new ChinaOneWayPermitFrontMrzResult();
-        result.json = json;
-        return result;
-    };
-    return ChinaOneWayPermitFrontMrzResult;
-}());
-exports.ChinaOneWayPermitFrontMrzResult = ChinaOneWayPermitFrontMrzResult;
-var ApecBusinessTravelCardMrzResult = /** @class */ (function () {
-    function ApecBusinessTravelCardMrzResult() {
-    }
-    Object.defineProperty(ApecBusinessTravelCardMrzResult.prototype, "documentCode", {
-        get: function () { return this.json.documentCode; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApecBusinessTravelCardMrzResult.prototype, "capturedMrz", {
-        get: function () { return this.json.capturedMrz; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApecBusinessTravelCardMrzResult.prototype, "passportIssuerIso", {
-        get: function () { return this.json.passportIssuerIso; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApecBusinessTravelCardMrzResult.prototype, "passportNumber", {
-        get: function () { return this.json.passportNumber; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ApecBusinessTravelCardMrzResult.prototype, "passportDateOfExpiry", {
-        get: function () {
-            return DateResult.fromJSON(this.json.passportDateOfExpiry);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ApecBusinessTravelCardMrzResult.fromJSON = function (json) {
-        var result = new ApecBusinessTravelCardMrzResult();
-        result.json = json;
-        return result;
-    };
-    return ApecBusinessTravelCardMrzResult;
-}());
-exports.ApecBusinessTravelCardMrzResult = ApecBusinessTravelCardMrzResult;
 var LocalizedOnlyId = /** @class */ (function () {
     function LocalizedOnlyId() {
     }

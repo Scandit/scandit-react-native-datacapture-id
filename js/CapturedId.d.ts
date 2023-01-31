@@ -30,8 +30,6 @@ export declare class CapturedId {
     get fullName(): string;
     get sex(): string | null;
     get dateOfBirth(): DateResult | null;
-    get age(): number | null;
-    get isExpired(): boolean | null;
     get nationality(): string | null;
     get address(): string | null;
     get capturedResultType(): CapturedResultType;
@@ -64,12 +62,6 @@ export declare class CapturedId {
     get chinaMainlandTravelPermitMRZResult(): ChinaMainlandTravelPermitMRZResult | null;
     private _chinaExitEntryPermitMRZResult;
     get chinaExitEntryPermitMRZResult(): ChinaExitEntryPermitMRZResult | null;
-    private _chinaOneWayPermitBackMrzResult;
-    get chinaOneWayPermitBackMrzResult(): ChinaOneWayPermitBackMrzResult | null;
-    private _chinaOneWayPermitFrontMrzResult;
-    get chinaOneWayPermitFrontMrzResult(): ChinaOneWayPermitFrontMrzResult | null;
-    private _apecBusinessTravelCardMrzResult;
-    get apecBusinessTravelCardMrzResult(): ApecBusinessTravelCardMrzResult | null;
     private static fromJSON;
     idImageOfType(type: IdImageType): string | null;
 }
@@ -79,7 +71,6 @@ export declare class AAMVABarcodeResult {
     get aliasFamilyName(): string | null;
     get aliasGivenName(): string | null;
     get aliasSuffixName(): string | null;
-    get isRealId(): boolean;
     get driverNamePrefix(): string | null;
     get driverNameSuffix(): string | null;
     get endorsementsCode(): string | null;
@@ -221,7 +212,7 @@ export declare class ChinaMainlandTravelPermitMRZResult {
     get capturedMrz(): string;
     get personalIdNumber(): string;
     get renewalTimes(): number;
-    get fullNameSimplifiedChinese(): string;
+    get gbkName(): string;
     get omittedCharacterCountInGBKName(): number;
     get omittedNameCount(): number;
     get issuingAuthorityCode(): string | null;
@@ -231,29 +222,6 @@ export declare class ChinaExitEntryPermitMRZResult {
     private json;
     get documentCode(): string;
     get capturedMrz(): string;
-    private static fromJSON;
-}
-export declare class ChinaOneWayPermitBackMrzResult {
-    private json;
-    get documentCode(): string;
-    get namesAreTruncated(): boolean;
-    get capturedMrz(): string;
-    private static fromJSON;
-}
-export declare class ChinaOneWayPermitFrontMrzResult {
-    private json;
-    get documentCode(): string;
-    get capturedMrz(): string;
-    get fullNameSimplifiedChinese(): string;
-    private static fromJSON;
-}
-export declare class ApecBusinessTravelCardMrzResult {
-    private json;
-    get documentCode(): string;
-    get capturedMrz(): string;
-    get passportIssuerIso(): string;
-    get passportNumber(): string;
-    get passportDateOfExpiry(): DateResult | null;
     private static fromJSON;
 }
 export declare class LocalizedOnlyId {
