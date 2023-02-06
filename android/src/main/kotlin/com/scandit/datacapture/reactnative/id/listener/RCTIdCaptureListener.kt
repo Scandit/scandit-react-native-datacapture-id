@@ -100,17 +100,15 @@ class RCTIdCaptureListener(
         promise.resolve(AamvaVizBarcodeComparisonVerifier.create().verify(capturedId).toJson())
     }
 
-    fun createContextForCloudVerification(promise: Promise) {
-        if (ScanditDataCaptureCoreModule.context == null) {
+    fun createContextForCloudVerification(promise: Promise, context: DataCaptureContext?) {
+        if (context == null) {
             return promise.reject(
                 "createContextForCloudVerification",
                 "Data Capture Context not available"
             )
         }
 
-        cloudVerifier = AamvaCloudVerifier.create(
-            ScanditDataCaptureCoreModule.context as DataCaptureContext
-        )
+        cloudVerifier = AamvaCloudVerifier.create(context)
         promise.resolve(null)
     }
 

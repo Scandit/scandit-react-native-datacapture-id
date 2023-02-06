@@ -14,6 +14,9 @@ var CapturedResultType;
     CapturedResultType["VIZResult"] = "vizResult";
     CapturedResultType["ChinaMainlandTravelPermitMRZResult"] = "chinaMainlandTravelPermitMrzResult";
     CapturedResultType["ChinaExitEntryPermitMRZResult"] = "chinaExitEntryPermitMrzResult";
+    CapturedResultType["ChinaOneWayPermitBackMrzResult"] = "chinaOneWayPermitBackMrzResult";
+    CapturedResultType["ChinaOneWayPermitFrontMrzResult"] = "chinaOneWayPermitFrontMrzResult";
+    CapturedResultType["ApecBusinessTravelCardMrzResult"] = "apecBusinessTravelCardMrzResult";
 })(CapturedResultType = exports.CapturedResultType || (exports.CapturedResultType = {}));
 var DocumentType;
 (function (DocumentType) {
@@ -89,6 +92,9 @@ var IdDocumentType;
     IdDocumentType["VisaMRZ"] = "visaMrz";
     IdDocumentType["ChinaMainlandTravelPermitMRZ"] = "chinaMainlandTravelPermitMrz";
     IdDocumentType["ChinaExitEntryPermitMRZ"] = "chinaExitEntryPermitMrz";
+    IdDocumentType["ChinaOneWayPermitBackMRZ"] = "chinaOneWayPermitBackMrz";
+    IdDocumentType["ChinaOneWayPermitFrontMRZ"] = "chinaOneWayPermitFrontMrz";
+    IdDocumentType["ApecBusinessTravelCardMRZ"] = "apecBusinessTravelCardMrz";
 })(IdDocumentType = exports.IdDocumentType || (exports.IdDocumentType = {}));
 var SupportedSides;
 (function (SupportedSides) {
