@@ -9,4 +9,5 @@ export declare class IdCaptureListenerProxy {
     private notifyListenersOfDidLocalize;
     private notifyListenersOfDidReject;
     private notifyListenersOfDidFail;
+    private notifyListenersOfDidTimeOut;
 }

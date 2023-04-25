@@ -14,6 +14,7 @@ var IdCaptureListenerEventName;
     IdCaptureListenerEventName["didLocalize"] = "idCaptureListener-didLocalize";
     IdCaptureListenerEventName["didReject"] = "idCaptureListener-didReject";
     IdCaptureListenerEventName["didFail"] = "idCaptureListener-didFail";
+    IdCaptureListenerEventName["didTimeOut"] = "idCaptureListener-didTimeOut";
 })(IdCaptureListenerEventName || (IdCaptureListenerEventName = {}));
 var IdCaptureListenerProxy = /** @class */ (function () {
     function IdCaptureListenerProxy() {
@@ -49,6 +50,12 @@ var IdCaptureListenerProxy = /** @class */ (function () {
             _this.notifyListenersOfDidFail(session);
         });
         this.nativeListeners.push(didFailListener);
+        var didTimeOutListener = EventEmitter.addListener(IdCaptureListenerEventName.didTimeOut, function (body) {
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
+            _this.notifyListenersOfDidTimeOut(session);
+            NativeModule.finishDidTimeOutCallback(_this.mode.isEnabled);
+        });
+        this.nativeListeners.push(didTimeOutListener);
     };
     IdCaptureListenerProxy.prototype.unsubscribeListener = function () {
         this.nativeListeners.forEach(function (listener) { return listener.remove(); });
@@ -94,6 +101,17 @@ var IdCaptureListenerProxy = /** @class */ (function () {
         mode.listeners.forEach(function (listener) {
             if (listener.didFailWithError) {
                 listener.didFailWithError(_this.mode, session._error, session, CameraProxy_1.CameraProxy.getLastFrame);
+            }
+        });
+        mode.isInListenerCallback = false;
+    };
+    IdCaptureListenerProxy.prototype.notifyListenersOfDidTimeOut = function (session) {
+        var _this = this;
+        var mode = this.mode;
+        mode.isInListenerCallback = true;
+        mode.listeners.forEach(function (listener) {
+            if (listener.didTimeoutInSession) {
+                listener.didTimeoutInSession(_this.mode, session, CameraProxy_1.CameraProxy.getLastFrame);
             }
         });
         mode.isInListenerCallback = false;

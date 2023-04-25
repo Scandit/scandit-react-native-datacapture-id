@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ComparisonCheckResult = exports.IdLayoutLineStyle = exports.IdLayoutStyle = exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
+exports.IdAnonymizationMode = exports.ComparisonCheckResult = exports.IdLayoutLineStyle = exports.IdLayoutStyle = exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
 var CapturedResultType;
 (function (CapturedResultType) {
     CapturedResultType["AAMVABarcodeResult"] = "aamvaBarcodeResult";
@@ -134,4 +134,11 @@ var ComparisonCheckResult;
     ComparisonCheckResult["Skipped"] = "Skipped";
     ComparisonCheckResult["Failed"] = "Failed";
 })(ComparisonCheckResult = exports.ComparisonCheckResult || (exports.ComparisonCheckResult = {}));
+var IdAnonymizationMode;
+(function (IdAnonymizationMode) {
+    IdAnonymizationMode["None"] = "none";
+    IdAnonymizationMode["FieldsOnly"] = "fieldsOnly";
+    IdAnonymizationMode["ImagesOnly"] = "imagesOnly";
+    IdAnonymizationMode["FieldsAndImages"] = "fieldsAndImages";
+})(IdAnonymizationMode = exports.IdAnonymizationMode || (exports.IdAnonymizationMode = {}));
 //# sourceMappingURL=Enums.js.map

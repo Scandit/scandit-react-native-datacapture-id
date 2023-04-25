@@ -122,3 +122,9 @@ export declare enum ComparisonCheckResult {
     Skipped = "Skipped",
     Failed = "Failed"
 }
+export declare enum IdAnonymizationMode {
+    None = "none",
+    FieldsOnly = "fieldsOnly",
+    ImagesOnly = "imagesOnly",
+    FieldsAndImages = "fieldsAndImages"
+}

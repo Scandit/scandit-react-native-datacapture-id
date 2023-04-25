@@ -7,4 +7,5 @@ export interface IdCaptureListener {
     didLocalizeId?(idCapture: IdCapture, session: IdCaptureSession, getFrameData: () => Promise<FrameData>): void;
     didRejectId?(idCapture: IdCapture, session: IdCaptureSession, getFrameData: () => Promise<FrameData>): void;
     didFailWithError?(idCapture: IdCapture, error: IdCaptureError, session: IdCaptureSession, getFrameData: () => Promise<FrameData>): void;
+    didTimeoutInSession?(idCapture: IdCapture, session: IdCaptureSession, getFrameData: () => Promise<FrameData>): void;
 }

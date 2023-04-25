@@ -99,6 +99,11 @@ class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
+    fun finishDidTimeOutCallback(enabled: Boolean) {
+        idCaptureListener.finishDidTimeOutCallback(enabled)
+    }
+
+    @ReactMethod
     fun verifyCapturedId(capturedIdJSON: String, promise: Promise) {
         idCaptureListener.verifyCapturedId(capturedIdJSON, promise)
     }

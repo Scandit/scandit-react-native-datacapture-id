@@ -19,17 +19,17 @@ extension ScanditDataCaptureId {
 extension ScanditDataCaptureId: IdCaptureDeserializerDelegate {
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didStartDeserializingMode mode: IdCapture,
-                               from JSONValue: JSONValue) {
-
+                               from jsonValue: JSONValue) {
+        // Empty on purpose
     }
 
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didFinishDeserializingMode mode: IdCapture,
-                               from JSONValue: JSONValue) {
+                               from jsonValue: JSONValue) {
         captureMode = mode
 
-        if JSONValue.containsKey("enabled") {
-            mode.isEnabled = JSONValue.bool(forKey: "enabled")
+        if jsonValue.containsKey("enabled") {
+            mode.isEnabled = jsonValue.bool(forKey: "enabled")
         }
 
          mode.addListener(self)
@@ -37,21 +37,25 @@ extension ScanditDataCaptureId: IdCaptureDeserializerDelegate {
 
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didStartDeserializingSettings settings: IdCaptureSettings,
-                               from JSONValue: JSONValue) {
+                               from jsonValue: JSONValue) {
+        // Empty on purpose
     }
 
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didFinishDeserializingSettings settings: IdCaptureSettings,
-                               from JSONValue: JSONValue) {
+                               from jsonValue: JSONValue) {
+        // Empty on purpose
     }
 
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didStartDeserializingOverlay overlay: IdCaptureOverlay,
-                               from JSONValue: JSONValue) {
+                               from jsonValue: JSONValue) {
+        // Empty on purpose
     }
 
     func idCaptureDeserializer(_ deserializer: IdCaptureDeserializer,
                                didFinishDeserializingOverlay overlay: IdCaptureOverlay,
-                               from JSONValue: JSONValue) {
+                               from jsonValue: JSONValue) {
+        // Empty on purpose
     }
 }

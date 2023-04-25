@@ -27,13 +27,15 @@ class ScanditDataCaptureId: RCTEventEmitter {
         CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didLocalize.rawValue)
     internal let didRejectIdLock =
         CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
+    internal let didTimeOutIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
 
     @objc override class func requiresMainQueueSetup() -> Bool {
         return true
     }
 
     @objc override var methodQueue: DispatchQueue! {
-        return SDCSharedMethodQeueue
+        return sdcSharedMethodQueue
     }
 
     @objc override func invalidate() {
@@ -45,6 +47,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
         didCaptureIdLock.reset()
         didLocalizeIdLock.reset()
         didRejectIdLock.reset()
+        didTimeOutIdLock.reset()
     }
 
     @objc(reset:reject:)

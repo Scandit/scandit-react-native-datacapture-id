@@ -24,6 +24,7 @@ var IdCaptureSettings = /** @class */ (function (_super) {
         _this.imageToResult = {};
         _this.supportedDocuments = [];
         _this.supportedSides = Enums_1.SupportedSides.FrontOnly;
+        _this.anonymizationMode = Enums_1.IdAnonymizationMode.None;
         return _this;
     }
     IdCaptureSettings.prototype.setProperty = function (name, value) {

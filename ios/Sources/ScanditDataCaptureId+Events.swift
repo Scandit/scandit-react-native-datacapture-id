@@ -11,6 +11,7 @@ enum ScanditDataCaptureIdEvent: String, CaseIterable {
     case didLocalize = "idCaptureListener-didLocalize"
     case didReject = "idCaptureListener-didReject"
     case didFail = "idCaptureListener-didFail"
+    case didTimeOut = "idCaptureListener-didTimeOut"
 }
 
 extension ScanditDataCaptureId {

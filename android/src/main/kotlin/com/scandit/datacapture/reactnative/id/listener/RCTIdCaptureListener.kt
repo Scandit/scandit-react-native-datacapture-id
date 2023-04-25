@@ -34,6 +34,8 @@ class RCTIdCaptureListener(
         EventWithResult<Boolean>(ID_CAPTURE_DID_LOCALIZE, eventEmitter)
     private val onIdRejected =
         EventWithResult<Boolean>(ID_CAPTURE_DID_REJECT, eventEmitter)
+    private val onIdTimedOut =
+        EventWithResult<Boolean>(ID_CAPTURE_DID_TIMEOUT, eventEmitter)
 
     override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         latestSession.set(session)
@@ -83,6 +85,17 @@ class RCTIdCaptureListener(
         ScanditDataCaptureCoreModule.lastFrame = null
     }
 
+    override fun onIdCaptureTimedOut(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        latestSession.set(session)
+        ScanditDataCaptureCoreModule.lastFrame = data
+        val params = writableMap {
+            putString(FIELD_SESSION, session.toJson())
+        }
+        val enabled = onIdTimedOut.emitForResult(params, mode.isEnabled)
+        mode.isEnabled = enabled
+        ScanditDataCaptureCoreModule.lastFrame = null
+    }
+
     fun finishDidCaptureCallback(enabled: Boolean) {
         onIdCaptured.onResult(enabled)
     }
@@ -93,6 +106,10 @@ class RCTIdCaptureListener(
 
     fun finishDidRejectCallback(enabled: Boolean) {
         onIdRejected.onResult(enabled)
+    }
+
+    fun finishDidTimeOutCallback(enabled: Boolean) {
+        onIdTimedOut.onResult(enabled)
     }
 
     fun verifyCapturedId(capturedIdJSON: String, promise: Promise) {
@@ -130,6 +147,7 @@ class RCTIdCaptureListener(
         const val ID_CAPTURE_DID_LOCALIZE = "idCaptureListener-didLocalize"
         const val ID_CAPTURE_DID_REJECT = "idCaptureListener-didReject"
         const val ID_CAPTURE_DID_FAIL = "idCaptureListener-didFail"
+        const val ID_CAPTURE_DID_TIMEOUT = "idCaptureListener-didTimeOut"
         const val FIELD_SESSION = "session"
     }
 }
