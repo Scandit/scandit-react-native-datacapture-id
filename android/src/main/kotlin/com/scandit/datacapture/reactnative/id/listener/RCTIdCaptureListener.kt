@@ -10,13 +10,13 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.scandit.datacapture.core.capture.DataCaptureContext
 import com.scandit.datacapture.core.data.FrameData
+import com.scandit.datacapture.frameworks.core.utils.LastFrameData
 import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.IdCaptureSession
 import com.scandit.datacapture.id.data.CapturedId
 import com.scandit.datacapture.id.verification.aamvacloud.AamvaCloudVerifier
 import com.scandit.datacapture.id.verification.aamvavizbarcode.AamvaVizBarcodeComparisonVerifier
-import com.scandit.datacapture.reactnative.core.ScanditDataCaptureCoreModule
 import com.scandit.datacapture.reactnative.core.utils.EventWithResult
 import com.scandit.datacapture.reactnative.core.utils.writableMap
 import java.util.concurrent.atomic.AtomicReference
@@ -39,61 +39,46 @@ class RCTIdCaptureListener(
 
     override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         latestSession.set(session)
-        ScanditDataCaptureCoreModule.lastFrame = data
+        LastFrameData.frameData.set(data)
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdCaptured.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
-        ScanditDataCaptureCoreModule.lastFrame = null
+        LastFrameData.frameData.set(null)
     }
 
     override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         latestSession.set(session)
-        ScanditDataCaptureCoreModule.lastFrame = data
+        LastFrameData.frameData.set(data)
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdLocalized.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
-        ScanditDataCaptureCoreModule.lastFrame = null
+        LastFrameData.frameData.set(null)
     }
 
     override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         latestSession.set(session)
-        ScanditDataCaptureCoreModule.lastFrame = data
+        LastFrameData.frameData.set(data)
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdRejected.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
-        ScanditDataCaptureCoreModule.lastFrame = null
-    }
-
-    override fun onErrorEncountered(
-        mode: IdCapture,
-        error: Throwable,
-        session: IdCaptureSession,
-        data: FrameData
-    ) {
-        latestSession.set(session)
-        ScanditDataCaptureCoreModule.lastFrame = data
-        val params = writableMap {
-            putString(FIELD_SESSION, session.toJson())
-        }
-        eventEmitter.emit(ID_CAPTURE_DID_FAIL, params)
-        ScanditDataCaptureCoreModule.lastFrame = null
+        LastFrameData.frameData.set(null)
     }
 
     override fun onIdCaptureTimedOut(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         latestSession.set(session)
-        ScanditDataCaptureCoreModule.lastFrame = data
+        LastFrameData.frameData.set(data)
         val params = writableMap {
             putString(FIELD_SESSION, session.toJson())
         }
         val enabled = onIdTimedOut.emitForResult(params, mode.isEnabled)
         mode.isEnabled = enabled
-        ScanditDataCaptureCoreModule.lastFrame = null
+        LastFrameData.frameData.set(null)
     }
 
     fun finishDidCaptureCallback(enabled: Boolean) {
@@ -146,7 +131,6 @@ class RCTIdCaptureListener(
         const val ID_CAPTURE_DID_CAPTURE = "idCaptureListener-didCapture"
         const val ID_CAPTURE_DID_LOCALIZE = "idCaptureListener-didLocalize"
         const val ID_CAPTURE_DID_REJECT = "idCaptureListener-didReject"
-        const val ID_CAPTURE_DID_FAIL = "idCaptureListener-didFail"
         const val ID_CAPTURE_DID_TIMEOUT = "idCaptureListener-didTimeOut"
         const val FIELD_SESSION = "session"
     }

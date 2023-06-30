@@ -14,14 +14,14 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.scandit.datacapture.core.capture.DataCaptureContext
 import com.scandit.datacapture.core.capture.DataCaptureContextListener
 import com.scandit.datacapture.core.json.JsonValue
+import com.scandit.datacapture.frameworks.core.deserialization.DeserializationLifecycleObserver
+import com.scandit.datacapture.frameworks.core.deserialization.Deserializers
 import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializer
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializerListener
 import com.scandit.datacapture.id.ui.overlay.IdCaptureOverlay
 import com.scandit.datacapture.reactnative.core.data.defaults.SerializableCameraSettingsDefaults
-import com.scandit.datacapture.reactnative.core.deserializers.Deserializers
-import com.scandit.datacapture.reactnative.core.deserializers.TreeLifecycleObserver
 import com.scandit.datacapture.reactnative.core.utils.LazyEventEmitter
 import com.scandit.datacapture.reactnative.id.data.defaults.IdCaptureOverlayDefaults
 import com.scandit.datacapture.reactnative.id.data.defaults.SerializableIdCaptureDefaults
@@ -38,14 +38,14 @@ class ScanditDataCaptureIdModule(
     IdCaptureDeserializerListener,
     IdCaptureListener by idCaptureListener,
     DataCaptureContextListener,
-    TreeLifecycleObserver.Callbacks {
+    DeserializationLifecycleObserver.Observer {
 
     override fun getName(): String = "ScanditDataCaptureId"
 
     init {
         idCaptureDeserializer.listener = this
         Deserializers.Factory.addModeDeserializer(idCaptureDeserializer)
-        TreeLifecycleObserver.callbacks += this
+        DeserializationLifecycleObserver.attach(this)
     }
 
     var idCapture: IdCapture? = null
@@ -61,7 +61,7 @@ class ScanditDataCaptureIdModule(
         }
 
     override fun onCatalystInstanceDestroy() {
-        TreeLifecycleObserver.callbacks -= this
+        DeserializationLifecycleObserver.detach(this)
         Deserializers.Factory.removeModeDeserializer(idCaptureDeserializer)
         idCaptureDeserializer.listener = this
     }
@@ -123,14 +123,14 @@ class ScanditDataCaptureIdModule(
         DEFAULTS_KEY to DEFAULTS.toWritableMap()
     )
 
-    override fun onTreeDestroyed() {
+    override fun onDataCaptureContextDeserialized(dataCaptureContext: DataCaptureContext) {
+        this.dataCaptureContext = dataCaptureContext
+    }
+
+    override fun onDataCaptureContextDisposed() {
         idCaptureListener.finishDidCaptureCallback(false)
         idCapture = null
         dataCaptureContext = null
-    }
-
-    override fun onTreeCreated(root: DataCaptureContext) {
-        dataCaptureContext = root
     }
 
     companion object {

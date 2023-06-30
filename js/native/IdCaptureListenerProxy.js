@@ -13,7 +13,6 @@ var IdCaptureListenerEventName;
     IdCaptureListenerEventName["didCapture"] = "idCaptureListener-didCapture";
     IdCaptureListenerEventName["didLocalize"] = "idCaptureListener-didLocalize";
     IdCaptureListenerEventName["didReject"] = "idCaptureListener-didReject";
-    IdCaptureListenerEventName["didFail"] = "idCaptureListener-didFail";
     IdCaptureListenerEventName["didTimeOut"] = "idCaptureListener-didTimeOut";
 })(IdCaptureListenerEventName || (IdCaptureListenerEventName = {}));
 var IdCaptureListenerProxy = /** @class */ (function () {
@@ -45,11 +44,6 @@ var IdCaptureListenerProxy = /** @class */ (function () {
             NativeModule.finishDidRejectCallback(_this.mode.isEnabled);
         });
         this.nativeListeners.push(didRejectListener);
-        var didFailListener = EventEmitter.addListener(IdCaptureListenerEventName.didFail, function (body) {
-            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
-            _this.notifyListenersOfDidFail(session);
-        });
-        this.nativeListeners.push(didFailListener);
         var didTimeOutListener = EventEmitter.addListener(IdCaptureListenerEventName.didTimeOut, function (body) {
             var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidTimeOut(session);
@@ -90,17 +84,6 @@ var IdCaptureListenerProxy = /** @class */ (function () {
         mode.listeners.forEach(function (listener) {
             if (listener.didRejectId) {
                 listener.didRejectId(_this.mode, session, CameraProxy_1.CameraProxy.getLastFrame);
-            }
-        });
-        mode.isInListenerCallback = false;
-    };
-    IdCaptureListenerProxy.prototype.notifyListenersOfDidFail = function (session) {
-        var _this = this;
-        var mode = this.mode;
-        mode.isInListenerCallback = true;
-        mode.listeners.forEach(function (listener) {
-            if (listener.didFailWithError) {
-                listener.didFailWithError(_this.mode, session._error, session, CameraProxy_1.CameraProxy.getLastFrame);
             }
         });
         mode.isInListenerCallback = false;

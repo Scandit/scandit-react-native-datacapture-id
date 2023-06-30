@@ -80,14 +80,4 @@ extension ScanditDataCaptureId: IdCaptureListener {
     func finishDidTimeOutCallback(enabled: Bool) {
         didTimeOutIdLock.unlock(value: enabled)
     }
-
-    func idCapture(_ idCapture: IdCapture,
-                   didfail session: IdCaptureSession,
-                   frameData: FrameData) {
-        ScanditDataCaptureCore.lastFrame = frameData
-        defer { ScanditDataCaptureCore.lastFrame = nil }
-
-        let body = ["session": session.jsonString]
-        sendEvent(withName: .didFail, body: body)
-    }
 }
