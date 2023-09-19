@@ -290,14 +290,14 @@ export declare class AamvaVizBarcodeComparisonVerifier {
     static create(): AamvaVizBarcodeComparisonVerifier;
     verify(capturedId: CapturedId): Promise<AamvaVizBarcodeComparisonResult>;
 }
-export declare class AamvaCloudVerificationResult {
+export declare class AamvaBarcodeVerificationResult {
     private json;
     get allChecksPassed(): boolean;
     private static fromJSON;
 }
-export declare class AamvaCloudVerifier {
+export declare class AamvaBarcodeVerifier {
     private proxy;
     private context;
-    static create(context: DataCaptureContext): Promise<AamvaCloudVerifier>;
-    verify(capturedId: CapturedId): Promise<AamvaCloudVerificationResult>;
+    static create(context: DataCaptureContext): Promise<AamvaBarcodeVerifier>;
+    verify(capturedId: CapturedId): Promise<AamvaBarcodeVerificationResult>;
 }

@@ -103,7 +103,7 @@ export interface AAMVABarcodeResultJSON {
         [key: string]: string;
     };
 }
-export interface AamvaCloudVerificationResultJSON {
+export interface AamvaBarcodeVerificationResultJSON {
     allChecksPassed: boolean;
 }
 export interface ArgentinaIdBarcodeResultJSON {

@@ -5,6 +5,6 @@ export declare class IdCaptureProxy {
     static forIdCapture(idCapture: IdCapture): IdCaptureProxy;
     reset(): Promise<void>;
     verifyCapturedId(capturedId: string): Promise<string | null>;
-    createContextForCloudVerification(context: DataCaptureContext): Promise<string | null>;
+    createContextForBarcodeVerification(context: DataCaptureContext): Promise<string | null>;
     verifyCapturedIdAsync(capturedId: string): Promise<string | null>;
 }
