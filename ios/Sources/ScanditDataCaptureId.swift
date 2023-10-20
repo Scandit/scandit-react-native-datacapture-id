@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import React
 import ScanditIdCapture
 import ScanditDataCaptureCore
 
