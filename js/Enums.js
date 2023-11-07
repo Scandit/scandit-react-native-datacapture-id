@@ -130,9 +130,9 @@ var IdLayoutLineStyle;
 })(IdLayoutLineStyle || (exports.IdLayoutLineStyle = IdLayoutLineStyle = {}));
 var ComparisonCheckResult;
 (function (ComparisonCheckResult) {
-    ComparisonCheckResult["Passed"] = "Passed";
-    ComparisonCheckResult["Skipped"] = "Skipped";
-    ComparisonCheckResult["Failed"] = "Failed";
+    ComparisonCheckResult["Passed"] = "passed";
+    ComparisonCheckResult["Skipped"] = "skipped";
+    ComparisonCheckResult["Failed"] = "failed";
 })(ComparisonCheckResult || (exports.ComparisonCheckResult = ComparisonCheckResult = {}));
 var IdAnonymizationMode;
 (function (IdAnonymizationMode) {

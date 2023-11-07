@@ -548,7 +548,7 @@ var AAMVABarcodeResult = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(AAMVABarcodeResult.prototype, "barcodeDataElements", {
-        get: function () { return this.json.barcodeDataElements; },
+        get: function () { return this.json.dictionary; },
         enumerable: false,
         configurable: true
     });
