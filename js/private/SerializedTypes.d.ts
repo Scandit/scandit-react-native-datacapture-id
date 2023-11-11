@@ -99,7 +99,7 @@ export interface AAMVABarcodeResultJSON {
     vehicleClass: string | null;
     weightKg: number | null;
     weightLbs: number | null;
-    dictionary: {
+    barcodeDataElements: {
         [key: string]: string;
     };
 }

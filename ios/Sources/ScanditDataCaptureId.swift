@@ -6,40 +6,30 @@
 
 import Foundation
 import React
+import ScanditIdCapture
 import ScanditDataCaptureCore
-import ScanditFrameworksId
 
 @objc(ScanditDataCaptureId)
 class ScanditDataCaptureId: RCTEventEmitter {
-    var idModule: IdCaptureModule!
+    var captureMode: IdCapture?
+    var barcodeVerifier: AamvaBarcodeVerifier?
+
+    var context: DataCaptureContext?
 
     override init() {
         super.init()
-        let emitter = ReactNativeEmitter(emitter: self)
-        let idCaptureListener = FrameworksIdCaptureListener(emitter: emitter)
-        idModule = IdCaptureModule(idCaptureListener: idCaptureListener)
-        idModule.didStart()
+        registerDeserializer()
     }
 
-    override func startObserving() {
-        super.startObserving()
-        idModule.addListener()
-    }
-
-    override func stopObserving() {
-        idModule.didStop()
-        super.stopObserving()
-    }
-
-    override func supportedEvents() -> [String]! {
-        FrameworksIdCaptureEvent.allCases.map { $0.rawValue }
-    }
-
-    override func constantsToExport() -> [AnyHashable : Any]! {
-        [
-            "Defaults": idModule.defaults.toEncodable()
-        ]
-    }
+    var hasListeners = false
+    internal let didCaptureIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didCapture.rawValue)
+    internal let didLocalizeIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didLocalize.rawValue)
+    internal let didRejectIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
+    internal let didTimeOutIdLock =
+        CallbackLock<Bool>(name: ScanditDataCaptureIdEvent.didReject.rawValue)
 
     @objc override class func requiresMainQueueSetup() -> Bool {
         return true
@@ -51,54 +41,70 @@ class ScanditDataCaptureId: RCTEventEmitter {
 
     @objc override func invalidate() {
         super.invalidate()
+        unlockLocks()
     }
 
-    @objc(finishDidCaptureCallback:)
-    func finishDidCaptureCallback(enabled: Bool) {
-        idModule.finishDidCaptureId(enabled: enabled)
-    }
-
-    @objc(finishDidLocalizeCallback:)
-    func finishDidLocalizeCallback(enabled: Bool) {
-        idModule.finishDidLocalizeId(enabled: enabled)
-    }
-
-    @objc(finishDidRejectCallback:)
-    func finishDidRejectCallback(enabled: Bool) {
-        idModule.finishDidRejectId(enabled: enabled)
-    }
-
-    @objc(finishDidTimeOutCallback:)
-    func finishDidTimeOutCallback(enabled: Bool) {
-        idModule.finishTimeout(enabled: enabled)
+    internal func unlockLocks() {
+        didCaptureIdLock.reset()
+        didLocalizeIdLock.reset()
+        didRejectIdLock.reset()
+        didTimeOutIdLock.reset()
     }
 
     @objc(reset:reject:)
     func reset(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        idModule.resetMode()
+        captureMode?.reset()
         resolve(nil)
     }
 
     @objc(verifyCapturedId:capturedIdJSON:reject:)
-    func verifyCapturedId(capturedIdJSON: String,
-                          resolve: @escaping RCTPromiseResolveBlock,
-                          reject: @escaping RCTPromiseRejectBlock) {
-        idModule.verifyCapturedIdAamvaViz(jsonString: capturedIdJSON,
-                                          result: ReactNativeResult(resolve, reject))
+    func verifyCapturedId(capturedIdJSON: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        let capturedId = CapturedId(jsonString: capturedIdJSON)
+        resolve(AAMVAVizBarcodeComparisonVerifier.init().verify(capturedId).jsonString)
     }
 
     @objc(createContextForBarcodeVerification:context:reject:)
-    func createContextForBarcodeVerification(context: String,
-                                             resolve: @escaping RCTPromiseResolveBlock,
-                                             reject: @escaping RCTPromiseRejectBlock) {
-        idModule.createAamvaBarcodeVerifier(result: ReactNativeResult(resolve, reject))
+    func createContextForBarcodeVerification(context: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let context = self.context else {
+            return reject("createContextForBarcodeVerification", "Data Capture Context not available", nil)
+        }
+
+        barcodeVerifier = AamvaBarcodeVerifier(context: context)
+        resolve(nil)
     }
 
     @objc(verifyCapturedIdAsync:capturedIdJSON:reject:)
-    func verifyCapturedIdAsync(capturedIdJSON: String,
-                               resolve: @escaping RCTPromiseResolveBlock,
-                               reject: @escaping RCTPromiseRejectBlock) {
-        idModule.verifyCapturedIdWithCloud(jsonString: capturedIdJSON,
-                                           result: ReactNativeResult(resolve, reject))
+    func verifyCapturedIdAsync(capturedIdJSON: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        let capturedId = CapturedId(jsonString: capturedIdJSON)
+        barcodeVerifier?.verify(capturedId, completionHandler: { result, error in
+          if (error != nil) {
+              return reject("OnConnectionFailure", nil, error)
+          }
+          resolve(result?.jsonString)
+        })
+    }
+
+    deinit {
+        unregisterRNTContextListener()
+    }
+}
+
+extension ScanditDataCaptureId: RNTDataCaptureContextListener {
+    func didUpdate(dataCaptureContext: DataCaptureContext?) {
+        context = dataCaptureContext
+    }
+
+    func registerRNTContextListener() {
+        guard let coreModule = bridge.module(for: ScanditDataCaptureCore.self) as? ScanditDataCaptureCore else {
+            return
+        }
+        coreModule.addRNTDataCaptureContextListener(self)
+    }
+
+    fileprivate func unregisterRNTContextListener() {
+        guard let coreModule = bridge.module(for: ScanditDataCaptureCore.self) as? ScanditDataCaptureCore else {
+            return
+        }
+        coreModule.removeRNTDataCaptureContextListener(self)
     }
 }

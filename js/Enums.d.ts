@@ -118,9 +118,9 @@ export declare enum IdLayoutLineStyle {
     Bold = "bold"
 }
 export declare enum ComparisonCheckResult {
-    Passed = "passed",
-    Skipped = "skipped",
-    Failed = "failed"
+    Passed = "Passed",
+    Skipped = "Skipped",
+    Failed = "Failed"
 }
 export declare enum IdAnonymizationMode {
     None = "none",
