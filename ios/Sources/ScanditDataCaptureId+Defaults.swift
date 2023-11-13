@@ -10,13 +10,17 @@ import ScanditDataCaptureCore
 
 extension ScanditDataCaptureId {
     override func constantsToExport() -> [AnyHashable: Any]! {
-        return ["Defaults": idCaptureDefaults]
+        return ["Defaults": defaults]
+    }
+
+    var defaults: [String: Any] {
+        return ["IdCapture": idCaptureDefaults]
     }
 
     var idCaptureDefaults: [String: Any] {
         return [
             "RecommendedCameraSettings": recommendedCameraSettings,
-            "IdCaptureOverlay": idCaptureOverlayDefaults
+            "IdCaptureOverlayDefaults": idCaptureOverlayDefaults
         ]
     }
 
@@ -26,9 +30,9 @@ extension ScanditDataCaptureId {
 
     var idCaptureOverlayDefaults: [AnyHashable: Any] {
         return [
-            "DefaultCapturedBrush": IdCaptureOverlay.defaultCapturedBrush.rntsdc_dictionary,
-            "DefaultLocalizedBrush": IdCaptureOverlay.defaultLocalizedBrush.rntsdc_dictionary,
-            "DefaultRejectedBrush": IdCaptureOverlay.defaultRejectedBrush.rntsdc_dictionary
+            "defaultCapturedBrush": IdCaptureOverlay.defaultCapturedBrush.rntsdc_dictionary,
+            "defaultLocalizedBrush": IdCaptureOverlay.defaultLocalizedBrush.rntsdc_dictionary,
+            "defaultRejectedBrush": IdCaptureOverlay.defaultRejectedBrush.rntsdc_dictionary
         ]
     }
 }

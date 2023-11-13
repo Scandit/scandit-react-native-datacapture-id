@@ -5,14 +5,13 @@
  */
 
 import Foundation
-import React
 import ScanditIdCapture
 import ScanditDataCaptureCore
 
 @objc(ScanditDataCaptureId)
 class ScanditDataCaptureId: RCTEventEmitter {
     var captureMode: IdCapture?
-    var barcodeVerifier: AamvaBarcodeVerifier?
+    var cloudVerifier: AamvaCloudVerifier?
 
     var context: DataCaptureContext?
 
@@ -63,20 +62,20 @@ class ScanditDataCaptureId: RCTEventEmitter {
         resolve(AAMVAVizBarcodeComparisonVerifier.init().verify(capturedId).jsonString)
     }
 
-    @objc(createContextForBarcodeVerification:context:reject:)
-    func createContextForBarcodeVerification(context: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+    @objc(createContextForCloudVerification:context:reject:)
+    func createContextForCloudVerification(context: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         guard let context = self.context else {
-            return reject("createContextForBarcodeVerification", "Data Capture Context not available", nil)
+            return reject("createContextForCloudVerification", "Data Capture Context not available", nil)
         }
 
-        barcodeVerifier = AamvaBarcodeVerifier(context: context)
+        cloudVerifier = AamvaCloudVerifier(context: context)
         resolve(nil)
     }
 
     @objc(verifyCapturedIdAsync:capturedIdJSON:reject:)
     func verifyCapturedIdAsync(capturedIdJSON: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let capturedId = CapturedId(jsonString: capturedIdJSON)
-        barcodeVerifier?.verify(capturedId, completionHandler: { result, error in
+        cloudVerifier?.verify(capturedId, completionHandler: { result, error in
           if (error != nil) {
               return reject("OnConnectionFailure", nil, error)
           }

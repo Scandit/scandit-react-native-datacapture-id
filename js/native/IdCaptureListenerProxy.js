@@ -10,46 +10,42 @@ var EventEmitter = new react_native_1.NativeEventEmitter(NativeModule);
 // tslint:enable:variable-name
 var IdCaptureListenerEventName;
 (function (IdCaptureListenerEventName) {
-    IdCaptureListenerEventName["didCapture"] = "IdCaptureListener.didCaptureId";
-    IdCaptureListenerEventName["didLocalize"] = "IdCaptureListener.didLocalizeId";
-    IdCaptureListenerEventName["didReject"] = "IdCaptureListener.didRejectId";
-    IdCaptureListenerEventName["didTimeOut"] = "IdCaptureListener.didTimeout";
+    IdCaptureListenerEventName["didCapture"] = "idCaptureListener-didCapture";
+    IdCaptureListenerEventName["didLocalize"] = "idCaptureListener-didLocalize";
+    IdCaptureListenerEventName["didReject"] = "idCaptureListener-didReject";
+    IdCaptureListenerEventName["didTimeOut"] = "idCaptureListener-didTimeOut";
 })(IdCaptureListenerEventName || (IdCaptureListenerEventName = {}));
 var IdCaptureListenerProxy = /** @class */ (function () {
     function IdCaptureListenerProxy() {
         this.nativeListeners = [];
     }
-    IdCaptureListenerProxy.forIdCapture = function (idCapture) {
+    IdCaptureListenerProxy.forIdCapture = function (textCapture) {
         var proxy = new IdCaptureListenerProxy();
-        proxy.mode = idCapture;
+        proxy.mode = textCapture;
         return proxy;
     };
     IdCaptureListenerProxy.prototype.subscribeListener = function () {
         var _this = this;
         var didCaptureListener = EventEmitter.addListener(IdCaptureListenerEventName.didCapture, function (body) {
-            var payload = JSON.parse(body);
-            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(payload.session));
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidCapture(session);
             NativeModule.finishDidCaptureCallback(_this.mode.isEnabled);
         });
         this.nativeListeners.push(didCaptureListener);
         var didLocalizeListener = EventEmitter.addListener(IdCaptureListenerEventName.didLocalize, function (body) {
-            var payload = JSON.parse(body);
-            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(payload.session));
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidLocalize(session);
             NativeModule.finishDidLocalizeCallback(_this.mode.isEnabled);
         });
         this.nativeListeners.push(didLocalizeListener);
         var didRejectListener = EventEmitter.addListener(IdCaptureListenerEventName.didReject, function (body) {
-            var payload = JSON.parse(body);
-            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(payload.session));
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidReject(session);
             NativeModule.finishDidRejectCallback(_this.mode.isEnabled);
         });
         this.nativeListeners.push(didRejectListener);
         var didTimeOutListener = EventEmitter.addListener(IdCaptureListenerEventName.didTimeOut, function (body) {
-            var payload = JSON.parse(body);
-            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(payload.session));
+            var session = IdCaptureSession_1.IdCaptureSession.fromJSON(JSON.parse(body.session));
             _this.notifyListenersOfDidTimeOut(session);
             NativeModule.finishDidTimeOutCallback(_this.mode.isEnabled);
         });

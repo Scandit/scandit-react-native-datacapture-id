@@ -3,12 +3,10 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -140,22 +138,22 @@ var IdCaptureOverlay = /** @class */ (function (_super) {
         Serializeable_1.ignoreFromSerialization
     ], IdCaptureOverlay.prototype, "view", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('idLayout')
+        Serializeable_1.nameForSerialization('idLayout')
     ], IdCaptureOverlay.prototype, "_idLayout", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('idLayoutStyle')
+        Serializeable_1.nameForSerialization('idLayoutStyle')
     ], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('idLayoutLineStyle')
+        Serializeable_1.nameForSerialization('idLayoutLineStyle')
     ], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('capturedBrush')
+        Serializeable_1.nameForSerialization('capturedBrush')
     ], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('localizedBrush')
+        Serializeable_1.nameForSerialization('localizedBrush')
     ], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
     __decorate([
-        (0, Serializeable_1.nameForSerialization)('rejectedBrush')
+        Serializeable_1.nameForSerialization('rejectedBrush')
     ], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
     return IdCaptureOverlay;
 }(Serializeable_1.DefaultSerializeable));

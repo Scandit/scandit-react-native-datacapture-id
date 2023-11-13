@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AamvaBarcodeVerifier = exports.AamvaBarcodeVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.ApecBusinessTravelCardMrzResult = exports.ChinaOneWayPermitFrontMrzResult = exports.ChinaOneWayPermitBackMrzResult = exports.ChinaExitEntryPermitMRZResult = exports.ChinaMainlandTravelPermitMRZResult = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaCloudVerifier = exports.AamvaCloudVerificationResult = exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.ApecBusinessTravelCardMrzResult = exports.ChinaOneWayPermitFrontMrzResult = exports.ChinaOneWayPermitBackMrzResult = exports.ChinaExitEntryPermitMRZResult = exports.ChinaMainlandTravelPermitMRZResult = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaDlBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 var PrivateCapturedId_1 = require("./private/PrivateCapturedId");
 var Common_1 = require("scandit-react-native-datacapture-core/js/Common");
 var Serializeable_1 = require("scandit-react-native-datacapture-core/js/private/Serializeable");
@@ -1326,8 +1326,7 @@ var AamvaVizBarcodeComparisonVerifier = /** @class */ (function () {
                 .verifyCapturedId(JSON.stringify(capturedIdJsonData))
                 .then(function (json) {
                 if (!json) {
-                    resolve(AamvaVizBarcodeComparisonResult
-                        .fromJSON(JSON.parse('{}')));
+                    resolve();
                 }
                 else {
                     resolve(AamvaVizBarcodeComparisonResult
@@ -1342,39 +1341,39 @@ var AamvaVizBarcodeComparisonVerifier = /** @class */ (function () {
     return AamvaVizBarcodeComparisonVerifier;
 }());
 exports.AamvaVizBarcodeComparisonVerifier = AamvaVizBarcodeComparisonVerifier;
-var AamvaBarcodeVerificationResult = /** @class */ (function () {
-    function AamvaBarcodeVerificationResult() {
+var AamvaCloudVerificationResult = /** @class */ (function () {
+    function AamvaCloudVerificationResult() {
     }
-    Object.defineProperty(AamvaBarcodeVerificationResult.prototype, "allChecksPassed", {
+    Object.defineProperty(AamvaCloudVerificationResult.prototype, "allChecksPassed", {
         get: function () { return this.json.allChecksPassed; },
         enumerable: false,
         configurable: true
     });
-    AamvaBarcodeVerificationResult.fromJSON = function (json) {
-        var result = new AamvaBarcodeVerificationResult();
+    AamvaCloudVerificationResult.fromJSON = function (json) {
+        var result = new AamvaCloudVerificationResult();
         result.json = json;
         return result;
     };
-    return AamvaBarcodeVerificationResult;
+    return AamvaCloudVerificationResult;
 }());
-exports.AamvaBarcodeVerificationResult = AamvaBarcodeVerificationResult;
-var AamvaBarcodeVerifier = /** @class */ (function () {
-    function AamvaBarcodeVerifier() {
+exports.AamvaCloudVerificationResult = AamvaCloudVerificationResult;
+var AamvaCloudVerifier = /** @class */ (function () {
+    function AamvaCloudVerifier() {
         this.proxy = new IdCaptureProxy_1.IdCaptureProxy();
     }
-    AamvaBarcodeVerifier.create = function (context) {
-        var verifier = new AamvaBarcodeVerifier();
+    AamvaCloudVerifier.create = function (context) {
+        var verifier = new AamvaCloudVerifier();
         return new Promise(function (resolve, reject) {
             verifier
                 .proxy
-                .createContextForBarcodeVerification(context)
+                .createContextForCloudVerification(context)
                 .then(function () {
                 verifier.context = context;
                 resolve(verifier);
             }, reject);
         });
     };
-    AamvaBarcodeVerifier.prototype.verify = function (capturedId) {
+    AamvaCloudVerifier.prototype.verify = function (capturedId) {
         var _this = this;
         // Necessary for not exposing internal API on CapturedId, while only passing the private "json" property
         // to native iOS and Android.
@@ -1385,11 +1384,10 @@ var AamvaBarcodeVerifier = /** @class */ (function () {
                 .verifyCapturedIdAsync(JSON.stringify(capturedIdJsonData))
                 .then(function (json) {
                 if (!json) {
-                    resolve(AamvaBarcodeVerificationResult
-                        .fromJSON(JSON.parse('{}')));
+                    resolve();
                 }
                 else {
-                    resolve(AamvaBarcodeVerificationResult
+                    resolve(AamvaCloudVerificationResult
                         .fromJSON(JSON.parse(json)));
                 }
             }, reject);
@@ -1397,8 +1395,8 @@ var AamvaBarcodeVerifier = /** @class */ (function () {
     };
     __decorate([
         Serializeable_1.ignoreFromSerialization
-    ], AamvaBarcodeVerifier.prototype, "proxy", void 0);
-    return AamvaBarcodeVerifier;
+    ], AamvaCloudVerifier.prototype, "proxy", void 0);
+    return AamvaCloudVerifier;
 }());
-exports.AamvaBarcodeVerifier = AamvaBarcodeVerifier;
+exports.AamvaCloudVerifier = AamvaCloudVerifier;
 //# sourceMappingURL=CapturedId.js.map
