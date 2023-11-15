@@ -10,28 +10,28 @@ var NativeModule = react_native_1.NativeModules.ScanditDataCaptureId;
 exports.Defaults = {
     IdCapture: {
         RecommendedCameraSettings: Camera_Related_1.CameraSettings
-            .fromJSON(NativeModule.Defaults.IdCapture.RecommendedCameraSettings),
+            .fromJSON(NativeModule.Defaults.RecommendedCameraSettings),
         IdCaptureOverlayDefaults: {
             defaultCapturedBrush: {
                 fillColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.fillColor),
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultCapturedBrush.fillColor),
                 strokeColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeColor),
-                strokeWidth: NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeWidth,
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultCapturedBrush.strokeColor),
+                strokeWidth: NativeModule.Defaults.IdCaptureOverlay.DefaultCapturedBrush.strokeWidth,
             },
             defaultLocalizedBrush: {
                 fillColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.fillColor),
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultLocalizedBrush.fillColor),
                 strokeColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeColor),
-                strokeWidth: NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeWidth,
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultLocalizedBrush.strokeColor),
+                strokeWidth: NativeModule.Defaults.IdCaptureOverlay.DefaultLocalizedBrush.strokeWidth,
             },
             defaultRejectedBrush: {
                 fillColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.fillColor),
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultRejectedBrush.fillColor),
                 strokeColor: Common_1.Color
-                    .fromJSON(NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeColor),
-                strokeWidth: NativeModule.Defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeWidth,
+                    .fromJSON(NativeModule.Defaults.IdCaptureOverlay.DefaultRejectedBrush.strokeColor),
+                strokeWidth: NativeModule.Defaults.IdCaptureOverlay.DefaultRejectedBrush.strokeWidth,
             },
         },
     },

@@ -17,7 +17,7 @@ var CapturedResultType;
     CapturedResultType["ChinaOneWayPermitBackMrzResult"] = "chinaOneWayPermitBackMrzResult";
     CapturedResultType["ChinaOneWayPermitFrontMrzResult"] = "chinaOneWayPermitFrontMrzResult";
     CapturedResultType["ApecBusinessTravelCardMrzResult"] = "apecBusinessTravelCardMrzResult";
-})(CapturedResultType = exports.CapturedResultType || (exports.CapturedResultType = {}));
+})(CapturedResultType || (exports.CapturedResultType = CapturedResultType = {}));
 var DocumentType;
 (function (DocumentType) {
     DocumentType["None"] = "none";
@@ -74,7 +74,7 @@ var DocumentType;
     DocumentType["MyNumberCard"] = "myNumberCard";
     DocumentType["MinorsPassport"] = "minorsPassport";
     DocumentType["MinorsPublicServicesCard"] = "minorsPublicServicesCard";
-})(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
+})(DocumentType || (exports.DocumentType = DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {
     IdDocumentType["AAMVABarcode"] = "aamvaBarcode";
@@ -95,18 +95,18 @@ var IdDocumentType;
     IdDocumentType["ChinaOneWayPermitBackMRZ"] = "chinaOneWayPermitBackMrz";
     IdDocumentType["ChinaOneWayPermitFrontMRZ"] = "chinaOneWayPermitFrontMrz";
     IdDocumentType["ApecBusinessTravelCardMRZ"] = "apecBusinessTravelCardMrz";
-})(IdDocumentType = exports.IdDocumentType || (exports.IdDocumentType = {}));
+})(IdDocumentType || (exports.IdDocumentType = IdDocumentType = {}));
 var SupportedSides;
 (function (SupportedSides) {
     SupportedSides["FrontOnly"] = "frontOnly";
     SupportedSides["FrontAndBack"] = "frontAndBack";
-})(SupportedSides = exports.SupportedSides || (exports.SupportedSides = {}));
+})(SupportedSides || (exports.SupportedSides = SupportedSides = {}));
 var IdImageType;
 (function (IdImageType) {
     IdImageType["Face"] = "face";
     IdImageType["IdFront"] = "idFront";
     IdImageType["IdBack"] = "idBack";
-})(IdImageType = exports.IdImageType || (exports.IdImageType = {}));
+})(IdImageType || (exports.IdImageType = IdImageType = {}));
 var IdLayout;
 (function (IdLayout) {
     IdLayout["TD1"] = "td1";
@@ -117,28 +117,28 @@ var IdLayout;
     IdLayout["PDF417"] = "pdf417";
     IdLayout["Auto"] = "auto";
     IdLayout["None"] = "none";
-})(IdLayout = exports.IdLayout || (exports.IdLayout = {}));
+})(IdLayout || (exports.IdLayout = IdLayout = {}));
 var IdLayoutStyle;
 (function (IdLayoutStyle) {
     IdLayoutStyle["Rounded"] = "rounded";
     IdLayoutStyle["Square"] = "square";
-})(IdLayoutStyle = exports.IdLayoutStyle || (exports.IdLayoutStyle = {}));
+})(IdLayoutStyle || (exports.IdLayoutStyle = IdLayoutStyle = {}));
 var IdLayoutLineStyle;
 (function (IdLayoutLineStyle) {
     IdLayoutLineStyle["Light"] = "light";
     IdLayoutLineStyle["Bold"] = "bold";
-})(IdLayoutLineStyle = exports.IdLayoutLineStyle || (exports.IdLayoutLineStyle = {}));
+})(IdLayoutLineStyle || (exports.IdLayoutLineStyle = IdLayoutLineStyle = {}));
 var ComparisonCheckResult;
 (function (ComparisonCheckResult) {
     ComparisonCheckResult["Passed"] = "Passed";
     ComparisonCheckResult["Skipped"] = "Skipped";
     ComparisonCheckResult["Failed"] = "Failed";
-})(ComparisonCheckResult = exports.ComparisonCheckResult || (exports.ComparisonCheckResult = {}));
+})(ComparisonCheckResult || (exports.ComparisonCheckResult = ComparisonCheckResult = {}));
 var IdAnonymizationMode;
 (function (IdAnonymizationMode) {
     IdAnonymizationMode["None"] = "none";
     IdAnonymizationMode["FieldsOnly"] = "fieldsOnly";
     IdAnonymizationMode["ImagesOnly"] = "imagesOnly";
     IdAnonymizationMode["FieldsAndImages"] = "fieldsAndImages";
-})(IdAnonymizationMode = exports.IdAnonymizationMode || (exports.IdAnonymizationMode = {}));
+})(IdAnonymizationMode || (exports.IdAnonymizationMode = IdAnonymizationMode = {}));
 //# sourceMappingURL=Enums.js.map

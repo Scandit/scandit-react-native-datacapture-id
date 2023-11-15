@@ -7,10 +7,10 @@
 import Foundation
 
 enum ScanditDataCaptureIdEvent: String, CaseIterable {
-    case didCapture = "idCaptureListener-didCapture"
-    case didLocalize = "idCaptureListener-didLocalize"
-    case didReject = "idCaptureListener-didReject"
-    case didTimeOut = "idCaptureListener-didTimeOut"
+    case didCapture = "IdCaptureListener.didCaptureId"
+    case didLocalize = "IdCaptureListener.didLocalizeId"
+    case didReject = "IdCaptureListener.didRejectId"
+    case didTimeOut = "IdCaptureListener.didTimeout"
 }
 
 extension ScanditDataCaptureId {
@@ -30,7 +30,13 @@ extension ScanditDataCaptureId {
 
     func sendEvent(withName name: ScanditDataCaptureIdEvent, body: Any!) -> Bool {
         guard hasListeners else { return false }
-        sendEvent(withName: name.rawValue, body: body)
+        do {
+            let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+            let jsonBody = String(data: bodyData, encoding: .utf8)
+            sendEvent(withName: name.rawValue, body: jsonBody)
+        } catch {
+            sendEvent(withName: name.rawValue, body: body)
+        }
         return true
     }
 }

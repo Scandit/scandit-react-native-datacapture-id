@@ -19,8 +19,8 @@ var IdCaptureProxy = /** @class */ (function () {
     IdCaptureProxy.prototype.verifyCapturedId = function (capturedId) {
         return NativeModule.verifyCapturedId(capturedId);
     };
-    IdCaptureProxy.prototype.createContextForCloudVerification = function (context) {
-        return NativeModule.createContextForCloudVerification(JSON.stringify(context.toJSON()));
+    IdCaptureProxy.prototype.createContextForBarcodeVerification = function (context) {
+        return NativeModule.createContextForBarcodeVerification(JSON.stringify(context.toJSON()));
     };
     IdCaptureProxy.prototype.verifyCapturedIdAsync = function (capturedId) {
         return NativeModule.verifyCapturedIdAsync(capturedId);
