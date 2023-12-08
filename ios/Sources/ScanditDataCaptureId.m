@@ -11,7 +11,7 @@ RCT_EXTERN_METHOD(verifyCapturedId
                   : (NSString *)capturedIdJSON capturedIdJSON
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(createContextForCloudVerification
+RCT_EXTERN_METHOD(createContextForBarcodeVerification
                   : (NSString *)context context
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
@@ -19,4 +19,5 @@ RCT_EXTERN_METHOD(verifyCapturedIdAsync
                   : (NSString *)capturedIdJSON capturedIdJSON
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(setModeEnabledState : (BOOL)enabled)
 @end
