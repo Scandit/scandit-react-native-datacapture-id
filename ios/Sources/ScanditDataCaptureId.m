@@ -19,5 +19,4 @@ RCT_EXTERN_METHOD(verifyCapturedIdAsync
                   : (NSString *)capturedIdJSON capturedIdJSON
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(setModeEnabledState : (BOOL)enabled)
 @end
