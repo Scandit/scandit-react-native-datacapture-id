@@ -51,6 +51,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
 
     @objc override func invalidate() {
         super.invalidate()
+        idModule.didStop()
     }
 
     @objc(finishDidCaptureCallback:)
@@ -100,5 +101,10 @@ class ScanditDataCaptureId: RCTEventEmitter {
                                reject: @escaping RCTPromiseRejectBlock) {
         idModule.verifyCapturedIdWithCloud(jsonString: capturedIdJSON,
                                            result: ReactNativeResult(resolve, reject))
+    }
+
+    @objc(setModeEnabledState:)
+    func setModeEnabledState(enabled: Bool) {
+        idModule.setModeEnabled(enabled: enabled)
     }
 }
