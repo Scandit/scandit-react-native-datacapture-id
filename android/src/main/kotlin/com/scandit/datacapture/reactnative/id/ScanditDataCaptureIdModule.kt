@@ -71,11 +71,6 @@ class ScanditDataCaptureIdModule(
         idCaptureModule.verifyCapturedIdBarcode(capturedIdJSON, ReactNativeResult(promise))
     }
 
-    @ReactMethod
-    fun setModeEnabledState(enabled: Boolean) {
-        idCaptureModule.setModeEnabled(enabled)
-    }
-
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to idCaptureModule.getDefaults()
     )
