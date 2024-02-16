@@ -1,4 +1,4 @@
-import { nameForSerialization, Quadrilateral, FactoryMaker, Feedback, CameraSettings, Color, CameraController, DefaultSerializeable, ignoreFromSerialization, Brush } from 'scandit-react-native-datacapture-core/dist/core';
+import { nameForSerialization, Quadrilateral, FactoryMaker, Feedback, CameraSettings, Color, BaseController, CameraController, DefaultSerializeable, ignoreFromSerialization, Brush } from 'scandit-react-native-datacapture-core/dist/core';
 
 var ComparisonCheckResult;
 (function (ComparisonCheckResult) {
@@ -249,14 +249,14 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-class IdCaptureController {
-    get _proxy() {
-        return FactoryMaker.getInstance('IdCaptureProxy');
-    }
+class IdCaptureController extends BaseController {
     static forIdCapture(idCapture) {
         const controller = new IdCaptureController();
         controller.idCapture = idCapture;
         return controller;
+    }
+    constructor() {
+        super('IdCaptureProxy');
     }
     reset() {
         return this._proxy.resetMode();
@@ -272,6 +272,15 @@ class IdCaptureController {
     }
     setModeEnabledState(enabled) {
         this._proxy.setModeEnabledState(enabled);
+    }
+    updateIdCaptureMode() {
+        return this._proxy.updateIdCaptureMode(JSON.stringify(this.idCapture.toJSON()));
+    }
+    applyIdCaptureModeSettings(newSettings) {
+        return this._proxy.applyIdCaptureModeSettings(JSON.stringify(newSettings.toJSON()));
+    }
+    updateIdCaptureOverlay(overlay) {
+        return this._proxy.updateIdCaptureOverlay(JSON.stringify(overlay.toJSON()));
     }
 }
 
@@ -1008,7 +1017,7 @@ class IdCapture extends DefaultSerializeable {
     }
     set feedback(feedback) {
         this._feedback = feedback;
-        this.didChange();
+        this.controller.updateIdCaptureMode();
     }
     static get recommendedCameraSettings() {
         return new CameraSettings(IdCapture.idCaptureDefaults.IdCapture.RecommendedCameraSettings);
@@ -1048,7 +1057,7 @@ class IdCapture extends DefaultSerializeable {
     }
     applySettings(settings) {
         this.settings = settings;
-        return this.didChange();
+        return this.controller.applyIdCaptureModeSettings(settings);
     }
     addListener(listener) {
         if (this.listeners.includes(listener)) {
@@ -1064,14 +1073,6 @@ class IdCapture extends DefaultSerializeable {
     }
     reset() {
         return this.controller.reset();
-    }
-    didChange() {
-        if (this.context) {
-            return this.context.update();
-        }
-        else {
-            return Promise.resolve();
-        }
     }
 }
 __decorate([
@@ -1177,45 +1178,55 @@ class IdCaptureOverlay extends DefaultSerializeable {
         this._capturedBrush = this._defaultCapturedBrush;
         this._localizedBrush = this._defaultLocalizedBrush;
         this._rejectedBrush = this._defaultRejectedBrush;
+        this._frontSideTextHint = null;
+        this._backSideTextHint = null;
     }
     setIdLayout(idLayout) {
         this._idLayout = idLayout;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
+    }
+    setFrontSideTextHint(text) {
+        this._frontSideTextHint = text;
+        this.idCapture.controller.updateIdCaptureOverlay(this);
+    }
+    setBackSideTextHint(text) {
+        this._backSideTextHint = text;
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get idLayoutStyle() {
         return this._idLayoutStyle;
     }
     set idLayoutStyle(style) {
         this._idLayoutStyle = style;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get idLayoutLineStyle() {
         return this._idLayoutLineStyle;
     }
     set idLayoutLineStyle(lineStyle) {
         this._idLayoutLineStyle = lineStyle;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get capturedBrush() {
         return this._capturedBrush;
     }
     set capturedBrush(brush) {
         this._capturedBrush = brush;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get localizedBrush() {
         return this._localizedBrush;
     }
     set localizedBrush(brush) {
         this._localizedBrush = brush;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get rejectedBrush() {
         return this._rejectedBrush;
     }
     set rejectedBrush(brush) {
         this._rejectedBrush = brush;
-        this.idCapture.didChange();
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get defaultCapturedBrush() {
         return this._defaultCapturedBrush;
@@ -1251,6 +1262,12 @@ __decorate([
 __decorate([
     nameForSerialization('rejectedBrush')
 ], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
+__decorate([
+    nameForSerialization('frontSideTextHint')
+], IdCaptureOverlay.prototype, "_frontSideTextHint", void 0);
+__decorate([
+    nameForSerialization('backSideTextHint')
+], IdCaptureOverlay.prototype, "_backSideTextHint", void 0);
 __decorate([
     ignoreFromSerialization
 ], IdCaptureOverlay, "idCaptureDefaults", null);
@@ -1346,15 +1363,15 @@ class AamvaVizBarcodeComparisonResult {
     }
     get datesOfBirthMatch() {
         return DateComparisonCheck
-            .fromJSON(this.json.datesOfBirth);
+            .fromJSON(this.json.datesOfBirthMatch);
     }
     get datesOfExpiryMatch() {
         return DateComparisonCheck
-            .fromJSON(this.json.datesOfExpiry);
+            .fromJSON(this.json.datesOfExpiryMatch);
     }
     get datesOfIssueMatch() {
         return DateComparisonCheck
-            .fromJSON(this.json.datesOfIssue);
+            .fromJSON(this.json.datesOfIssueMatch);
     }
     static fromJSON(json) {
         const result = new AamvaVizBarcodeComparisonResult();
@@ -1477,6 +1494,9 @@ var DocumentType;
     DocumentType["RefugeePassport"] = "refugeePassport";
     DocumentType["SpecialId"] = "specialId";
     DocumentType["UniformedServicesId"] = "uniformedServicesId";
+    DocumentType["ImmigrantVisa"] = "immigrantVisa";
+    DocumentType["ConsularVoterId"] = "consularVoterId";
+    DocumentType["TwicCard"] = "twicCard";
 })(DocumentType || (DocumentType = {}));
 
 export { AAMVABarcodeResult, AamvaBarcodeVerificationResult, AamvaBarcodeVerifier, AamvaVizBarcodeComparisonResult, AamvaVizBarcodeComparisonVerifier, ApecBusinessTravelCardMrzResult, ArgentinaIdBarcodeResult, CapturedId, CapturedResultType, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ChinaOneWayPermitBackMrzResult, ChinaOneWayPermitFrontMrzResult, ColombiaDlBarcodeResult, ColombiaIdBarcodeResult, CommonAccessCardBarcodeResult, CommonCapturedIdFields, ComparisonCheckResult, DateComparisonCheck, DateResult, DocumentType, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureError, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureSession, IdCaptureSettings, IdDocumentType, IdImageType, IdLayout, IdLayoutLineStyle, IdLayoutStyle, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, StringComparisonCheck, SupportedSides, USUniformedServicesBarcodeResult, USVisaVIZResult, VIZResult, VehicleRestriction, getIdDefaults, loadIdDefaults, parseIdDefaults };

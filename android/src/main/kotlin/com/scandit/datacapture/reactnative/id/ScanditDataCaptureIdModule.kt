@@ -76,6 +76,21 @@ class ScanditDataCaptureIdModule(
         idCaptureModule.setModeEnabled(enabled)
     }
 
+    @ReactMethod
+    fun updateIdCaptureOverlay(overlayJson: String, promise: Promise) {
+        idCaptureModule.updateOverlay(overlayJson, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun updateIdCaptureMode(modeJson: String, promise: Promise) {
+        idCaptureModule.updateModeFromJson(modeJson, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun applyIdCaptureModeSettings(modeSettingsJson: String, promise: Promise) {
+        idCaptureModule.applyModeSettings(modeSettingsJson, ReactNativeResult(promise))
+    }
+
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to idCaptureModule.getDefaults()
     )

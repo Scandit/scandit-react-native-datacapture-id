@@ -5,4 +5,7 @@ export declare class NativeIdCaptureProxy implements IdCaptureProxy {
     createContextForBarcodeVerification(contextJSON: string): Promise<void>;
     verifyCapturedIdAsync(capturedId: string): Promise<string | null>;
     setModeEnabledState(enabled: boolean): void;
+    updateIdCaptureMode(modeJson: string): Promise<void>;
+    applyIdCaptureModeSettings(newSettingsJson: string): Promise<void>;
+    updateIdCaptureOverlay(overlayJson: string): Promise<void>;
 }
