@@ -54,10 +54,6 @@ class ScanditDataCaptureId: RCTEventEmitter {
         idModule.didStop()
     }
 
-    deinit {
-        invalidate()
-    }
-
     @objc(finishDidCaptureCallback:)
     func finishDidCaptureCallback(enabled: Bool) {
         idModule.finishDidCaptureId(enabled: enabled)
@@ -110,20 +106,5 @@ class ScanditDataCaptureId: RCTEventEmitter {
     @objc(setModeEnabledState:)
     func setModeEnabledState(enabled: Bool) {
         idModule.setModeEnabled(enabled: enabled)
-    }
-
-    @objc(updateIdCaptureOverlay:resolve:reject:)
-    func updateIdCaptureOverlay(overlayJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.updateOverlay(overlayJson: overlayJson, result: ReactNativeResult(resolve, reject))
-    }
-
-    @objc(updateIdCaptureMode:resolve:reject:)
-    func updateIdCaptureMode(modeJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.updateModeFromJson(modeJson: modeJson, result: ReactNativeResult(resolve, reject))
-    }
-
-    @objc(applyIdCaptureModeSettings:resolve:reject:)
-    func applyIdCaptureModeSettings(modeSettingsJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.applyModeSettings(modeSettingsJson: modeSettingsJson, result: ReactNativeResult(resolve, reject))
     }
 }
