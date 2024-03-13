@@ -24,6 +24,15 @@ class NativeIdCaptureProxy {
     setModeEnabledState(enabled) {
         NativeModule$1.setModeEnabledState(enabled);
     }
+    updateIdCaptureMode(modeJson) {
+        return NativeModule$1.updateIdCaptureMode(modeJson);
+    }
+    applyIdCaptureModeSettings(newSettingsJson) {
+        return NativeModule$1.applyIdCaptureModeSettings(newSettingsJson);
+    }
+    updateIdCaptureOverlay(overlayJson) {
+        return NativeModule$1.updateIdCaptureOverlay(overlayJson);
+    }
 }
 
 // tslint:disable:variable-name
@@ -56,6 +65,7 @@ class NativeIdCaptureListenerProxy {
         this.nativeListeners.push(didRejectListener);
     }
     subscribeDidTimeOutListener() {
+        // perhaps rename this to a token
         const didTimeOutListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didTimeOut, (body) => {
             this.eventEmitter.emit(IdCaptureListenerEvents.didTimeOut, body);
         });
