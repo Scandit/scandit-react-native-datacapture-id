@@ -72,6 +72,11 @@ class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
+    fun verifyVizMrz(capturedIdJSON: String, promise: Promise) {
+        idCaptureModule.vizMrzVerification(capturedIdJSON, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
     fun setModeEnabledState(enabled: Boolean) {
         idCaptureModule.setModeEnabled(enabled)
     }
