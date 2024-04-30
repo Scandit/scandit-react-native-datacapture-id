@@ -107,14 +107,6 @@ class ScanditDataCaptureId: RCTEventEmitter {
                                            result: ReactNativeResult(resolve, reject))
     }
 
-    @objc(verifyVizMrz:capturedIdJSON:reject:)
-    func verifyVizMrz(capturedIdJSON: String,
-                               resolve: @escaping RCTPromiseResolveBlock,
-                               reject: @escaping RCTPromiseRejectBlock) {
-        idModule.verifyCaptureIdMrzViz(jsonString: capturedIdJSON,
-                                           result: ReactNativeResult(resolve, reject))
-    }
-
     @objc(setModeEnabledState:)
     func setModeEnabledState(enabled: Bool) {
         idModule.setModeEnabled(enabled: enabled)
