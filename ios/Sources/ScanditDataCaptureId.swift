@@ -27,7 +27,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     override func stopObserving() {
-        idModule.didStop()
+        idModule.removeListener()
         super.stopObserving()
     }
 
@@ -104,6 +104,14 @@ class ScanditDataCaptureId: RCTEventEmitter {
                                resolve: @escaping RCTPromiseResolveBlock,
                                reject: @escaping RCTPromiseRejectBlock) {
         idModule.verifyCapturedIdWithCloud(jsonString: capturedIdJSON,
+                                           result: ReactNativeResult(resolve, reject))
+    }
+
+    @objc(verifyVizMrz:capturedIdJSON:reject:)
+    func verifyVizMrz(capturedIdJSON: String,
+                               resolve: @escaping RCTPromiseResolveBlock,
+                               reject: @escaping RCTPromiseRejectBlock) {
+        idModule.verifyCaptureIdMrzViz(jsonString: capturedIdJSON,
                                            result: ReactNativeResult(resolve, reject))
     }
 
