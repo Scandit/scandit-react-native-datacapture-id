@@ -27,7 +27,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     override func stopObserving() {
-        idModule.removeListener()
+        idModule.didStop()
         super.stopObserving()
     }
 
