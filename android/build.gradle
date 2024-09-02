@@ -25,7 +25,7 @@ buildscript {
         if (ext.has("kotlinVersion")) {
             ext.kotlinVersion()
         } else {
-            ext.safeExtGet("kotlinVersion", "1.8.22")
+            ext.safeExtGet("kotlinVersion", "1.7.21")
         }
     }
 
@@ -61,30 +61,18 @@ android {
     lintOptions {
         abortOnError false
     }
-
-    packagingOptions {
-        pickFirst 'lib/x86/libc++_shared.so'
-        pickFirst 'lib/x86_64/libc++_shared.so'
-        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-        pickFirst 'lib/arm64-v8a/libc++_shared.so'
-    }
-}
-
-if (file( "${rootProject.projectDir}/build-test.gradle").exists()) {
-    apply from: "${rootProject.projectDir}/build-test.gradle"
 }
 
 dependencies {
-    def sdk_version = "6.26.0"
+    def sdk_version = "6.25.3"
 
-    println("Version of the native sdk used in this build: ${safeExtGet("global_sdk_version", sdk_version)}")
-    api project(path: ":scandit-react-native-datacapture-core")
-
+    println("Version of the native sdk used in this build: ${safeExtGet('global_sdk_version', sdk_version)}")
     if (findProject(':scandit-datacapture-frameworks-id') != null) {
         api project(":scandit-datacapture-frameworks-id")
     } else {
         api "com.scandit.datacapture.frameworks:id:${safeExtGet('global_sdk_version', sdk_version)}"
     }
+    api project(path: ':scandit-react-native-datacapture-core')
 
     // For < 0.71, this will be from the local maven repo
     // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
