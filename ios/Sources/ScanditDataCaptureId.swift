@@ -134,4 +134,9 @@ class ScanditDataCaptureId: RCTEventEmitter {
     func applyIdCaptureModeSettings(modeSettingsJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         idModule.applyModeSettings(modeSettingsJson: modeSettingsJson, result: ReactNativeResult(resolve, reject))
     }
+
+    @objc(updateIdCaptureFeedback:resolve:reject:)
+    func updateIdCaptureFeedback(feedbackJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        idModule.updateFeedback(feedbackJson: feedbackJson, result: ReactNativeResult(resolve, reject))
+    }
 }

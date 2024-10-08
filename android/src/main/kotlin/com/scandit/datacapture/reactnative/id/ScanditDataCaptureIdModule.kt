@@ -96,6 +96,11 @@ class ScanditDataCaptureIdModule(
         idCaptureModule.applyModeSettings(modeSettingsJson, ReactNativeResult(promise))
     }
 
+    @ReactMethod
+    fun updateIdCaptureFeedback(feedbackJson: String, promise: Promise) {
+        idCaptureModule.updateFeedback(feedbackJson, ReactNativeResult(promise))
+    }
+
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to idCaptureModule.getDefaults()
     )

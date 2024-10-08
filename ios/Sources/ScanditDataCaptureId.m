@@ -39,4 +39,9 @@ RCT_EXTERN_METHOD(applyIdCaptureModeSettings
                   : (NSString *)modeSettingsJson resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(updateIdCaptureFeedback
+                  : (NSString *)feedbackJson resolve
+                  : (RCTPromiseResolveBlock)resolve reject
+                  : (RCTPromiseRejectBlock)reject)
 @end
