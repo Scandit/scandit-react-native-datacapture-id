@@ -1,7 +1,7 @@
 import { FactoryMaker } from 'scandit-react-native-datacapture-core/dist/core';
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { loadIdDefaults, IdCaptureListenerEvents } from './id.js';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
+export { AAMVABarcodeResult, AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, AamvaVizBarcodeComparisonResult, AamvaVizBarcodeComparisonVerifier, ApecBusinessTravelCardMrzResult, ArgentinaIdBarcodeResult, CapturedId, CapturedResultType, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ChinaOneWayPermitBackMrzResult, ChinaOneWayPermitFrontMrzResult, ColombiaDlBarcodeResult, ColombiaIdBarcodeResult, CommonAccessCardBarcodeResult, ComparisonCheckResult, DateResult, DocumentType, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureError, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureSession, IdCaptureSettings, IdDocumentType, IdImageType, IdLayout, IdLayoutLineStyle, IdLayoutStyle, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, RejectionReason, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, SupportedSides, TextHintPosition, USUniformedServicesBarcodeResult, USVisaVIZResult, VIZResult, VehicleRestriction, VizMrzComparisonCheckResult, VizMrzComparisonResult, VizMrzComparisonVerifier } from './id.js';
 import { initCoreDefaults } from 'scandit-react-native-datacapture-core';
 
 // tslint:disable:variable-name
@@ -12,11 +12,17 @@ class NativeIdCaptureProxy {
     resetMode() {
         return NativeModule$1.reset();
     }
+    verifyCapturedId(capturedId) {
+        return NativeModule$1.verifyCapturedId(capturedId);
+    }
     createContextForBarcodeVerification(contextJSON) {
         return NativeModule$1.createContextForBarcodeVerification(contextJSON);
     }
     verifyCapturedIdAsync(capturedId) {
         return NativeModule$1.verifyCapturedIdAsync(capturedId);
+    }
+    verifyVizMrz(capturedId) {
+        return NativeModule$1.verifyVizMrz(capturedId);
     }
     setModeEnabledState(enabled) {
         NativeModule$1.setModeEnabledState(enabled);
@@ -52,11 +58,24 @@ class NativeIdCaptureListenerProxy {
         });
         this.nativeListeners.push(didCaptureListener);
     }
+    subscribeDidLocalizeListener() {
+        const didLocalizeListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didLocalize, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didLocalize, body);
+        });
+        this.nativeListeners.push(didLocalizeListener);
+    }
     subscribeDidRejectListener() {
         const didRejectListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didReject, (body) => {
             this.eventEmitter.emit(IdCaptureListenerEvents.didReject, body);
         });
         this.nativeListeners.push(didRejectListener);
+    }
+    subscribeDidTimeOutListener() {
+        // perhaps rename this to a token
+        const didTimeOutListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didTimeOut, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didTimeOut, body);
+        });
+        this.nativeListeners.push(didTimeOutListener);
     }
     unregisterListenerForEvents() {
         this.nativeListeners.forEach(listener => listener.remove());
