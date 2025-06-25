@@ -6,3 +6,4 @@ export { IdCaptureController, IdCaptureListenerController, IdCaptureListenerProx
 export { IdCapture, IdCaptureFeedback, IdCaptureListener, IdCaptureOverlay, IdCaptureSettings, IdLayoutLineStyle, IdLayoutStyle, RejectionReason } from 'scandit-datacapture-frameworks-id';
 export { IdCaptureDocumentType, DriverLicense, HealthInsuranceCard, IdCaptureDocument, IdCard, Passport, RegionSpecific, ResidencePermit, VisaIcao } from 'scandit-datacapture-frameworks-id';
 export { IdCaptureScanner, SingleSideScanner, FullDocumentScanner, IdCaptureRegion, RegionSpecificSubtype, IdImages, IdSide } from 'scandit-datacapture-frameworks-id';
+export * from './IdCaptureView';
