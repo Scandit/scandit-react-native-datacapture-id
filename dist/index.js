@@ -1,9 +1,8 @@
 import { FactoryMaker } from 'scandit-react-native-datacapture-core/dist/core';
-import { NativeModules, NativeEventEmitter, AppState } from 'react-native';
-import { IdCapture, IdCaptureSettings, loadIdDefaults, IdCaptureOverlay, IdCaptureListenerEvents } from './id.js';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
-import { FrameSourceState, Camera, CameraPosition, DataCaptureView, initCoreDefaults } from 'scandit-react-native-datacapture-core';
-import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef } from 'react';
+import { NativeModules, NativeEventEmitter } from 'react-native';
+import { loadIdDefaults, IdCaptureListenerEvents } from './id.js';
+export { AAMVABarcodeResult, AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, AamvaVizBarcodeComparisonResult, AamvaVizBarcodeComparisonVerifier, ApecBusinessTravelCardMrzResult, ArgentinaIdBarcodeResult, CapturedId, CapturedResultType, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ChinaOneWayPermitBackMrzResult, ChinaOneWayPermitFrontMrzResult, ColombiaDlBarcodeResult, ColombiaIdBarcodeResult, CommonAccessCardBarcodeResult, ComparisonCheckResult, DateResult, DocumentType, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureError, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureSession, IdCaptureSettings, IdDocumentType, IdImageType, IdLayout, IdLayoutLineStyle, IdLayoutStyle, LocalizedOnlyId, MRZResult, ProfessionalDrivingPermit, RejectedId, RejectionReason, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, SupportedSides, TextHintPosition, USUniformedServicesBarcodeResult, USVisaVIZResult, VIZResult, VehicleRestriction, VizMrzComparisonCheckResult, VizMrzComparisonResult, VizMrzComparisonVerifier } from './id.js';
+import { initCoreDefaults } from 'scandit-react-native-datacapture-core';
 
 // tslint:disable:variable-name
 const NativeModule$1 = NativeModules.ScanditDataCaptureId;
@@ -13,11 +12,17 @@ class NativeIdCaptureProxy {
     resetMode() {
         return NativeModule$1.reset();
     }
+    verifyCapturedId(capturedId) {
+        return NativeModule$1.verifyCapturedId(capturedId);
+    }
     createContextForBarcodeVerification(contextJSON) {
         return NativeModule$1.createContextForBarcodeVerification(contextJSON);
     }
     verifyCapturedIdAsync(capturedId) {
         return NativeModule$1.verifyCapturedIdAsync(capturedId);
+    }
+    verifyVizMrz(capturedId) {
+        return NativeModule$1.verifyVizMrz(capturedId);
     }
     setModeEnabledState(enabled) {
         NativeModule$1.setModeEnabledState(enabled);
@@ -48,16 +53,29 @@ class NativeIdCaptureListenerProxy {
     }
     isModeEnabled = () => false;
     subscribeDidCaptureListener() {
-        const didCaptureListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didCapture, (event) => {
-            this.eventEmitter.emit(IdCaptureListenerEvents.didCapture, event.data);
+        const didCaptureListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didCapture, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didCapture, body);
         });
         this.nativeListeners.push(didCaptureListener);
     }
+    subscribeDidLocalizeListener() {
+        const didLocalizeListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didLocalize, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didLocalize, body);
+        });
+        this.nativeListeners.push(didLocalizeListener);
+    }
     subscribeDidRejectListener() {
-        const didRejectListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didReject, (event) => {
-            this.eventEmitter.emit(IdCaptureListenerEvents.didReject, event.data);
+        const didRejectListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didReject, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didReject, body);
         });
         this.nativeListeners.push(didRejectListener);
+    }
+    subscribeDidTimeOutListener() {
+        // perhaps rename this to a token
+        const didTimeOutListener = RNEventEmitter.addListener(IdCaptureListenerEvents.didTimeOut, (body) => {
+            this.eventEmitter.emit(IdCaptureListenerEvents.didTimeOut, body);
+        });
+        this.nativeListeners.push(didTimeOutListener);
     }
     unregisterListenerForEvents() {
         this.nativeListeners.forEach(listener => listener.remove());
@@ -88,222 +106,5 @@ function initIdDefaults() {
     loadIdDefaults(dataCaptureId.Defaults);
 }
 
-// tslint:disable-next-line
-const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
-    useImperativeHandle(ref, () => ({
-        reset() {
-            getMode().reset();
-        },
-    }), []);
-    /* STATE VARIABLES */
-    const [isEnabledState, setIsEnabledState] = useState(false);
-    const [frameSourceState, setFrameSourceState] = useState(FrameSourceState.Off);
-    /* STATE HANDLERS */
-    useEffect(() => {
-        getMode().isEnabled = isEnabledState;
-    }, [isEnabledState]);
-    useEffect(() => {
-        getCamera()?.switchToDesiredState(frameSourceState);
-    }, [frameSourceState]);
-    const viewRef = useRef(null);
-    const componentIsSetUp = useRef(false);
-    const idCaptureModeRef = useRef(null);
-    function getMode() {
-        if (idCaptureModeRef.current !== null) {
-            return idCaptureModeRef.current;
-        }
-        idCaptureModeRef.current = IdCapture.forContext(null, props.idCaptureSettings || new IdCaptureSettings());
-        return idCaptureModeRef.current;
-    }
-    const idCaptureOverlayRef = useRef(null);
-    function getIdCaptureOverlay() {
-        if (idCaptureOverlayRef.current !== null) {
-            return idCaptureOverlayRef.current;
-        }
-        idCaptureOverlayRef.current = IdCaptureOverlay.withIdCaptureForView(getMode(), null);
-        return idCaptureOverlayRef.current;
-    }
-    const cameraRef = useRef(null);
-    function getCamera() {
-        if (cameraRef.current !== null) {
-            return cameraRef.current;
-        }
-        cameraRef.current = Camera.asPositionWithSettings(props.desiredCameraPosition || CameraPosition.WorldFacing, props.cameraSettings || IdCapture.recommendedCameraSettings);
-        return cameraRef.current;
-    }
-    const torchSwitchControl = useRef(null);
-    const zoomSwitchControl = useRef(null);
-    const appState = useRef(AppState.currentState);
-    /* SETUP */
-    useEffect(() => {
-        doSetup();
-        const subscription = AppState.addEventListener('change', nextAppState => {
-            if (appState.current.match(/inactive|background/) &&
-                nextAppState === 'active') {
-                setIsEnabledState(props.isEnabled);
-                setFrameSourceState(props.desiredCameraState || FrameSourceState.On);
-            }
-            else {
-                setIsEnabledState(false);
-                setFrameSourceState(FrameSourceState.Off);
-            }
-            appState.current = nextAppState;
-        });
-        return () => {
-            subscription.remove();
-            doCleanup();
-        };
-    }, []);
-    const doSetup = () => {
-        if (componentIsSetUp.current)
-            return;
-        componentIsSetUp.current = true;
-        /* Handling Data Capture Context */
-        props.context.setFrameSource(getCamera());
-        props.context.removeAllModes();
-        props.context.addMode(getMode());
-        /* Adding ID Capture Overlay */
-        if (viewRef.current) {
-            viewRef.current.addOverlay(getIdCaptureOverlay());
-        }
-    };
-    const doCleanup = () => {
-        if (!componentIsSetUp.current)
-            return;
-        componentIsSetUp.current = false;
-        /* Remove the torch control */
-        if (torchSwitchControl.current) {
-            viewRef.current?.removeControl(torchSwitchControl.current);
-        }
-        /* Remove the zoom control */
-        if (zoomSwitchControl.current) {
-            viewRef.current?.removeControl(zoomSwitchControl.current);
-        }
-        /* Closing the camera */
-        getCamera()?.switchToDesiredState(FrameSourceState.Off);
-        /* Cleaning Data Capture Context */
-        if (idCaptureModeRef.current) {
-            props.context.removeMode(idCaptureModeRef.current);
-        }
-        props.context.setFrameSource(null);
-        idCaptureModeRef.current = null;
-        /* Cleaning Overlays */
-        if (viewRef.current) {
-            viewRef.current.view?.overlays?.forEach((overlay) => viewRef.current?.view?.removeOverlay(overlay));
-        }
-    };
-    /* ID CAPTURE MODE */
-    useEffect(() => {
-        if (props.idCaptureSettings) {
-            getMode().applySettings(props.idCaptureSettings);
-        }
-    }, [props.idCaptureSettings]);
-    useEffect(() => {
-        setIsEnabledState(props.isEnabled);
-        setFrameSourceState(props.desiredCameraState || FrameSourceState.On);
-    }, [props.isEnabled]);
-    useEffect(() => {
-        const listeners = [...getMode().listeners];
-        listeners.forEach((listener) => {
-            getMode().removeListener(listener);
-        });
-        if (props.didCaptureId || props.didRejectId) {
-            getMode().addListener({
-                didCaptureId: props.didCaptureId,
-                didRejectId: props.didRejectId,
-            });
-        }
-    }, [props.didCaptureId, props.didRejectId]);
-    /* OVERLAYS */
-    useEffect(() => {
-        if (props.capturedBrush) {
-            getIdCaptureOverlay().capturedBrush = props.capturedBrush;
-        }
-        if (props.rejectedBrush) {
-            getIdCaptureOverlay().rejectedBrush = props.rejectedBrush;
-        }
-        if (props.localizedBrush) {
-            getIdCaptureOverlay().localizedBrush = props.localizedBrush;
-        }
-    }, [props.capturedBrush, props.rejectedBrush, props.localizedBrush]);
-    /* CAMERA */
-    useEffect(() => {
-        getCamera()?.applySettings(props.cameraSettings || IdCapture.recommendedCameraSettings);
-    }, [props.cameraSettings]);
-    useEffect(() => {
-        if (props.desiredCameraState) {
-            setFrameSourceState(props.desiredCameraState);
-        }
-    }, [props.desiredCameraState]);
-    useEffect(() => {
-        if (props.desiredCameraPosition) {
-            setFrameSourceState(FrameSourceState.Off);
-            props.context.setFrameSource(null).then(() => {
-                cameraRef.current = Camera.asPositionWithSettings(props.desiredCameraPosition || CameraPosition.WorldFacing, props.cameraSettings || IdCapture.recommendedCameraSettings);
-                props.context.setFrameSource(getCamera()).then(() => {
-                    setFrameSourceState(props.desiredCameraState || FrameSourceState.On);
-                });
-            });
-        }
-    }, [props.desiredCameraPosition]);
-    /* CONTROLS */
-    useEffect(() => {
-        if (props.desiredTorchState) {
-            getCamera().desiredTorchState = props.desiredTorchState;
-        }
-    }, [props.desiredTorchState]);
-    useEffect(() => {
-        if (!viewRef.current)
-            return;
-        if (torchSwitchControl.current) {
-            viewRef.current?.removeControl(torchSwitchControl.current);
-        }
-        if (!props.torchSwitchControl)
-            return;
-        torchSwitchControl.current = props.torchSwitchControl;
-        viewRef.current.addControl(torchSwitchControl.current);
-    }, [props.torchSwitchControl]);
-    useEffect(() => {
-        if (!viewRef.current)
-            return;
-        if (zoomSwitchControl.current) {
-            viewRef.current?.removeControl(zoomSwitchControl.current);
-        }
-        if (!props.zoomSwitchControl)
-            return;
-        zoomSwitchControl.current = props.zoomSwitchControl;
-        viewRef.current.addControl(zoomSwitchControl.current);
-    }, [props.zoomSwitchControl]);
-    /* MISC */
-    useEffect(() => {
-        if (props.feedback) {
-            getMode().feedback = props.feedback;
-        }
-    }, [props.feedback]);
-    useEffect(() => {
-        if (!props.navigation)
-            return;
-        try {
-            const unsubscribeFromFocus = props.navigation.addListener('focus', () => {
-                doSetup();
-            });
-            const unsubscribeFromBlur = props.navigation.addListener('blur', () => {
-                doCleanup();
-            });
-            return () => {
-                unsubscribeFromFocus();
-                unsubscribeFromBlur();
-            };
-        }
-        catch (e) {
-            // tslint:disable-next-line:no-console
-            console.error(e);
-        }
-    }, [props.navigation]);
-    return (React.createElement(DataCaptureView, { context: props.context, style: { flex: 1 }, ref: viewRef }));
-});
-
 initIdDefaults();
 initIdProxy();
-
-export { IdCaptureView };
