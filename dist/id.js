@@ -60,6 +60,8 @@ var RejectionReason;
     RejectionReason["HolderUnderage"] = "holderUnderage";
     RejectionReason["ForgedAamvaBarcode"] = "forgedAamvaBarcode";
     RejectionReason["InconsistentData"] = "inconsistentData";
+    RejectionReason["BluetoothCommunicationError"] = "bluetoothCommunicationError";
+    RejectionReason["BluetoothUnavailable"] = "bluetoothUnavailable";
 })(RejectionReason || (RejectionReason = {}));
 
 var IdCaptureRegion;
@@ -318,6 +320,13 @@ var IdCaptureRegion;
     IdCaptureRegion["Zimbabwe"] = "zimbabwe";
 })(IdCaptureRegion || (IdCaptureRegion = {}));
 
+var UsRealIdStatus;
+(function (UsRealIdStatus) {
+    UsRealIdStatus["NotAvailable"] = "notAvailable";
+    UsRealIdStatus["NotRealIdCompliant"] = "notRealIdCompliant";
+    UsRealIdStatus["RealIdCompliant"] = "realIdCompliant";
+})(UsRealIdStatus || (UsRealIdStatus = {}));
+
 var RegionSpecificSubtype;
 (function (RegionSpecificSubtype) {
     RegionSpecificSubtype["UsBorderCrossingCard"] = "usBorderCrossingCard";
@@ -396,24 +405,24 @@ class IdImages {
     constructor() {
         this.json = null;
     }
-    get face() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.face) !== null && _c !== undefined ? _c : null; }
-    get frame() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.frame) !== null && _c !== undefined ? _c : null; }
+    get face() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.face) !== null && _c !== void 0 ? _c : null; }
+    get frame() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.frame) !== null && _c !== void 0 ? _c : null; }
     getFrame(side) {
         var _a, _b, _c, _d, _e, _f;
         switch (side) {
             case IdSide.Front:
-                return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.frame) !== null && _c !== undefined ? _c : null;
+                return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.frame) !== null && _c !== void 0 ? _c : null;
             case IdSide.Back:
-                return (_f = (_e = (_d = this.json) === null || _d === undefined ? undefined : _d.back) === null || _e === undefined ? undefined : _e.frame) !== null && _f !== undefined ? _f : null;
+                return (_f = (_e = (_d = this.json) === null || _d === void 0 ? void 0 : _d.back) === null || _e === void 0 ? void 0 : _e.frame) !== null && _f !== void 0 ? _f : null;
         }
     }
     getCroppedDocument(side) {
         var _a, _b, _c, _d, _e, _f;
         switch (side) {
             case IdSide.Front:
-                return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.croppedDocument) !== null && _c !== undefined ? _c : null;
+                return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.croppedDocument) !== null && _c !== void 0 ? _c : null;
             case IdSide.Back:
-                return (_f = (_e = (_d = this.json) === null || _d === undefined ? undefined : _d.back) === null || _e === undefined ? undefined : _e.croppedDocument) !== null && _f !== undefined ? _f : null;
+                return (_f = (_e = (_d = this.json) === null || _d === void 0 ? void 0 : _d.back) === null || _e === void 0 ? void 0 : _e.croppedDocument) !== null && _f !== void 0 ? _f : null;
         }
     }
     static fromJSON(json) {
@@ -563,7 +572,7 @@ class IdCaptureController extends BaseController {
         return this._proxy.createContextForBarcodeVerification(JSON.stringify(context.toJSON()));
     }
     verifyCapturedIdAsync(capturedId) {
-        return __awaiter(this, undefined, undefined, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const result = yield this._proxy.verifyCapturedIdAsync(capturedId);
             if (result == null) {
                 return null;
@@ -725,32 +734,87 @@ class CommonCapturedIdFields {
 }
 
 class VIZResult {
-    get additionalAddressInformation() { return this.json.additionalAddressInformation; }
-    get additionalNameInformation() { return this.json.additionalNameInformation; }
-    get documentAdditionalNumber() { return this.json.documentAdditionalNumber; }
-    get employer() { return this.json.employer; }
-    get issuingAuthority() { return this.json.issuingAuthority; }
-    get issuingJurisdiction() { return this.json.issuingJurisdiction; }
-    get issuingJurisdictionIso() { return this.json.issuingJurisdictionIso; }
-    get maritalStatus() { return this.json.maritalStatus; }
-    get personalIdNumber() { return this.json.personalIdNumber; }
-    get placeOfBirth() { return this.json.placeOfBirth; }
-    get profession() { return this.json.profession; }
-    get race() { return this.json.race; }
-    get religion() { return this.json.religion; }
-    get residentialStatus() { return this.json.residentialStatus; }
-    get capturedSides() { return this.json.capturedSides; }
-    get isBackSideCaptureSupported() { return this.json.isBackSideCaptureSupported; }
-    get bloodType() { return this.json.bloodType; }
-    get sponsor() { return this.json.sponsor; }
-    get mothersName() { return this.json.mothersName; }
-    get fathersName() { return this.json.fathersName; }
-    get passportNumber() { return this.json.passportNumber; }
-    get visaNumber() { return this.json.visaNumber; }
-    get firstName() { return this.json.firstName; }
-    get lastName() { return this.json.lastName; }
-    get secondaryLastName() { return this.json.secondaryLastName; }
-    get fullName() { return this.json.fullName; }
+    get additionalAddressInformation() {
+        return this.json.additionalAddressInformation;
+    }
+    get additionalNameInformation() {
+        return this.json.additionalNameInformation;
+    }
+    get documentAdditionalNumber() {
+        return this.json.documentAdditionalNumber;
+    }
+    get employer() {
+        return this.json.employer;
+    }
+    get issuingAuthority() {
+        return this.json.issuingAuthority;
+    }
+    get issuingJurisdiction() {
+        return this.json.issuingJurisdiction;
+    }
+    get issuingJurisdictionIso() {
+        return this.json.issuingJurisdictionIso;
+    }
+    get maritalStatus() {
+        return this.json.maritalStatus;
+    }
+    get personalIdNumber() {
+        return this.json.personalIdNumber;
+    }
+    get placeOfBirth() {
+        return this.json.placeOfBirth;
+    }
+    get profession() {
+        return this.json.profession;
+    }
+    get race() {
+        return this.json.race;
+    }
+    get religion() {
+        return this.json.religion;
+    }
+    get residentialStatus() {
+        return this.json.residentialStatus;
+    }
+    get usRealIdStatus() {
+        return this.json.usRealIdStatus;
+    }
+    get capturedSides() {
+        return this.json.capturedSides;
+    }
+    get isBackSideCaptureSupported() {
+        return this.json.isBackSideCaptureSupported;
+    }
+    get bloodType() {
+        return this.json.bloodType;
+    }
+    get sponsor() {
+        return this.json.sponsor;
+    }
+    get mothersName() {
+        return this.json.mothersName;
+    }
+    get fathersName() {
+        return this.json.fathersName;
+    }
+    get passportNumber() {
+        return this.json.passportNumber;
+    }
+    get visaNumber() {
+        return this.json.visaNumber;
+    }
+    get firstName() {
+        return this.json.firstName;
+    }
+    get lastName() {
+        return this.json.lastName;
+    }
+    get secondaryLastName() {
+        return this.json.secondaryLastName;
+    }
+    get fullName() {
+        return this.json.fullName;
+    }
     static fromJSON(json) {
         const result = new VIZResult();
         result.json = json;
@@ -1087,10 +1151,10 @@ class DriverLicense extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], DriverLicense.prototype, "_region", undefined);
+], DriverLicense.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], DriverLicense.prototype, "_documentType", undefined);
+], DriverLicense.prototype, "_documentType", void 0);
 
 class HealthInsuranceCard extends DefaultSerializeable {
     constructor(region) {
@@ -1125,10 +1189,10 @@ class HealthInsuranceCard extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], HealthInsuranceCard.prototype, "_region", undefined);
+], HealthInsuranceCard.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], HealthInsuranceCard.prototype, "_documentType", undefined);
+], HealthInsuranceCard.prototype, "_documentType", void 0);
 
 class IdCard extends DefaultSerializeable {
     constructor(region) {
@@ -1163,10 +1227,10 @@ class IdCard extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], IdCard.prototype, "_region", undefined);
+], IdCard.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], IdCard.prototype, "_documentType", undefined);
+], IdCard.prototype, "_documentType", void 0);
 
 class Passport extends DefaultSerializeable {
     constructor(region) {
@@ -1201,10 +1265,10 @@ class Passport extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], Passport.prototype, "_region", undefined);
+], Passport.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], Passport.prototype, "_documentType", undefined);
+], Passport.prototype, "_documentType", void 0);
 
 class RegionSpecific extends DefaultSerializeable {
     constructor(subtype) {
@@ -1243,13 +1307,13 @@ class RegionSpecific extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], RegionSpecific.prototype, "_region", undefined);
+], RegionSpecific.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentSubtype')
-], RegionSpecific.prototype, "_documentSubtype", undefined);
+], RegionSpecific.prototype, "_documentSubtype", void 0);
 __decorate([
     nameForSerialization('documentType')
-], RegionSpecific.prototype, "_documentType", undefined);
+], RegionSpecific.prototype, "_documentType", void 0);
 
 class ResidencePermit extends DefaultSerializeable {
     constructor(region) {
@@ -1284,10 +1348,10 @@ class ResidencePermit extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], ResidencePermit.prototype, "_region", undefined);
+], ResidencePermit.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], ResidencePermit.prototype, "_documentType", undefined);
+], ResidencePermit.prototype, "_documentType", void 0);
 
 class VisaIcao extends DefaultSerializeable {
     constructor(region) {
@@ -1322,32 +1386,60 @@ class VisaIcao extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('region')
-], VisaIcao.prototype, "_region", undefined);
+], VisaIcao.prototype, "_region", void 0);
 __decorate([
     nameForSerialization('documentType')
-], VisaIcao.prototype, "_documentType", undefined);
+], VisaIcao.prototype, "_documentType", void 0);
 
 class CapturedId {
     constructor() {
         this._document = null;
     }
-    get firstName() { return this.commonCapturedFields.firstName; }
-    get lastName() { return this.commonCapturedFields.lastName; }
-    get fullName() { return this.commonCapturedFields.fullName; }
-    get secondaryLastName() { return this.commonCapturedFields.secondaryLastName; }
-    get sex() { return this.commonCapturedFields.sex; }
+    get firstName() {
+        return this.commonCapturedFields.firstName;
+    }
+    get lastName() {
+        return this.commonCapturedFields.lastName;
+    }
+    get fullName() {
+        return this.commonCapturedFields.fullName;
+    }
+    get secondaryLastName() {
+        return this.commonCapturedFields.secondaryLastName;
+    }
+    get sex() {
+        return this.commonCapturedFields.sex;
+    }
     get dateOfBirth() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
     }
-    get age() { return this.json.age; }
-    get isExpired() { return this.json.isExpired; }
-    get nationality() { return this.commonCapturedFields.nationality; }
-    get address() { return this.commonCapturedFields.address; }
-    get document() { return this._document; }
-    get issuingCountryIso() { return this.commonCapturedFields.issuingCountryIso; }
-    get issuingCountry() { return this.commonCapturedFields.issuingCountry; }
-    get documentAdditionalNumber() { return this.commonCapturedFields.documentAdditionalNumber; }
-    get documentNumber() { return this.commonCapturedFields.documentNumber; }
+    get age() {
+        return this.json.age;
+    }
+    get isExpired() {
+        return this.json.isExpired;
+    }
+    get nationality() {
+        return this.commonCapturedFields.nationality;
+    }
+    get address() {
+        return this.commonCapturedFields.address;
+    }
+    get document() {
+        return this._document;
+    }
+    get issuingCountryIso() {
+        return this.commonCapturedFields.issuingCountryIso;
+    }
+    get issuingCountry() {
+        return this.commonCapturedFields.issuingCountry;
+    }
+    get documentAdditionalNumber() {
+        return this.commonCapturedFields.documentAdditionalNumber;
+    }
+    get documentNumber() {
+        return this.commonCapturedFields.documentNumber;
+    }
     get dateOfExpiry() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfExpiry);
     }
@@ -1356,8 +1448,7 @@ class CapturedId {
     }
     get barcode() {
         if (this._barcodeResult == null && this.json.barcodeResult != null) {
-            this._barcodeResult = BarcodeResult.
-                fromJSON(this.json.barcodeResult);
+            this._barcodeResult = BarcodeResult.fromJSON(this.json.barcodeResult);
         }
         return this._barcodeResult;
     }
@@ -1375,31 +1466,44 @@ class CapturedId {
     }
     isIdCard() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isIdCard) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isIdCard) === true;
+    }
+    get usRealIdStatus() {
+        const localVizResult = this.vizResult;
+        if ((localVizResult === null || localVizResult === void 0 ? void 0 : localVizResult.usRealIdStatus) && localVizResult.usRealIdStatus !== UsRealIdStatus.NotAvailable) {
+            return localVizResult.usRealIdStatus;
+        }
+        if (this.barcode && this.barcode.isRealId !== null) {
+            if (this.barcode.isRealId)
+                return UsRealIdStatus.RealIdCompliant;
+            else
+                return UsRealIdStatus.NotRealIdCompliant;
+        }
+        return UsRealIdStatus.NotAvailable;
     }
     isDriverLicense() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isDriverLicense) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isDriverLicense) === true;
     }
     isPassport() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isPassport) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isPassport) === true;
     }
     isVisaIcao() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isVisaIcao) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isVisaIcao) === true;
     }
     isRegionSpecific(subtype) {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isRegionSpecific) === true && this.document.subtype === subtype;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isRegionSpecific) === true && this.document.subtype === subtype;
     }
     isResidencePermit() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isResidencePermit) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isResidencePermit) === true;
     }
     isHealthInsuranceCard() {
         var _a;
-        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isHealthInsuranceCard) === true;
+        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isHealthInsuranceCard) === true;
     }
     get images() {
         return this._images;
@@ -1546,7 +1650,7 @@ class IdCaptureFeedback extends DefaultSerializeable {
     }
     updateFeedback() {
         var _a;
-        (_a = this.controller) === null || _a === undefined ? undefined : _a.updateFeedback(this);
+        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateFeedback(this);
     }
     constructor(idCaptured, idRejected) {
         super();
@@ -1559,13 +1663,13 @@ class IdCaptureFeedback extends DefaultSerializeable {
 }
 __decorate([
     ignoreFromSerialization
-], IdCaptureFeedback.prototype, "controller", undefined);
+], IdCaptureFeedback.prototype, "controller", void 0);
 __decorate([
     nameForSerialization('idCaptured')
-], IdCaptureFeedback.prototype, "_idCaptured", undefined);
+], IdCaptureFeedback.prototype, "_idCaptured", void 0);
 __decorate([
     nameForSerialization('idRejected')
-], IdCaptureFeedback.prototype, "_idRejected", undefined);
+], IdCaptureFeedback.prototype, "_idRejected", void 0);
 __decorate([
     ignoreFromSerialization
 ], IdCaptureFeedback, "idDefaults", null);
@@ -1649,25 +1753,25 @@ class IdCapture extends DefaultSerializeable {
 }
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "_isEnabled", undefined);
+], IdCapture.prototype, "_isEnabled", void 0);
 __decorate([
     nameForSerialization('feedback')
-], IdCapture.prototype, "_feedback", undefined);
+], IdCapture.prototype, "_feedback", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "privateContext", undefined);
+], IdCapture.prototype, "privateContext", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "listeners", undefined);
+], IdCapture.prototype, "listeners", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "controller", undefined);
+], IdCapture.prototype, "controller", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "listenerController", undefined);
+], IdCapture.prototype, "listenerController", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCapture.prototype, "isInListenerCallback", undefined);
+], IdCapture.prototype, "isInListenerCallback", void 0);
 __decorate([
     ignoreFromSerialization
 ], IdCapture, "idCaptureDefaults", null);
@@ -1784,37 +1888,37 @@ class IdCaptureOverlay extends DefaultSerializeable {
 }
 __decorate([
     ignoreFromSerialization
-], IdCaptureOverlay.prototype, "idCapture", undefined);
+], IdCaptureOverlay.prototype, "idCapture", void 0);
 __decorate([
     ignoreFromSerialization
-], IdCaptureOverlay.prototype, "view", undefined);
+], IdCaptureOverlay.prototype, "view", void 0);
 __decorate([
     nameForSerialization('idLayoutStyle')
-], IdCaptureOverlay.prototype, "_idLayoutStyle", undefined);
+], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
 __decorate([
     nameForSerialization('idLayoutLineStyle')
-], IdCaptureOverlay.prototype, "_idLayoutLineStyle", undefined);
+], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
 __decorate([
     nameForSerialization('textHintPosition')
-], IdCaptureOverlay.prototype, "_textHintPosition", undefined);
+], IdCaptureOverlay.prototype, "_textHintPosition", void 0);
 __decorate([
     nameForSerialization('showTextHints')
-], IdCaptureOverlay.prototype, "_showTextHints", undefined);
+], IdCaptureOverlay.prototype, "_showTextHints", void 0);
 __decorate([
     nameForSerialization('capturedBrush')
-], IdCaptureOverlay.prototype, "_capturedBrush", undefined);
+], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
 __decorate([
     nameForSerialization('localizedBrush')
-], IdCaptureOverlay.prototype, "_localizedBrush", undefined);
+], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
 __decorate([
     nameForSerialization('rejectedBrush')
-], IdCaptureOverlay.prototype, "_rejectedBrush", undefined);
+], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
 __decorate([
     nameForSerialization('frontSideTextHint')
-], IdCaptureOverlay.prototype, "_frontSideTextHint", undefined);
+], IdCaptureOverlay.prototype, "_frontSideTextHint", void 0);
 __decorate([
     nameForSerialization('backSideTextHint')
-], IdCaptureOverlay.prototype, "_backSideTextHint", undefined);
+], IdCaptureOverlay.prototype, "_backSideTextHint", void 0);
 __decorate([
     ignoreFromSerialization
 ], IdCaptureOverlay, "idCaptureDefaults", null);
@@ -1844,16 +1948,16 @@ class SingleSideScanner extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('isFull')
-], SingleSideScanner.prototype, "_isFull", undefined);
+], SingleSideScanner.prototype, "_isFull", void 0);
 __decorate([
     ignoreFromSerialization
-], SingleSideScanner.prototype, "_barcode", undefined);
+], SingleSideScanner.prototype, "_barcode", void 0);
 __decorate([
     ignoreFromSerialization
-], SingleSideScanner.prototype, "_machineReadableZone", undefined);
+], SingleSideScanner.prototype, "_machineReadableZone", void 0);
 __decorate([
     ignoreFromSerialization
-], SingleSideScanner.prototype, "_visualInspectionZone", undefined);
+], SingleSideScanner.prototype, "_visualInspectionZone", void 0);
 
 class FullDocumentScanner extends DefaultSerializeable {
     constructor() {
@@ -1871,16 +1975,16 @@ class FullDocumentScanner extends DefaultSerializeable {
 }
 __decorate([
     nameForSerialization('isFull')
-], FullDocumentScanner.prototype, "_isFull", undefined);
+], FullDocumentScanner.prototype, "_isFull", void 0);
 __decorate([
     ignoreFromSerialization
-], FullDocumentScanner.prototype, "_barcode", undefined);
+], FullDocumentScanner.prototype, "_barcode", void 0);
 __decorate([
     ignoreFromSerialization
-], FullDocumentScanner.prototype, "_machineReadableZone", undefined);
+], FullDocumentScanner.prototype, "_machineReadableZone", void 0);
 __decorate([
     ignoreFromSerialization
-], FullDocumentScanner.prototype, "_visualInspectionZone", undefined);
+], FullDocumentScanner.prototype, "_visualInspectionZone", void 0);
 
 class IdCaptureSettings extends DefaultSerializeable {
     constructor() {
@@ -1953,6 +2057,6 @@ class AamvaBarcodeVerifier {
 }
 __decorate([
     ignoreFromSerialization
-], AamvaBarcodeVerifier.prototype, "controller", undefined);
+], AamvaBarcodeVerifier.prototype, "controller", void 0);
 
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, CommonCapturedIdFields, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, VIZResult, VehicleRestriction, VisaIcao, getIdDefaults, loadIdDefaults, parseIdDefaults };
+export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, CommonCapturedIdFields, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VisaIcao, getIdDefaults, loadIdDefaults, parseIdDefaults };
