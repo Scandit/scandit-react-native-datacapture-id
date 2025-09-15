@@ -1,8 +1,8 @@
-import { ScreenStateManager, FactoryMaker } from 'scandit-react-native-datacapture-core/dist/core';
+import { ScreenStateManager, FactoryMaker, createNativeProxy } from 'scandit-react-native-datacapture-core/dist/core';
 import { NativeModules, NativeEventEmitter, AppState } from 'react-native';
 import { IdCapture, IdCaptureSettings, loadIdDefaults, IdCaptureOverlay, IdCaptureListenerEvents } from './id.js';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
-import { FrameSourceState, Camera, CameraPosition, DataCaptureView, initCoreDefaults } from 'scandit-react-native-datacapture-core';
+export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
+import { FrameSourceState, Camera, CameraPosition, DataCaptureView, createRNNativeCaller, initCoreDefaults } from 'scandit-react-native-datacapture-core';
 import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef, useMemo } from 'react';
 
 // tslint:disable:variable-name
@@ -27,9 +27,6 @@ class NativeIdCaptureProxy {
     }
     applyIdCaptureModeSettings(newSettingsJson) {
         return NativeModule$1.applyIdCaptureModeSettings(newSettingsJson);
-    }
-    updateIdCaptureOverlay(overlayJson) {
-        return NativeModule$1.updateIdCaptureOverlay(overlayJson);
     }
     updateFeedback(feedbackJson) {
         return NativeModule$1.updateIdCaptureFeedback(feedbackJson);
@@ -80,6 +77,10 @@ class NativeIdCaptureListenerProxy {
 function initIdProxy() {
     FactoryMaker.bindInstance('IdCaptureProxy', new NativeIdCaptureProxy());
     FactoryMaker.bindInstance('IdCaptureListenerProxy', new NativeIdCaptureListenerProxy());
+    FactoryMaker.bindLazyInstance('IdCaptureOverlayProxy', () => {
+        const caller = createRNNativeCaller(NativeModules.ScanditDataCaptureId);
+        return createNativeProxy(caller);
+    });
 }
 
 const dataCaptureId = NativeModules.ScanditDataCaptureId;
@@ -126,7 +127,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         if (idCaptureOverlayRef.current !== null) {
             return idCaptureOverlayRef.current;
         }
-        idCaptureOverlayRef.current = IdCaptureOverlay.withIdCaptureForView(getMode(), null);
+        idCaptureOverlayRef.current = new IdCaptureOverlay(getMode());
         return idCaptureOverlayRef.current;
     }
     const cameraRef = useRef(null);

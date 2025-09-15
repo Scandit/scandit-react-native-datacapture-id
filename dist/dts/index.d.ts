@@ -1,4 +1,4 @@
-export { DateResult, IdAnonymizationMode, IdImageType, CapturedSides, TextHintPosition } from 'scandit-datacapture-frameworks-id';
+export { DateResult, IdAnonymizationMode, IdImageType, CapturedSides, TextHintPosition, Duration } from 'scandit-datacapture-frameworks-id';
 export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier } from 'scandit-datacapture-frameworks-id';
 export { CapturedId, BarcodeResult, MRZResult, ProfessionalDrivingPermit } from 'scandit-datacapture-frameworks-id';
 export { VehicleRestriction, VIZResult } from 'scandit-datacapture-frameworks-id';
