@@ -16,7 +16,7 @@ RCT_EXTERN_METHOD(verifyCapturedIdAsync
 RCT_EXTERN_METHOD(setModeEnabledState : (BOOL)enabled)
 
 RCT_EXTERN_METHOD(updateIdCaptureOverlay
-                  : (NSString *)overlayJson resolve
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 
