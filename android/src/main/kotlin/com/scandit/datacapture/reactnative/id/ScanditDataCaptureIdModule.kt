@@ -10,8 +10,6 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.scandit.datacapture.frameworks.core.errors.ParameterNullError
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import com.scandit.datacapture.reactnative.core.utils.ReactNativeResult
 
@@ -64,10 +62,7 @@ class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
-    fun updateIdCaptureOverlay(readableMap: ReadableMap, promise: Promise) {
-        val overlayJson = readableMap.getString("overlayJson") ?: return promise.reject(
-            ParameterNullError("overlayJson")
-        )
+    fun updateIdCaptureOverlay(overlayJson: String, promise: Promise) {
         idCaptureModule.updateOverlay(overlayJson, ReactNativeResult(promise))
     }
 
@@ -89,16 +84,6 @@ class ScanditDataCaptureIdModule(
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         DEFAULTS_KEY to idCaptureModule.getDefaults()
     )
-
-    @ReactMethod
-    fun addListener(@Suppress("UNUSED_PARAMETER") eventName: String?) {
-        // Keep: Required for RN built in Event Emitter Calls.
-    }
-
-    @ReactMethod
-    fun removeListeners(@Suppress("UNUSED_PARAMETER") count: Int?) {
-        // Keep: Required for RN built in Event Emitter Calls.
-    }
 
     companion object {
         private const val DEFAULTS_KEY = "Defaults"
