@@ -95,11 +95,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     @objc(updateIdCaptureOverlay:resolve:reject:)
-    func updateIdCaptureOverlay(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        guard let overlayJson = data["overlayJson"] as? String else {
-            reject("-1", "Missing overlayJson parameter", nil)
-            return
-        }
+    func updateIdCaptureOverlay(overlayJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         idModule.updateOverlay(overlayJson: overlayJson, result: ReactNativeResult(resolve, reject))
     }
 

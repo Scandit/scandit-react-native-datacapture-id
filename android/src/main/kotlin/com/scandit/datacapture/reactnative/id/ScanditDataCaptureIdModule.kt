@@ -10,8 +10,6 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.scandit.datacapture.frameworks.core.errors.ParameterNullError
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import com.scandit.datacapture.reactnative.core.utils.ReactNativeResult
 
@@ -64,10 +62,7 @@ class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
-    fun updateIdCaptureOverlay(readableMap: ReadableMap, promise: Promise) {
-        val overlayJson = readableMap.getString("overlayJson") ?: return promise.reject(
-            ParameterNullError("overlayJson")
-        )
+    fun updateIdCaptureOverlay(overlayJson: String, promise: Promise) {
         idCaptureModule.updateOverlay(overlayJson, ReactNativeResult(promise))
     }
 
