@@ -1,9 +1,9 @@
-import { FactoryMaker } from 'scandit-react-native-datacapture-core/dist/core';
+import { ScreenStateManager, FactoryMaker } from 'scandit-react-native-datacapture-core/dist/core';
 import { NativeModules, NativeEventEmitter, AppState } from 'react-native';
 import { IdCapture, IdCaptureSettings, loadIdDefaults, IdCaptureOverlay, IdCaptureListenerEvents } from './id.js';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
+export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, BarcodeResult, CapturedId, CapturedSides, DateResult, DriverLicense, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureSettings, IdCard, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VisaIcao } from './id.js';
 import { FrameSourceState, Camera, CameraPosition, DataCaptureView, initCoreDefaults } from 'scandit-react-native-datacapture-core';
-import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useEffect, useRef, useMemo } from 'react';
 
 // tslint:disable:variable-name
 const NativeModule$1 = NativeModules.ScanditDataCaptureId;
@@ -103,10 +103,16 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         getMode().isEnabled = isEnabledState;
     }, [isEnabledState]);
     useEffect(() => {
-        getCamera()?.switchToDesiredState(frameSourceState);
+        if (screenStateManager.isScreenActive(viewId.current)) {
+            getCamera()?.switchToDesiredState(frameSourceState);
+        }
     }, [frameSourceState]);
     const viewRef = useRef(null);
     const componentIsSetUp = useRef(false);
+    const viewId = useRef(Math.floor(Math.random() * 1000000));
+    const screenStateManager = useMemo(() => {
+        return ScreenStateManager.getInstance();
+    }, []);
     const idCaptureModeRef = useRef(null);
     function getMode() {
         if (idCaptureModeRef.current !== null) {
@@ -138,8 +144,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     useEffect(() => {
         doSetup();
         const subscription = AppState.addEventListener('change', nextAppState => {
-            if (appState.current.match(/inactive|background/) &&
-                nextAppState === 'active') {
+            if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
                 setIsEnabledState(props.isEnabled);
                 setFrameSourceState(props.desiredCameraState || FrameSourceState.On);
             }
@@ -155,6 +160,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         };
     }, []);
     const doSetup = () => {
+        screenStateManager.setActiveScreen(viewId.current);
         if (componentIsSetUp.current)
             return;
         componentIsSetUp.current = true;
@@ -179,13 +185,15 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         if (zoomSwitchControl.current) {
             viewRef.current?.removeControl(zoomSwitchControl.current);
         }
-        /* Closing the camera */
-        getCamera()?.switchToDesiredState(FrameSourceState.Off);
+        /* Closing the camera if camera is active */
+        if (screenStateManager.isScreenActive(viewId.current)) {
+            getCamera()?.switchToDesiredState(FrameSourceState.Off);
+            props.context.setFrameSource(null);
+        }
         /* Cleaning Data Capture Context */
         if (idCaptureModeRef.current) {
             props.context.removeMode(idCaptureModeRef.current);
         }
-        props.context.setFrameSource(null);
         idCaptureModeRef.current = null;
         /* Cleaning Overlays */
         if (viewRef.current) {
@@ -231,7 +239,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         getCamera()?.applySettings(props.cameraSettings || IdCapture.recommendedCameraSettings);
     }, [props.cameraSettings]);
     useEffect(() => {
-        if (props.desiredCameraState) {
+        if (props.desiredCameraState && screenStateManager.isScreenActive(viewId.current)) {
             setFrameSourceState(props.desiredCameraState);
         }
     }, [props.desiredCameraState]);
@@ -300,7 +308,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
             console.error(e);
         }
     }, [props.navigation]);
-    return (React.createElement(DataCaptureView, { context: props.context, style: { flex: 1 }, ref: viewRef }));
+    return React.createElement(DataCaptureView, { context: props.context, style: { flex: 1 }, ref: viewRef });
 });
 
 initIdDefaults();
