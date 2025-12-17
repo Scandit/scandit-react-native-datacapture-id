@@ -16,37 +16,26 @@ class ScanditDataCaptureId: RCTEventEmitter {
     override init() {
         super.init()
         let emitter = ReactNativeEmitter(emitter: self)
-        let idCaptureListener = FrameworksIdCaptureListener(emitter: emitter)
-        idModule = IdCaptureModule(idCaptureListener: idCaptureListener)
+        idModule = IdCaptureModule(emitter: emitter)
         idModule.didStart()
-    }
-
-    override func startObserving() {
-        super.startObserving()
-        idModule.addListener()
-    }
-
-    override func stopObserving() {
-        idModule.removeListener()
-        super.stopObserving()
     }
 
     override func supportedEvents() -> [String]! {
         FrameworksIdCaptureEvent.allCases.map { $0.rawValue }
     }
 
-    override func constantsToExport() -> [AnyHashable : Any]! {
+    override func constantsToExport() -> [AnyHashable: Any]! {
         [
             "Defaults": idModule.defaults.toEncodable()
         ]
     }
 
     @objc override class func requiresMainQueueSetup() -> Bool {
-        return true
+        true
     }
 
     @objc override var methodQueue: DispatchQueue! {
-        return sdcSharedMethodQueue
+        sdcSharedMethodQueue
     }
 
     @objc override func invalidate() {
@@ -58,59 +47,108 @@ class ScanditDataCaptureId: RCTEventEmitter {
         invalidate()
     }
 
-    @objc(finishDidCaptureCallback:)
-    func finishDidCaptureCallback(enabled: Bool) {
-        idModule.finishDidCaptureId(enabled: enabled)
-    }
-
-    @objc(finishDidRejectCallback:)
-    func finishDidRejectCallback(enabled: Bool) {
-        idModule.finishDidRejectId(enabled: enabled)
-    }
-
-    @objc(reset:reject:)
-    func reset(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        idModule.resetMode()
+    @objc(finishDidCaptureCallback:resolve:reject:)
+    func finishDidCaptureCallback(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.finishDidCaptureId(modeId: data.modeId, enabled: enabled)
         resolve(nil)
     }
 
-    @objc(createContextForBarcodeVerification:context:reject:)
-    func createContextForBarcodeVerification(context: String,
-                                             resolve: @escaping RCTPromiseResolveBlock,
-                                             reject: @escaping RCTPromiseRejectBlock) {
-        idModule.createAamvaBarcodeVerifier(result: ReactNativeResult(resolve, reject))
+    @objc(finishDidRejectCallback:resolve:reject:)
+    func finishDidRejectCallback(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.finishDidRejectId(modeId: data.modeId, enabled: enabled)
+        resolve(nil)
     }
 
-    @objc(verifyCapturedIdAsync:capturedIdJSON:reject:)
-    func verifyCapturedIdAsync(capturedIdJSON: String,
-                               resolve: @escaping RCTPromiseResolveBlock,
-                               reject: @escaping RCTPromiseRejectBlock) {
-        idModule.verifyCapturedIdWithCloud(jsonString: capturedIdJSON,
-                                           result: ReactNativeResult(resolve, reject))
+    @objc(resetIdCaptureMode:)
+    func resetIdCaptureMode(data: [String: Any]) {
+        idModule.resetMode(modeId: data.modeId)
     }
 
-    @objc(setModeEnabledState:)
-    func setModeEnabledState(enabled: Bool) {
-        idModule.setModeEnabled(enabled: enabled)
+    @objc(addIdCaptureListener:)
+    func addIdCaptureListener(data: [String: Any]) {
+        idModule.addListener(modeId: data.modeId)
+    }
+
+    @objc(removeIdCaptureListener:)
+    func removeIdCaptureListener(data: [String: Any]) {
+        idModule.removeListener(modeId: data.modeId)
+    }
+
+    @objc(setModeEnabledState:resolve:reject:)
+    func setModeEnabledState(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.setModeEnabled(modeId: data.modeId, enabled: enabled)
+        resolve(nil)
     }
 
     @objc(updateIdCaptureOverlay:resolve:reject:)
-    func updateIdCaptureOverlay(overlayJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    func updateIdCaptureOverlay(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let overlayJson = data["overlayJson"] as? String else {
+            reject("-1", "Missing overlayJson parameter", nil)
+            return
+        }
         idModule.updateOverlay(overlayJson: overlayJson, result: ReactNativeResult(resolve, reject))
     }
 
     @objc(updateIdCaptureMode:resolve:reject:)
-    func updateIdCaptureMode(modeJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.updateModeFromJson(modeJson: modeJson, result: ReactNativeResult(resolve, reject))
+    func updateIdCaptureMode(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let modeJson = data["modeJson"] as? String else {
+            reject("-1", "Missing modeJson parameter", nil)
+            return
+        }
+        idModule.updateModeFromJson(modeId: data.modeId, modeJson: modeJson, result: ReactNativeResult(resolve, reject))
     }
 
     @objc(applyIdCaptureModeSettings:resolve:reject:)
-    func applyIdCaptureModeSettings(modeSettingsJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.applyModeSettings(modeSettingsJson: modeSettingsJson, result: ReactNativeResult(resolve, reject))
+    func applyIdCaptureModeSettings(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let settingsJson = data["settingsJson"] as? String else {
+            reject("-1", "Missing settingsJson parameter", nil)
+            return
+        }
+        idModule.applyModeSettings(
+            modeId: data.modeId,
+            modeSettingsJson: settingsJson,
+            result: ReactNativeResult(resolve, reject)
+        )
     }
 
     @objc(updateIdCaptureFeedback:resolve:reject:)
-    func updateIdCaptureFeedback(feedbackJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        idModule.updateFeedback(feedbackJson: feedbackJson, result: ReactNativeResult(resolve, reject))
+    func updateIdCaptureFeedback(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let feedbackJson = data["feedbackJson"] as? String else {
+            reject("-1", "Missing feedbackJson parameter", nil)
+            return
+        }
+        idModule.updateFeedback(
+            modeId: data.modeId,
+            feedbackJson: feedbackJson,
+            result: ReactNativeResult(resolve, reject)
+        )
     }
 }

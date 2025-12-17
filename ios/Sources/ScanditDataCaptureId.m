@@ -2,36 +2,44 @@
 #import <React/RCTEventEmitter.h>
 
 @interface RCT_EXTERN_MODULE (ScanditDataCaptureId, RCTEventEmitter)
-RCT_EXTERN_METHOD(finishDidCaptureCallback : (BOOL)enabled)
-RCT_EXTERN_METHOD(finishDidRejectCallback : (BOOL)enabled)
-RCT_EXTERN_METHOD(reset : (RCTPromiseResolveBlock)resolve reject : (RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(createContextForBarcodeVerification
-                  : (NSString *)context context
+RCT_EXTERN_METHOD(finishDidCaptureCallback
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(verifyCapturedIdAsync
-                  : (NSString *)capturedIdJSON capturedIdJSON
+
+RCT_EXTERN_METHOD(finishDidRejectCallback
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
-RCT_EXTERN_METHOD(setModeEnabledState : (BOOL)enabled)
+
+RCT_EXTERN_METHOD(resetIdCaptureMode : (NSDictionary *)data)
+
+RCT_EXTERN_METHOD(addIdCaptureListener : (NSDictionary *)data)
+
+RCT_EXTERN_METHOD(removeIdCaptureListener : (NSDictionary *)data)
+
+RCT_EXTERN_METHOD(setModeEnabledState
+                  : (NSDictionary *)data resolve
+                  : (RCTPromiseResolveBlock)resolve reject
+                  : (RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(updateIdCaptureOverlay
-                  : (NSString *)overlayJson resolve
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(updateIdCaptureMode
-                  : (NSString *)modeJson resolve
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(applyIdCaptureModeSettings
-                  : (NSString *)modeSettingsJson resolve
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(updateIdCaptureFeedback
-                  : (NSString *)feedbackJson resolve
+                  : (NSDictionary *)data resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 @end
