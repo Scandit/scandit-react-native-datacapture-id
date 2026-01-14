@@ -24,18 +24,18 @@ class ScanditDataCaptureId: RCTEventEmitter {
         FrameworksIdCaptureEvent.allCases.map { $0.rawValue }
     }
 
-    override func constantsToExport() -> [AnyHashable: Any]! {
+    override func constantsToExport() -> [AnyHashable : Any]! {
         [
             "Defaults": idModule.defaults.toEncodable()
         ]
     }
 
     @objc override class func requiresMainQueueSetup() -> Bool {
-        true
+        return true
     }
 
     @objc override var methodQueue: DispatchQueue! {
-        sdcSharedMethodQueue
+        return sdcSharedMethodQueue
     }
 
     @objc override func invalidate() {
@@ -71,12 +71,13 @@ class ScanditDataCaptureId: RCTEventEmitter {
     func resetIdCaptureMode(data: [String: Any]) {
         idModule.resetMode(modeId: data.modeId)
     }
+    
 
     @objc(addIdCaptureListener:)
     func addIdCaptureListener(data: [String: Any]) {
         idModule.addListener(modeId: data.modeId)
     }
-
+    
     @objc(removeIdCaptureListener:)
     func removeIdCaptureListener(data: [String: Any]) {
         idModule.removeListener(modeId: data.modeId)
@@ -93,11 +94,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     @objc(updateIdCaptureOverlay:resolve:reject:)
-    func updateIdCaptureOverlay(
-        data: [String: Any],
-        resolve: @escaping RCTPromiseResolveBlock,
-        reject: @escaping RCTPromiseRejectBlock
-    ) {
+    func updateIdCaptureOverlay(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         guard let overlayJson = data["overlayJson"] as? String else {
             reject("-1", "Missing overlayJson parameter", nil)
             return
@@ -106,11 +103,7 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     @objc(updateIdCaptureMode:resolve:reject:)
-    func updateIdCaptureMode(
-        data: [String: Any],
-        resolve: @escaping RCTPromiseResolveBlock,
-        reject: @escaping RCTPromiseRejectBlock
-    ) {
+    func updateIdCaptureMode(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         guard let modeJson = data["modeJson"] as? String else {
             reject("-1", "Missing modeJson parameter", nil)
             return
@@ -119,36 +112,20 @@ class ScanditDataCaptureId: RCTEventEmitter {
     }
 
     @objc(applyIdCaptureModeSettings:resolve:reject:)
-    func applyIdCaptureModeSettings(
-        data: [String: Any],
-        resolve: @escaping RCTPromiseResolveBlock,
-        reject: @escaping RCTPromiseRejectBlock
-    ) {
+    func applyIdCaptureModeSettings(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         guard let settingsJson = data["settingsJson"] as? String else {
             reject("-1", "Missing settingsJson parameter", nil)
             return
         }
-        idModule.applyModeSettings(
-            modeId: data.modeId,
-            modeSettingsJson: settingsJson,
-            result: ReactNativeResult(resolve, reject)
-        )
+        idModule.applyModeSettings(modeId: data.modeId, modeSettingsJson: settingsJson, result: ReactNativeResult(resolve, reject))
     }
 
     @objc(updateIdCaptureFeedback:resolve:reject:)
-    func updateIdCaptureFeedback(
-        data: [String: Any],
-        resolve: @escaping RCTPromiseResolveBlock,
-        reject: @escaping RCTPromiseRejectBlock
-    ) {
+    func updateIdCaptureFeedback(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         guard let feedbackJson = data["feedbackJson"] as? String else {
             reject("-1", "Missing feedbackJson parameter", nil)
             return
         }
-        idModule.updateFeedback(
-            modeId: data.modeId,
-            feedbackJson: feedbackJson,
-            result: ReactNativeResult(resolve, reject)
-        )
+        idModule.updateFeedback(modeId: data.modeId, feedbackJson: feedbackJson, result: ReactNativeResult(resolve, reject))
     }
 }

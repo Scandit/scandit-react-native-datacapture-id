@@ -1,24 +1,26 @@
-import { IdCapture, IdCaptureSettings, IdCaptureOverlay, registerIdProxies, loadIdDefaults, ID_PROXY_TYPE_NAMES } from './id.js';
+import { CameraOwnershipHelper, FactoryMaker, createNativeProxy } from 'scandit-react-native-datacapture-core/dist/core';
+import { FrameSourceState, CameraPosition, DataCaptureView, createRNNativeCaller, initCoreDefaults } from 'scandit-react-native-datacapture-core';
+import { NativeModules, AppState } from 'react-native';
+import { IdCapture, IdCaptureSettings, IdCaptureOverlay, loadIdDefaults } from './id.js';
 export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaIcao } from './id.js';
-import { AppState, NativeModules } from 'react-native';
-import { getNativeModule, FrameSourceState, CameraPosition, DataCaptureView, initCoreDefaults, createRNNativeCaller } from 'scandit-react-native-datacapture-core';
 import React, { forwardRef, useImperativeHandle, useState, useMemo, useCallback, useEffect, useRef } from 'react';
-import { CameraOwnershipHelper } from 'scandit-react-native-datacapture-core/dist/core';
-
-class RNIdNativeCallerProvider {
-    getNativeCaller(proxyType) {
-        if (!ID_PROXY_TYPE_NAMES.includes(proxyType)) {
-            throw new Error(`No native module mapped for proxy type: ${proxyType}`);
-        }
-        return createRNNativeCaller(NativeModules.ScanditDataCaptureId);
-    }
-}
 
 function initIdProxy() {
-    registerIdProxies(new RNIdNativeCallerProvider());
+    FactoryMaker.bindLazyInstance('IdCaptureProxy', () => {
+        const caller = createRNNativeCaller(NativeModules.ScanditDataCaptureId);
+        return createNativeProxy(caller);
+    });
+    FactoryMaker.bindLazyInstance('IdCaptureListenerProxy', () => {
+        const caller = createRNNativeCaller(NativeModules.ScanditDataCaptureId);
+        return createNativeProxy(caller);
+    });
+    FactoryMaker.bindLazyInstance('IdCaptureOverlayProxy', () => {
+        const caller = createRNNativeCaller(NativeModules.ScanditDataCaptureId);
+        return createNativeProxy(caller);
+    });
 }
 
-const dataCaptureId = getNativeModule('ScanditDataCaptureId');
+const dataCaptureId = NativeModules.ScanditDataCaptureId;
 function initIdDefaults() {
     initCoreDefaults();
     loadIdDefaults(dataCaptureId.Defaults);
@@ -28,9 +30,11 @@ function initIdDefaults() {
 const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     useImperativeHandle(ref, () => ({
         reset() {
-            void getMode().reset();
+            getMode().reset();
         },
-    }), []);
+    }), 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
     /* STATE VARIABLES */
     const [isEnabledState, setIsEnabledState] = useState(false);
     const [frameSourceState, setFrameSourceState] = useState(FrameSourceState.Off);
@@ -46,7 +50,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
             return idCaptureModeRef.current;
         }
         idCaptureModeRef.current = new IdCapture(props.idCaptureSettings || new IdCaptureSettings());
-        idCaptureModeRef.current['parentId'] = viewId;
+        idCaptureModeRef.current.parentId = viewId;
         return idCaptureModeRef.current;
     }, [props.idCaptureSettings, viewId]);
     useEffect(() => {
@@ -54,7 +58,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     }, [isEnabledState, getMode]);
     useEffect(() => {
         const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
-        void CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
+        CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
             await camera.switchToDesiredState(frameSourceState);
         });
     }, [frameSourceState, props.desiredCameraPosition, cameraOwner]);
@@ -91,6 +95,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
             subscription.remove();
             doDestroy();
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     const setupCamera = useCallback(async () => {
         const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
@@ -108,14 +113,14 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         if (componentIsSetUp.current)
             return;
         componentIsSetUp.current = true;
-        /* Setup camera with ownership - Fire-and-forget */
-        void setupCamera();
-        /* Only proceed after camera is ready - these operations are async but errors are handled internally */
-        void props.context.removeAllModes();
-        void props.context.addMode(getMode());
+        /* Setup camera with ownership - WAIT for completion */
+        setupCamera();
+        /* Only proceed after camera is ready */
+        props.context.removeAllModes();
+        props.context.addMode(getMode());
         /* Adding ID Capture Overlay */
         if (viewRef.current) {
-            void viewRef.current.addOverlay(getIdCaptureOverlay());
+            viewRef.current.addOverlay(getIdCaptureOverlay());
         }
     }, [setupCamera, props.context, getMode, getIdCaptureOverlay]);
     const doDestroy = () => {
@@ -141,18 +146,15 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         }
         /* Cleaning Data Capture Context */
         if (idCaptureModeRef.current) {
-            void props.context.removeMode(idCaptureModeRef.current);
+            props.context.removeMode(idCaptureModeRef.current);
         }
         /* Cleaning Overlays */
         if (viewRef.current) {
-            viewRef.current['view']?.overlays?.forEach((overlay) => {
-                void viewRef.current?.['view']?.removeOverlay(overlay);
-            });
+            viewRef.current.view?.overlays?.forEach((overlay) => viewRef.current?.view?.removeOverlay(overlay));
         }
-        /* Turn off camera and release ownership - Fire-and-forget cleanup */
+        /* Turn off camera and release ownership */
         const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        void CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
+        CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
             await camera.switchToDesiredState(FrameSourceState.Off);
             await props.context.setFrameSource(null);
         }).finally(() => {
@@ -163,7 +165,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     /* ID CAPTURE MODE */
     useEffect(() => {
         if (props.idCaptureSettings) {
-            void getMode().applySettings(props.idCaptureSettings);
+            getMode().applySettings(props.idCaptureSettings);
         }
     }, [props.idCaptureSettings, getMode]);
     useEffect(() => {
@@ -178,7 +180,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     }, [props.didCaptureId, props.didRejectId]);
     // Add/remove listener only when needed
     useEffect(() => {
-        void (async () => {
+        const setupListeners = async () => {
             const shouldHaveListener = props.didCaptureId || props.didRejectId;
             const hasListener = listenerRef.current !== null;
             if (shouldHaveListener && !hasListener) {
@@ -194,7 +196,8 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
                 await getMode().removeListener(listenerRef.current);
                 listenerRef.current = null;
             }
-        })();
+        };
+        setupListeners();
     }, [props.didCaptureId, props.didRejectId, getMode, listenerRef, callbacksRef]);
     /* OVERLAYS */
     useEffect(() => {
@@ -214,7 +217,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
             return; // Don't run until camera is ready
         const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
         const settings = props.cameraSettings || IdCapture.createRecommendedCameraSettings();
-        void CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
+        CameraOwnershipHelper.withCamera(position, cameraOwner, async (camera) => {
             await camera.applySettings(settings);
         });
     }, [props.cameraSettings, props.desiredCameraPosition, cameraOwner, isCameraSetup]);
@@ -224,9 +227,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         }
     }, [props.desiredCameraState]);
     useEffect(() => {
-        if (!props.desiredCameraPosition)
-            return;
-        void (async () => {
+        if (props.desiredCameraPosition) {
             // Handle camera position change with ownership
             const currentOwnedPosition = CameraOwnershipHelper.getOwnedPosition(cameraOwner);
             const newPosition = props.desiredCameraPosition;
@@ -234,22 +235,22 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
                 // Release old camera ownership
                 CameraOwnershipHelper.releaseOwnership(currentOwnedPosition, cameraOwner);
                 // Set up new camera
-                await setupCamera();
+                setupCamera();
             }
             else if (!currentOwnedPosition) {
                 // No camera owned yet, set up new camera
-                await setupCamera();
+                setupCamera();
             }
-        })();
+        }
     }, [props.desiredCameraPosition, cameraOwner, setupCamera]);
     /* CONTROLS */
     useEffect(() => {
-        if (!props.desiredTorchState)
-            return;
-        const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
-        void CameraOwnershipHelper.withCameraWhenAvailable(position, cameraOwner, camera => {
-            camera.desiredTorchState = props.desiredTorchState;
-        });
+        if (props.desiredTorchState) {
+            const position = props.desiredCameraPosition || CameraPosition.WorldFacing;
+            CameraOwnershipHelper.withCameraWhenAvailable(position, cameraOwner, async (camera) => {
+                camera.desiredTorchState = props.desiredTorchState;
+            });
+        }
     }, [props.desiredTorchState, props.desiredCameraPosition, cameraOwner]);
     useEffect(() => {
         if (!viewRef.current)
@@ -260,7 +261,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         if (!props.torchSwitchControl)
             return;
         torchSwitchControl.current = props.torchSwitchControl;
-        void viewRef.current.addControl(torchSwitchControl.current);
+        viewRef.current.addControl(torchSwitchControl.current);
     }, [props.torchSwitchControl]);
     useEffect(() => {
         if (!viewRef.current)
@@ -271,7 +272,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         if (!props.zoomSwitchControl)
             return;
         zoomSwitchControl.current = props.zoomSwitchControl;
-        void viewRef.current.addControl(zoomSwitchControl.current);
+        viewRef.current.addControl(zoomSwitchControl.current);
     }, [props.zoomSwitchControl]);
     /* MISC */
     useEffect(() => {
