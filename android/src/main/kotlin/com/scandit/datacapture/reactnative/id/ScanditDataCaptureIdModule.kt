@@ -10,11 +10,8 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
-import com.scandit.datacapture.frameworks.core.errors.ParameterNullError
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import com.scandit.datacapture.reactnative.core.utils.ReactNativeResult
-import com.scandit.datacapture.reactnative.core.utils.modeId
 
 class ScanditDataCaptureIdModule(
     reactContext: ReactApplicationContext,
@@ -23,81 +20,65 @@ class ScanditDataCaptureIdModule(
 
     override fun getName(): String = "ScanditDataCaptureId"
 
+    init {
+        // automatically register listeners
+        idCaptureModule.addListener()
+    }
+
     override fun invalidate() {
         idCaptureModule.onDestroy()
         super.invalidate()
     }
 
     @ReactMethod
-    fun addIdCaptureListener(readableMap: ReadableMap) {
-        idCaptureModule.addListener(readableMap.modeId)
+    fun reset() {
+        idCaptureModule.resetMode()
     }
 
     @ReactMethod
-    fun removeIdCaptureListener(readableMap: ReadableMap) {
-        idCaptureModule.removeListener(readableMap.modeId)
+    fun finishDidCaptureCallback(enabled: Boolean) {
+        idCaptureModule.finishDidCaptureId(enabled)
     }
 
     @ReactMethod
-    fun resetIdCaptureMode(readableMap: ReadableMap) {
-        idCaptureModule.resetMode(readableMap.modeId)
+    fun finishDidRejectCallback(enabled: Boolean) {
+        idCaptureModule.finishDidRejectId(enabled)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @ReactMethod
+    fun createContextForBarcodeVerification(contextJSON: String, promise: Promise) {
+        idCaptureModule.createContextForBarcodeVerification(ReactNativeResult(promise))
     }
 
     @ReactMethod
-    fun finishDidCaptureCallback(readableMap: ReadableMap) {
-        idCaptureModule.finishDidCaptureId(readableMap.modeId, readableMap.getBoolean("enabled"))
+    fun verifyCapturedIdAsync(capturedIdJSON: String, promise: Promise) {
+        idCaptureModule.verifyCapturedIdBarcode(capturedIdJSON, ReactNativeResult(promise))
     }
 
     @ReactMethod
-    fun finishDidRejectCallback(readableMap: ReadableMap) {
-        idCaptureModule.finishDidRejectId(readableMap.modeId, readableMap.getBoolean("enabled"))
+    fun setModeEnabledState(enabled: Boolean) {
+        idCaptureModule.setModeEnabled(enabled)
     }
 
     @ReactMethod
-    fun setModeEnabledState(readableMap: ReadableMap) {
-        idCaptureModule.setModeEnabled(readableMap.modeId, readableMap.getBoolean("enabled"))
-    }
-
-    @ReactMethod
-    fun updateIdCaptureOverlay(readableMap: ReadableMap, promise: Promise) {
-        val overlayJson = readableMap.getString("overlayJson") ?: return promise.reject(
-            ParameterNullError("overlayJson")
-        )
+    fun updateIdCaptureOverlay(overlayJson: String, promise: Promise) {
         idCaptureModule.updateOverlay(overlayJson, ReactNativeResult(promise))
     }
 
     @ReactMethod
-    fun updateIdCaptureMode(readableMap: ReadableMap, promise: Promise) {
-        val modeJson = readableMap.getString("modeJson")
-        if (modeJson == null) {
-            promise.reject(ParameterNullError("modeJson"))
-            return
-        }
-        idCaptureModule.updateModeFromJson(readableMap.modeId, modeJson, ReactNativeResult(promise))
+    fun updateIdCaptureMode(modeJson: String, promise: Promise) {
+        idCaptureModule.updateModeFromJson(modeJson, ReactNativeResult(promise))
     }
 
     @ReactMethod
-    fun applyIdCaptureModeSettings(readableMap: ReadableMap, promise: Promise) {
-        val settingsJson = readableMap.getString("settingsJson")
-        if (settingsJson == null) {
-            promise.reject(ParameterNullError("settingsJson"))
-            return
-        }
-        idCaptureModule.applyModeSettings(
-            readableMap.modeId,
-            settingsJson,
-            ReactNativeResult(promise)
-        )
+    fun applyIdCaptureModeSettings(modeSettingsJson: String, promise: Promise) {
+        idCaptureModule.applyModeSettings(modeSettingsJson, ReactNativeResult(promise))
     }
 
     @ReactMethod
-    fun updateIdCaptureFeedback(readableMap: ReadableMap, promise: Promise) {
-        val feedbackJson = readableMap.getString("feedbackJson")
-        if (feedbackJson == null) {
-            promise.reject(ParameterNullError("feedbackJson"))
-            return
-        }
-        idCaptureModule.updateFeedback(readableMap.modeId, feedbackJson, ReactNativeResult(promise))
+    fun updateIdCaptureFeedback(feedbackJson: String, promise: Promise) {
+        idCaptureModule.updateFeedback(feedbackJson, ReactNativeResult(promise))
     }
 
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
