@@ -41,8 +41,23 @@ class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
+    fun finishDidLocalizeCallback(enabled: Boolean) {
+        idCaptureModule.finishDidLocalizeId(enabled)
+    }
+
+    @ReactMethod
     fun finishDidRejectCallback(enabled: Boolean) {
         idCaptureModule.finishDidRejectId(enabled)
+    }
+
+    @ReactMethod
+    fun finishDidTimeOutCallback(enabled: Boolean) {
+        idCaptureModule.finishDidTimeout(enabled)
+    }
+
+    @ReactMethod
+    fun verifyCapturedId(capturedIdJSON: String, promise: Promise) {
+        idCaptureModule.verifyCaptureId(capturedIdJSON, ReactNativeResult(promise))
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -54,6 +69,11 @@ class ScanditDataCaptureIdModule(
     @ReactMethod
     fun verifyCapturedIdAsync(capturedIdJSON: String, promise: Promise) {
         idCaptureModule.verifyCapturedIdBarcode(capturedIdJSON, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun verifyVizMrz(capturedIdJSON: String, promise: Promise) {
+        idCaptureModule.vizMrzVerification(capturedIdJSON, ReactNativeResult(promise))
     }
 
     @ReactMethod
