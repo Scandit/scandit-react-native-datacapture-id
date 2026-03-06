@@ -11,22 +11,21 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
-import com.facebook.react.module.annotations.ReactModule
-import com.scandit.datacapture.frameworks.core.CoreModule
-import com.scandit.datacapture.frameworks.core.FrameworkModule
-import com.scandit.datacapture.frameworks.core.locator.ServiceLocator
+import com.scandit.datacapture.frameworks.core.errors.ParameterNullError
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
-import com.scandit.datacapture.reactnative.core.utils.ReactNativeMethodCall
 import com.scandit.datacapture.reactnative.core.utils.ReactNativeResult
 
-@ReactModule(name = ScanditDataCaptureIdModule.NAME)
-open class ScanditDataCaptureIdModule(
+class ScanditDataCaptureIdModule(
     reactContext: ReactApplicationContext,
     private val idCaptureModule: IdCaptureModule,
-    private val serviceLocator: ServiceLocator<FrameworkModule>,
 ) : ReactContextBaseJavaModule(reactContext) {
 
-    override fun getName(): String = NAME
+    override fun getName(): String = "ScanditDataCaptureId"
+
+    init {
+        // automatically register listeners
+        idCaptureModule.addListener()
+    }
 
     override fun invalidate() {
         idCaptureModule.onDestroy()
@@ -34,26 +33,57 @@ open class ScanditDataCaptureIdModule(
     }
 
     @ReactMethod
-    fun executeId(data: ReadableMap, promise: Promise) {
-        val coreModule = serviceLocator.resolve(
-            CoreModule::class.java.simpleName
-        ) as? CoreModule ?: return run {
-            promise.reject("-1", "Unable to retrieve the CoreModule from the locator.")
-        }
+    fun reset() {
+        idCaptureModule.resetMode()
+    }
 
-        val result = coreModule.execute(
-            ReactNativeMethodCall(data),
-            ReactNativeResult(promise),
-            idCaptureModule
+    @ReactMethod
+    fun finishDidCaptureCallback(enabled: Boolean) {
+        idCaptureModule.finishDidCaptureId(enabled)
+    }
+
+    @ReactMethod
+    fun finishDidRejectCallback(enabled: Boolean) {
+        idCaptureModule.finishDidRejectId(enabled)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @ReactMethod
+    fun createContextForBarcodeVerification(contextJSON: String, promise: Promise) {
+        idCaptureModule.createContextForBarcodeVerification(ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun verifyCapturedIdAsync(capturedIdJSON: String, promise: Promise) {
+        idCaptureModule.verifyCapturedIdBarcode(capturedIdJSON, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun setModeEnabledState(enabled: Boolean) {
+        idCaptureModule.setModeEnabled(enabled)
+    }
+
+    @ReactMethod
+    fun updateIdCaptureOverlay(readableMap: ReadableMap, promise: Promise) {
+        val overlayJson = readableMap.getString("overlayJson") ?: return promise.reject(
+            ParameterNullError("overlayJson")
         )
+        idCaptureModule.updateOverlay(overlayJson, ReactNativeResult(promise))
+    }
 
-        if (!result) {
-            val methodName = data.getString("methodName") ?: "unknown"
-            promise.reject(
-                "METHOD_NOT_FOUND",
-                "Unknown Core method: $methodName"
-            )
-        }
+    @ReactMethod
+    fun updateIdCaptureMode(modeJson: String, promise: Promise) {
+        idCaptureModule.updateModeFromJson(modeJson, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun applyIdCaptureModeSettings(modeSettingsJson: String, promise: Promise) {
+        idCaptureModule.applyModeSettings(modeSettingsJson, ReactNativeResult(promise))
+    }
+
+    @ReactMethod
+    fun updateIdCaptureFeedback(feedbackJson: String, promise: Promise) {
+        idCaptureModule.updateFeedback(feedbackJson, ReactNativeResult(promise))
     }
 
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
@@ -71,7 +101,6 @@ open class ScanditDataCaptureIdModule(
     }
 
     companion object {
-        const val NAME = "ScanditDataCaptureId"
         private const val DEFAULTS_KEY = "Defaults"
     }
 }
