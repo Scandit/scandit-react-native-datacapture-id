@@ -1,8 +1,8 @@
-import { IdCapture, IdCaptureSettings, IdCaptureOverlay, registerIdProxies, loadIdDefaults, ID_PROXY_TYPE_NAMES } from './id.js';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureController, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListenerController, IdCaptureListenerEvents, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaIcao } from './id.js';
-import { AppState, NativeModules } from 'react-native';
-import { getNativeModule, FrameSourceState, CameraPosition, DataCaptureView, initCoreDefaults, createRNNativeCaller } from 'scandit-react-native-datacapture-core';
+import { setIdDefaultsLoader, IdCapture, IdCaptureSettings, IdCaptureOverlay, registerIdProxies, loadIdDefaults, ID_PROXY_TYPE_NAMES } from './id.js';
+export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaIcao } from './id.js';
+import { FrameSourceState, CameraPosition, DataCaptureView, initCoreDefaults, getModuleDefaults, getNativeModule, createRNNativeCaller } from 'scandit-react-native-datacapture-core';
 import React, { forwardRef, useImperativeHandle, useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { AppState } from 'react-native';
 import { CameraOwnershipHelper } from 'scandit-react-native-datacapture-core/dist/core';
 
 class RNIdNativeCallerProvider {
@@ -10,7 +10,9 @@ class RNIdNativeCallerProvider {
         if (!ID_PROXY_TYPE_NAMES.includes(proxyType)) {
             throw new Error(`No native module mapped for proxy type: ${proxyType}`);
         }
-        return createRNNativeCaller(NativeModules.ScanditDataCaptureId);
+        // Use getNativeModule which handles both TurboModules and legacy modules
+        const nativeModule = getNativeModule('ScanditDataCaptureId');
+        return createRNNativeCaller(nativeModule);
     }
 }
 
@@ -18,11 +20,11 @@ function initIdProxy() {
     registerIdProxies(new RNIdNativeCallerProvider());
 }
 
-const dataCaptureId = getNativeModule('ScanditDataCaptureId');
 function initIdDefaults() {
     initCoreDefaults();
-    loadIdDefaults(dataCaptureId.Defaults);
+    loadIdDefaults(getModuleDefaults('ScanditDataCaptureId'));
 }
+setIdDefaultsLoader(initIdDefaults);
 
 // tslint:disable-next-line
 const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
