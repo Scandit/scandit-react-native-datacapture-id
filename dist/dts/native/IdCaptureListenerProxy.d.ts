@@ -5,7 +5,9 @@ export declare class NativeIdCaptureListenerProxy implements IdCaptureListenerPr
     constructor();
     isModeEnabled: () => boolean;
     subscribeDidCaptureListener(): void;
+    subscribeDidLocalizeListener(): void;
     subscribeDidRejectListener(): void;
+    subscribeDidTimeOutListener(): void;
     unregisterListenerForEvents(): void;
     finishDidCaptureCallback(isEnabled: boolean): void;
     finishDidLocalizeCallback(isEnabled: boolean): void;
