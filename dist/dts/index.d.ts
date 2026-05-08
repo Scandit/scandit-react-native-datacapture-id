@@ -1,10 +1,4 @@
-export { DateResult, IdAnonymizationMode, IdImageType, CapturedSides, TextHintPosition, Duration } from 'scandit-datacapture-frameworks-id';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier } from 'scandit-datacapture-frameworks-id';
-export { CapturedId, BarcodeResult, MRZResult, ProfessionalDrivingPermit } from 'scandit-datacapture-frameworks-id';
-export { VehicleRestriction, VIZResult } from 'scandit-datacapture-frameworks-id';
-export { UsRealIdStatus } from 'scandit-datacapture-frameworks-id';
+export { ComparisonCheck, ComparisonCheckResult, DateResult, IdAnonymizationMode, IdDocumentType, IdImageType, LocalizedOnlyId, RejectedId, SupportedSides, TextHintPosition, VizMrzComparisonCheck } from 'scandit-datacapture-frameworks-id';
+export { AAMVABarcodeResult, AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, AamvaBarcodeVerifier, AamvaVizBarcodeComparisonResult, AamvaVizBarcodeComparisonVerifier, ApecBusinessTravelCardMrzResult, ArgentinaIdBarcodeResult, CapturedId, CapturedResultType, ChinaExitEntryPermitMRZResult, ChinaMainlandTravelPermitMRZResult, ChinaOneWayPermitBackMrzResult, ChinaOneWayPermitFrontMrzResult, ColombiaDlBarcodeResult, ColombiaIdBarcodeResult, CommonAccessCardBarcodeResult, DocumentType, MRZResult, ProfessionalDrivingPermit, SouthAfricaDlBarcodeResult, SouthAfricaIdBarcodeResult, USUniformedServicesBarcodeResult, USVisaVIZResult, VehicleRestriction, VizMrzComparisonCheckResult, VizMrzComparisonResult, VizMrzComparisonVerifier, VIZResult } from 'scandit-datacapture-frameworks-id';
 export { IdCaptureController, IdCaptureListenerController, IdCaptureListenerProxy, IdCaptureListenerEvents, IdCaptureProxy } from 'scandit-datacapture-frameworks-id';
-export { IdCapture, IdCaptureFeedback, IdCaptureListener, IdCaptureOverlay, IdCaptureSettings, IdLayoutLineStyle, IdLayoutStyle, RejectionReason } from 'scandit-datacapture-frameworks-id';
-export { IdCaptureDocumentType, DriverLicense, HealthInsuranceCard, IdCaptureDocument, IdCard, Passport, RegionSpecific, ResidencePermit, VisaIcao } from 'scandit-datacapture-frameworks-id';
-export { IdCaptureScanner, SingleSideScanner, FullDocumentScanner, IdCaptureRegion, RegionSpecificSubtype, IdImages, IdSide } from 'scandit-datacapture-frameworks-id';
-export * from './IdCaptureView';
+export { IdCapture, IdCaptureError, IdCaptureFeedback, IdCaptureListener, IdCaptureOverlay, IdCaptureSession, IdCaptureSettings, IdLayout, IdLayoutLineStyle, IdLayoutStyle, RejectionReason } from 'scandit-datacapture-frameworks-id';

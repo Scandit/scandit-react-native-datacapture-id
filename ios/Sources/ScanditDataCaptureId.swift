@@ -63,15 +63,33 @@ class ScanditDataCaptureId: RCTEventEmitter {
         idModule.finishDidCaptureId(enabled: enabled)
     }
 
+    @objc(finishDidLocalizeCallback:)
+    func finishDidLocalizeCallback(enabled: Bool) {
+        idModule.finishDidLocalizeId(enabled: enabled)
+    }
+
     @objc(finishDidRejectCallback:)
     func finishDidRejectCallback(enabled: Bool) {
         idModule.finishDidRejectId(enabled: enabled)
+    }
+
+    @objc(finishDidTimeOutCallback:)
+    func finishDidTimeOutCallback(enabled: Bool) {
+        idModule.finishTimeout(enabled: enabled)
     }
 
     @objc(reset:reject:)
     func reset(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         idModule.resetMode()
         resolve(nil)
+    }
+
+    @objc(verifyCapturedId:capturedIdJSON:reject:)
+    func verifyCapturedId(capturedIdJSON: String,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) {
+        idModule.verifyCapturedIdAamvaViz(jsonString: capturedIdJSON,
+                                          result: ReactNativeResult(resolve, reject))
     }
 
     @objc(createContextForBarcodeVerification:context:reject:)
@@ -89,17 +107,21 @@ class ScanditDataCaptureId: RCTEventEmitter {
                                            result: ReactNativeResult(resolve, reject))
     }
 
+    @objc(verifyVizMrz:capturedIdJSON:reject:)
+    func verifyVizMrz(capturedIdJSON: String,
+                               resolve: @escaping RCTPromiseResolveBlock,
+                               reject: @escaping RCTPromiseRejectBlock) {
+        idModule.verifyCaptureIdMrzViz(jsonString: capturedIdJSON,
+                                           result: ReactNativeResult(resolve, reject))
+    }
+
     @objc(setModeEnabledState:)
     func setModeEnabledState(enabled: Bool) {
         idModule.setModeEnabled(enabled: enabled)
     }
 
     @objc(updateIdCaptureOverlay:resolve:reject:)
-    func updateIdCaptureOverlay(data: [String: Any], resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
-        guard let overlayJson = data["overlayJson"] as? String else {
-            reject("-1", "Missing overlayJson parameter", nil)
-            return
-        }
+    func updateIdCaptureOverlay(overlayJson: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         idModule.updateOverlay(overlayJson: overlayJson, result: ReactNativeResult(resolve, reject))
     }
 
