@@ -147,7 +147,7 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
         }
         /* Cleaning Overlays */
         if (viewRef.current) {
-            viewRef.current['view']?.overlays?.forEach((overlay) => {
+            viewRef.current['view']?.overlays?.forEach(overlay => {
                 void viewRef.current?.['view']?.removeOverlay(overlay);
             });
         }
