@@ -7,95 +7,148 @@
 import Foundation
 import React
 import ScanditDataCaptureCore
-import ScanditFrameworksCore
 import ScanditFrameworksId
 
-/// Swift implementation for the Id native module.
-/// This class contains all business logic and is used by the Obj-C++ adapter (NativeScanditDataCaptureId).
-/// Following the Adapter Pattern from React Native's TurboModule Swift guide.
-@objcMembers
-public class ScanditDataCaptureIdImpl: NSObject {
+@objc(ScanditDataCaptureId)
+class ScanditDataCaptureId: RCTEventEmitter {
     var idModule: IdCaptureModule!
 
-    /// Reference to the RCTEventEmitter adapter.
-    weak var emitter: RCTEventEmitter?
-
-    public override init() {
+    override init() {
         super.init()
-    }
-
-    /// Called by the Obj-C++ adapter to set up the emitter reference and initialize modules (old architecture).
-    public func setup(with emitter: RCTEventEmitter) {
-        self.emitter = emitter
-        guard let reactEmitter = ScanditDataCaptureCore.ReactNativeEmitterFactory.create(emitter: emitter) else {
-            fatalError("Failed to create ReactNativeEmitter")
-        }
-        idModule = IdCaptureModule(emitter: reactEmitter)
+        let emitter = ReactNativeEmitter(emitter: self)
+        idModule = IdCaptureModule(emitter: emitter)
         idModule.didStart()
     }
 
-    /// Called by the Obj-C++ adapter to set up the emitter reference and initialize modules (new architecture).
-    /// - Parameters:
-    ///   - emitter: The RCTEventEmitter (nil in new arch since we don't inherit from RCTEventEmitter).
-    ///   - turboEmitter: TurboModule emitter block for new architecture.
-    @objc(setupWith:turboEmitter:)
-    public func setup(with emitter: RCTEventEmitter?, turboEmitter: SDCEventEmitBlock?) {
-        self.emitter = emitter
-        guard
-            let reactEmitter = ScanditDataCaptureCore.ReactNativeEmitterFactory.create(
-                emitter: emitter,
-                turboEmitter: turboEmitter
-            )
-        else {
-            fatalError("Failed to create ReactNativeEmitter")
-        }
-        idModule = IdCaptureModule(emitter: reactEmitter)
-        idModule.didStart()
-    }
-
-    public func supportedEvents() -> [String] {
+    override func supportedEvents() -> [String]! {
         FrameworksIdCaptureEvent.allCases.map { $0.rawValue }
     }
 
-    public func getConstants() -> [AnyHashable: Any] {
-        guard let module = idModule else {
-            return [:]
-        }
-        return [
-            "Defaults": module.getDefaults()
+    override func constantsToExport() -> [AnyHashable: Any]! {
+        [
+            "Defaults": idModule.defaults.toEncodable()
         ]
     }
 
-    public func invalidate() {
-        idModule?.didStop()
+    @objc override class func requiresMainQueueSetup() -> Bool {
+        true
     }
 
-    public func executeId(
+    @objc override var methodQueue: DispatchQueue! {
+        sdcSharedMethodQueue
+    }
+
+    @objc override func invalidate() {
+        super.invalidate()
+        idModule.didStop()
+    }
+
+    deinit {
+        invalidate()
+    }
+
+    @objc(finishDidCaptureCallback:resolve:reject:)
+    func finishDidCaptureCallback(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.finishDidCaptureId(modeId: data.modeId, enabled: enabled)
+        resolve(nil)
+    }
+
+    @objc(finishDidRejectCallback:resolve:reject:)
+    func finishDidRejectCallback(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.finishDidRejectId(modeId: data.modeId, enabled: enabled)
+        resolve(nil)
+    }
+
+    @objc(resetIdCaptureMode:)
+    func resetIdCaptureMode(data: [String: Any]) {
+        idModule.resetMode(modeId: data.modeId)
+    }
+
+    @objc(addIdCaptureListener:)
+    func addIdCaptureListener(data: [String: Any]) {
+        idModule.addListener(modeId: data.modeId)
+    }
+
+    @objc(removeIdCaptureListener:)
+    func removeIdCaptureListener(data: [String: Any]) {
+        idModule.removeListener(modeId: data.modeId)
+    }
+
+    @objc(setModeEnabledState:resolve:reject:)
+    func setModeEnabledState(data: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        guard let enabled = data["enabled"] as? Bool else {
+            reject("-1", "Missing enabled parameter", nil)
+            return
+        }
+        idModule.setModeEnabled(modeId: data.modeId, enabled: enabled)
+        resolve(nil)
+    }
+
+    @objc(updateIdCaptureOverlay:resolve:reject:)
+    func updateIdCaptureOverlay(
         data: [String: Any],
         resolve: @escaping RCTPromiseResolveBlock,
         reject: @escaping RCTPromiseRejectBlock
     ) {
-        guard let module = idModule else {
-            reject("MODULE_NOT_INITIALIZED", "IdModule is not initialized. setup() may not have been called.", nil)
+        guard let overlayJson = data["overlayJson"] as? String else {
+            reject("-1", "Missing overlayJson parameter", nil)
             return
         }
+        idModule.updateOverlay(overlayJson: overlayJson, result: ReactNativeResult(resolve, reject))
+    }
 
-        let coreModuleName = String(describing: CoreModule.self)
-        guard let coreModule = DefaultServiceLocator.shared.resolve(clazzName: coreModuleName) as? CoreModule else {
-            reject("-1", "Unable to retrieve the CoreModule from the locator.", nil)
+    @objc(updateIdCaptureMode:resolve:reject:)
+    func updateIdCaptureMode(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let modeJson = data["modeJson"] as? String else {
+            reject("-1", "Missing modeJson parameter", nil)
             return
         }
+        idModule.updateModeFromJson(modeId: data.modeId, modeJson: modeJson, result: ReactNativeResult(resolve, reject))
+    }
 
-        let result = ReactNativeResult(resolve, reject)
-        let handled = coreModule.execute(
-            ReactNativeMethodCall(data),
-            result: result,
-            module: module
+    @objc(applyIdCaptureModeSettings:resolve:reject:)
+    func applyIdCaptureModeSettings(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let settingsJson = data["settingsJson"] as? String else {
+            reject("-1", "Missing settingsJson parameter", nil)
+            return
+        }
+        idModule.applyModeSettings(
+            modeId: data.modeId,
+            modeSettingsJson: settingsJson,
+            result: ReactNativeResult(resolve, reject)
         )
+    }
 
-        if !handled {
-            let methodName = data["methodName"] as? String ?? "unknown"
-            reject("METHOD_NOT_FOUND", "Unknown Core method: \(methodName)", nil)
+    @objc(updateIdCaptureFeedback:resolve:reject:)
+    func updateIdCaptureFeedback(
+        data: [String: Any],
+        resolve: @escaping RCTPromiseResolveBlock,
+        reject: @escaping RCTPromiseRejectBlock
+    ) {
+        guard let feedbackJson = data["feedbackJson"] as? String else {
+            reject("-1", "Missing feedbackJson parameter", nil)
+            return
         }
+        idModule.updateFeedback(
+            modeId: data.modeId,
+            feedbackJson: feedbackJson,
+            result: ReactNativeResult(resolve, reject)
+        )
     }
 }
