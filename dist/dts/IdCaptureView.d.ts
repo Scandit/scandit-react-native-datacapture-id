@@ -1,6 +1,7 @@
 import React from 'react';
 import { Brush, CameraPosition, CameraSettings, DataCaptureContext, FrameSourceState, TorchState, TorchSwitchControl, ZoomSwitchControl } from 'scandit-react-native-datacapture-core';
 import { IdCapture, IdCaptureFeedback, IdCaptureSettings, CapturedId, RejectionReason } from 'scandit-datacapture-frameworks-id';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 interface IdCaptureViewProps {
     context: DataCaptureContext;
     isEnabled: boolean;
@@ -15,7 +16,7 @@ interface IdCaptureViewProps {
     torchSwitchControl?: TorchSwitchControl | null;
     zoomSwitchControl?: ZoomSwitchControl | null;
     feedback?: IdCaptureFeedback;
-    navigation?: any;
+    navigation?: NavigationProp<ParamListBase>;
     didCaptureId?(idCapture: IdCapture, capturedId: CapturedId): void;
     didRejectId?(idCapture: IdCapture, rejectedId: CapturedId | null, reason: RejectionReason): void;
 }
