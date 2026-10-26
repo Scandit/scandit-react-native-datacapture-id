@@ -1,6 +1,6 @@
 import { setIdDefaultsLoader, IdCapture, IdCaptureSettings, IdCaptureOverlay, registerIdProxies, loadIdDefaults, ID_PROXY_TYPE_NAMES } from './id.js';
 export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaIcao } from './id.js';
-import { FrameSourceState, CameraPosition, DataCaptureView, initCoreDefaults, getModuleDefaults, getNativeModule, createRNNativeCaller } from 'scandit-react-native-datacapture-core';
+import { FrameSourceState, CameraPosition, DataCaptureView, _internal, initCoreDefaults, getModuleDefaults, getNativeModule, createRNNativeCaller } from 'scandit-react-native-datacapture-core';
 import React, { forwardRef, useImperativeHandle, useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import { CameraOwnershipHelper } from 'scandit-react-native-datacapture-core/dist/core';
@@ -27,7 +27,7 @@ function initIdDefaults() {
 setIdDefaultsLoader(initIdDefaults);
 
 // tslint:disable-next-line
-const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
+const IdCaptureView$1 = forwardRef(function IdCaptureView(props, ref) {
     useImperativeHandle(ref, () => ({
         reset() {
             void getMode().reset();
@@ -210,6 +210,34 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
             getIdCaptureOverlay().localizedBrush = props.localizedBrush;
         }
     }, [props.capturedBrush, props.rejectedBrush, props.localizedBrush, getIdCaptureOverlay]);
+    useEffect(() => {
+        const overlay = getIdCaptureOverlay();
+        if (props.idLayoutStyle != null)
+            overlay.idLayoutStyle = props.idLayoutStyle;
+        if (props.idLayoutLineStyle != null)
+            overlay.idLayoutLineStyle = props.idLayoutLineStyle;
+        if (props.showTextHints != null)
+            overlay.showTextHints = props.showTextHints;
+        if (props.textHintPosition != null)
+            overlay.textHintPosition = props.textHintPosition;
+        if (props.frontSideTextHint)
+            overlay.setFrontSideTextHint(props.frontSideTextHint);
+        if (props.backSideTextHint)
+            overlay.setBackSideTextHint(props.backSideTextHint);
+    }, [
+        props.idLayoutStyle,
+        props.idLayoutLineStyle,
+        props.showTextHints,
+        props.textHintPosition,
+        props.frontSideTextHint,
+        props.backSideTextHint,
+        getIdCaptureOverlay,
+    ]);
+    useEffect(() => {
+        if (props.externalTransactionId !== undefined) {
+            getMode().externalTransactionId = props.externalTransactionId || null;
+        }
+    }, [props.externalTransactionId, getMode]);
     /* CAMERA */
     useEffect(() => {
         if (!isCameraSetup)
@@ -304,7 +332,159 @@ const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
     return React.createElement(DataCaptureView, { context: props.context, parentId: viewId, style: { flex: 1 }, ref: viewRef });
 });
 
+function buildSettings(settings) {
+    return settings ?? new IdCaptureSettings();
+}
+const IdCaptureView = forwardRef(function IdCaptureView(props, ref) {
+    const idCaptureSettings = _internal.useStableProp(props.idCaptureSettings);
+    const basicOverlayCapturedBrush = _internal.useStableProp(props.basicOverlay?.capturedBrush);
+    const basicOverlayRejectedBrush = _internal.useStableProp(props.basicOverlay?.rejectedBrush);
+    const basicOverlayLocalizedBrush = _internal.useStableProp(props.basicOverlay?.localizedBrush);
+    const torchSwitchControl = _internal.useStableProp(props.torchSwitchControl);
+    const zoomSwitchControl = _internal.useStableProp(props.zoomSwitchControl);
+    const feedback = _internal.useStableProp(props.feedback);
+    const context = _internal.useDataCaptureContextInternal();
+    // Provider-camera view: a shared claim keeps the provider camera on while
+    // this view is enabled; the claim engine coexists with other shared views
+    // and yields to exclusive (own-camera) views. Replaces the deleted
+    // useCameraControl/setFrameSourceState surface.
+    const [cameraActive, setCameraActive] = useState(false);
+    const viewHandle = _internal.useViewHandle();
+    const cameraClaim = _internal.useCameraClaim({
+        mode: 'shared',
+        active: cameraActive,
+        nativeViewRef: viewHandle.mutableRef,
+    });
+    const viewRef = viewHandle.mutableRef;
+    const viewState = viewHandle.current;
+    const viewRefCallback = viewHandle.ref;
+    const viewId = viewHandle.id;
+    const resolveSettings = useCallback(() => buildSettings(idCaptureSettings), [idCaptureSettings]);
+    const basicOverlayIdLayoutStyle = props.basicOverlay?.idLayoutStyle;
+    const basicOverlayIdLayoutLineStyle = props.basicOverlay?.idLayoutLineStyle;
+    const basicOverlayShowTextHints = props.basicOverlay?.showTextHints;
+    const basicOverlayTextHintPosition = props.basicOverlay?.textHintPosition;
+    const basicOverlayFrontSideTextHint = props.basicOverlay?.frontSideTextHint;
+    const basicOverlayBackSideTextHint = props.basicOverlay?.backSideTextHint;
+    const basicOverlay = _internal.useOverlay({
+        view: viewRef,
+        enabled: props.basicOverlay?.enabled !== false,
+        factory: () => new IdCaptureOverlay(getMode()),
+        factoryDeps: [],
+        update: overlay => {
+            if (basicOverlayCapturedBrush !== undefined)
+                overlay.capturedBrush = basicOverlayCapturedBrush;
+            if (basicOverlayRejectedBrush !== undefined)
+                overlay.rejectedBrush = basicOverlayRejectedBrush;
+            if (basicOverlayLocalizedBrush !== undefined)
+                overlay.localizedBrush = basicOverlayLocalizedBrush;
+            if (basicOverlayIdLayoutStyle !== undefined)
+                overlay.idLayoutStyle = basicOverlayIdLayoutStyle;
+            if (basicOverlayIdLayoutLineStyle !== undefined)
+                overlay.idLayoutLineStyle = basicOverlayIdLayoutLineStyle;
+            if (basicOverlayShowTextHints !== undefined)
+                overlay.showTextHints = basicOverlayShowTextHints;
+            if (basicOverlayTextHintPosition !== undefined)
+                overlay.textHintPosition = basicOverlayTextHintPosition;
+            if (basicOverlayFrontSideTextHint !== undefined)
+                overlay.setFrontSideTextHint(basicOverlayFrontSideTextHint);
+            if (basicOverlayBackSideTextHint !== undefined)
+                overlay.setBackSideTextHint(basicOverlayBackSideTextHint);
+        },
+        updateDeps: [
+            basicOverlayCapturedBrush,
+            basicOverlayRejectedBrush,
+            basicOverlayLocalizedBrush,
+            basicOverlayIdLayoutStyle,
+            basicOverlayIdLayoutLineStyle,
+            basicOverlayShowTextHints,
+            basicOverlayTextHintPosition,
+            basicOverlayFrontSideTextHint,
+            basicOverlayBackSideTextHint,
+        ],
+    });
+    const { getMode, enable: enableMode, disable: disableMode, } = _internal.useMode({
+        disabled: props.disabled,
+        createMode: () => {
+            const mode = new IdCapture(resolveSettings());
+            mode['parentId'] = viewId;
+            return mode;
+        },
+        applySettings: mode => {
+            if (feedback !== undefined)
+                mode.feedback = feedback;
+            return mode.applySettings(resolveSettings());
+        },
+        setEnabled: (mode, enabled) => {
+            if (mode.isEnabled !== enabled)
+                mode.isEnabled = enabled;
+        },
+        attach: mode => context.addMode(mode),
+        detach: mode => context.removeMode(mode),
+        attachables: [basicOverlay],
+        settingsDeps: [resolveSettings, feedback],
+    });
+    _internal.useModeListener({
+        mode: getMode(),
+        listenerFns: {
+            didCaptureId: props.didCaptureId
+                ? (_mode, id) => {
+                    props.didCaptureId(id);
+                }
+                : undefined,
+            didRejectId: props.didRejectId ? (_mode, id, reason) => props.didRejectId(id, reason) : undefined,
+        },
+        addListener: (m, l) => void m.addListener(l),
+        removeListener: (m, l) => void m.removeListener(l),
+    });
+    // Enable/disable scanning (mode + camera), shared by the navigation prop and
+    // the imperative `enable()`/`disable()` handle. The mode side goes through
+    // `useMode` (single authority on `isEnabled`); we add the camera here.
+    const enable = useCallback(async () => {
+        await enableMode();
+        setCameraActive(true);
+        await cameraClaim.granted();
+    }, [enableMode, cameraClaim]);
+    const disable = useCallback(async () => {
+        await disableMode();
+        setCameraActive(false);
+    }, [disableMode]);
+    // Lifecycle: focus/blur + app foreground/background + the `disabled` veto,
+    // resolved to a single enable/disable.
+    _internal.useLifecycleHook({
+        navigation: props.navigation,
+        disabled: props.disabled,
+        appStateHandlingDisabled: props.appStateHandlingDisabled,
+        onEnable: enable,
+        onDisable: disable,
+    });
+    _internal.useNativeControl(viewState, torchSwitchControl);
+    _internal.useNativeControl(viewState, zoomSwitchControl);
+    _internal.useModeListener({
+        mode: viewState,
+        listenerFns: {
+            didChangeSize: props.onDidChangeSize ?? undefined,
+        },
+        addListener: (v, l) => v.addListener(l),
+        removeListener: (v, l) => v.removeListener(l),
+    });
+    useImperativeHandle(ref, () => ({
+        reset: () => getMode().reset() ?? Promise.resolve(),
+        enable,
+        disable,
+    }), [getMode, enable, disable]);
+    return (React.createElement(DataCaptureView, { context: context, parentId: viewId, style: props.style ?? { flex: 1 }, ref: viewRefCallback, onNativeDispose: teardown => cameraClaim.release(teardown) }));
+});
+
+// Internal-only exports for AIO views and other not-yet-public APIs.
+// Exposed at the package level via `import { _internal } from 'scandit-react-native-datacapture-id'`.
+
+var internal = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    IdCaptureView: IdCaptureView
+});
+
 initIdDefaults();
 initIdProxy();
 
-export { IdCaptureView };
+export { IdCaptureView$1 as IdCaptureView, internal as _internal };
