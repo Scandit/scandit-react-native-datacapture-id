@@ -4,55 +4,254 @@
  * Flowgen v1.21.0
  */
 
-declare export { DateResult } from "scandit-datacapture-frameworks-id";
-declare export { IdAnonymizationMode } from "scandit-datacapture-frameworks-id";
-declare export { IdFieldType } from "scandit-datacapture-frameworks-id";
-declare export { IdImageType } from "scandit-datacapture-frameworks-id";
-declare export { CapturedSides } from "scandit-datacapture-frameworks-id";
-declare export { TextHintPosition } from "scandit-datacapture-frameworks-id";
-declare export { BarcodeResult } from "scandit-datacapture-frameworks-id";
-declare export { Duration } from "scandit-datacapture-frameworks-id";
-declare export { IdImages } from "scandit-datacapture-frameworks-id";
-declare export { IdSide } from "scandit-datacapture-frameworks-id";
-declare export { Sex } from "scandit-datacapture-frameworks-id";
-declare export { UsRealIdStatus } from "scandit-datacapture-frameworks-id";
-declare export { CapturedId } from "scandit-datacapture-frameworks-id";
-declare export { MobileDocumentOCRResult } from "scandit-datacapture-frameworks-id";
-declare export { MobileDocumentResult } from "scandit-datacapture-frameworks-id";
-declare export { MRZResult } from "scandit-datacapture-frameworks-id";
-declare export { VIZResult } from "scandit-datacapture-frameworks-id";
-declare export { IdCapture } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureFeedback } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureListener } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureOverlay } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureSettings } from "scandit-datacapture-frameworks-id";
-declare export { IdLayoutLineStyle } from "scandit-datacapture-frameworks-id";
-declare export { IdLayoutStyle } from "scandit-datacapture-frameworks-id";
-declare export { RejectionReason } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureDocumentType } from "scandit-datacapture-frameworks-id";
-declare export { DriverLicense } from "scandit-datacapture-frameworks-id";
-declare export { HealthInsuranceCard } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureDocument } from "scandit-datacapture-frameworks-id";
-declare export { IdCard } from "scandit-datacapture-frameworks-id";
-declare export { Passport } from "scandit-datacapture-frameworks-id";
-declare export { RegionSpecific } from "scandit-datacapture-frameworks-id";
-declare export { ResidencePermit } from "scandit-datacapture-frameworks-id";
-declare export { VisaIcao } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureScanner } from "scandit-datacapture-frameworks-id";
-declare export { SingleSideScanner } from "scandit-datacapture-frameworks-id";
-declare export { FullDocumentScanner } from "scandit-datacapture-frameworks-id";
-declare export { MobileDocumentScanner } from "scandit-datacapture-frameworks-id";
-declare export { PhysicalDocumentScanner } from "scandit-datacapture-frameworks-id";
-declare export { MobileDocumentDataElement } from "scandit-datacapture-frameworks-id";
-declare export { IdCaptureRegion } from "scandit-datacapture-frameworks-id";
-declare export { RegionSpecificSubtype } from "scandit-datacapture-frameworks-id";
-declare export { AamvaBarcodeVerificationResult } from "scandit-datacapture-frameworks-id";
-declare export { AamvaBarcodeVerificationStatus } from "scandit-datacapture-frameworks-id";
-declare export { DataConsistencyResult } from "scandit-datacapture-frameworks-id";
-declare export { DataConsistencyCheck } from "scandit-datacapture-frameworks-id";
-declare export { VerificationResult } from "scandit-datacapture-frameworks-id";
-declare export { ProfessionalDrivingPermit } from "scandit-datacapture-frameworks-id";
-declare export { VehicleRestriction } from "scandit-datacapture-frameworks-id";
-declare export { DrivingLicenseCategory } from "scandit-datacapture-frameworks-id";
-declare export { DrivingLicenseDetails } from "scandit-datacapture-frameworks-id";
-declare export * from "./IdCaptureView";
+import {
+  IdLayoutStyle,
+  IdLayoutLineStyle,
+  TextHintPosition,
+  CapturedId,
+  RejectionReason,
+  IdCaptureSettings,
+  IdCaptureFeedback,
+} from "./id";
+declare export {
+  AamvaBarcodeVerificationResult,
+  AamvaBarcodeVerificationStatus,
+  ApplicationStatus,
+  BarcodeResult,
+  CapturedId,
+  CapturedSides,
+  DataConsistencyCheck,
+  DataConsistencyResult,
+  DateResult,
+  DriverLicense,
+  DrivingLicenseCategory,
+  DrivingLicenseDetails,
+  Duration,
+  FullDocumentScanner,
+  HealthInsuranceCard,
+  IdAnonymizationMode,
+  IdCapture,
+  IdCaptureDocument,
+  IdCaptureDocumentType,
+  IdCaptureFeedback,
+  IdCaptureListener,
+  IdCaptureOverlay,
+  IdCaptureRegion,
+  IdCaptureScanner,
+  IdCaptureSettings,
+  IdCard,
+  IdFieldType,
+  IdImageType,
+  IdImages,
+  IdLayoutLineStyle,
+  IdLayoutStyle,
+  IdSide,
+  MRZResult,
+  MobileDocumentDataElement,
+  MobileDocumentOCRResult,
+  MobileDocumentResult,
+  MobileDocumentScanner,
+  Passport,
+  PassportType,
+  PhysicalDocumentScanner,
+  ProfessionalDrivingPermit,
+  RegionSpecific,
+  RegionSpecificSubtype,
+  RejectionReason,
+  ResidencePermit,
+  Sex,
+  SingleSideScanner,
+  TextHintPosition,
+  UsRealIdStatus,
+  VIZResult,
+  VehicleRestriction,
+  VerificationResult,
+  VisaDetails,
+  VisaIcao,
+  VisaLetter,
+} from "./id";
+import React from "react";
+import { StyleProp, ViewStyle } from "react-native";
+import {
+  Brush,
+  TorchSwitchControl,
+  ZoomSwitchControl,
+} from "scandit-react-native-datacapture-core";
+import type { ScanditNavigationProp } from "scandit-react-native-datacapture-core";
+
+/**
+ * [object Object],[object Object],[object Object],[object Object],[object Object]
+ * @since 8.7.0
+ */
+declare interface IdCaptureAioBasicOverlayProps {
+  /**
+   * Whether to attach the basic overlay at all. Defaults to *true*; pass *false* to render the camera preview without an overlay.
+   * @since 8.7.0
+   */
+  enabled?: boolean;
+
+  /**
+   * Brush used to draw documents that were captured.
+   * @since 8.7.0
+   */
+  capturedBrush?: Brush;
+
+  /**
+   * Brush used to draw documents that were rejected.
+   * @since 8.7.0
+   */
+  rejectedBrush?: Brush;
+
+  /**
+   * Brush used to draw documents that were localized but not yet captured.
+   * @since 8.7.0
+   */
+  localizedBrush?: Brush;
+
+  /**
+   * Layout style of the viewfinder frame drawn for the document.
+   * @since 8.7.0
+   */
+  idLayoutStyle?: $Values<typeof IdLayoutStyle>;
+
+  /**
+   * Line style of the viewfinder frame drawn for the document.
+   * @since 8.7.0
+   */
+  idLayoutLineStyle?: $Values<typeof IdLayoutLineStyle>;
+
+  /**
+   * Whether the overlay shows scanning hint text.
+   * @since 8.7.0
+   */
+  showTextHints?: boolean;
+
+  /**
+   * Position of the hint text relative to the viewfinder.
+   * @since 8.7.0
+   */
+  textHintPosition?: $Values<typeof TextHintPosition>;
+
+  /**
+   * Hint text shown while the front side of a document is being scanned.
+   * @since 8.7.0
+   */
+  frontSideTextHint?: string;
+
+  /**
+   * Hint text shown while the back side of a document is being scanned.
+   * @since 8.7.0
+   */
+  backSideTextHint?: string;
+}
+/**
+ * [object Object],[object Object],[object Object],[object Object],[object Object]
+ * @since 8.7.0
+ */
+declare interface IdCaptureAioViewProps {
+  /**
+   * [object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  style?: StyleProp<ViewStyle>;
+
+  /**
+   * [object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  navigation?: ScanditNavigationProp;
+
+  /**
+   * [object Object],[object Object],[object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  disabled?: boolean;
+
+  /**
+   * Turns off the automatic enabling and disabling of the mode in response to the application moving between foreground and background.
+   * @since 8.7.0
+   */
+  appStateHandlingDisabled?: boolean;
+
+  /**
+   * Called whenever a document is recognized and parsed.
+   * @since 8.7.0
+   */
+  didCaptureId?: (capturedId: CapturedId) => void;
+
+  /**
+   * [object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  didRejectId?: (
+    rejectedId: CapturedId | null,
+    reason: $Values<typeof RejectionReason>
+  ) => void;
+
+  /**
+   * [object Object],[object Object],[object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  idCaptureSettings: IdCaptureSettings;
+
+  /**
+   * [object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  basicOverlay?: IdCaptureAioBasicOverlayProps;
+
+  /**
+   * Adds a torch toggle control drawn on top of the camera preview.
+   * @since 8.7.0
+   */
+  torchSwitchControl?: TorchSwitchControl | null;
+
+  /**
+   * Adds a zoom toggle control drawn on top of the camera preview.
+   * @since 8.7.0
+   */
+  zoomSwitchControl?: ZoomSwitchControl | null;
+
+  /**
+   * Sound and vibration feedback emitted on capture and rejection. Omit to use the SDK default.
+   * @since 8.7.0
+   */
+  feedback?: IdCaptureFeedback;
+}
+/**
+ * [object Object],[object Object],[object Object]
+ * @since 8.7.0
+ */
+declare interface IdCaptureAioViewHandle {
+  /**
+   * [object Object],[object Object],[object Object]
+   * @since 8.7.0
+   */
+  reset(): Promise<void>;
+
+  /**
+   * Turns scanning on now: enables the mode and turns the camera on. Automatic navigation and application-state handling may subsequently turn it off again.
+   * @since 8.7.0
+   */
+  enable(): Promise<void>;
+
+  /**
+   * Turns scanning off now: disables the mode and turns the camera off.
+   * @since 8.7.0
+   */
+  disable(): Promise<void>;
+}
+/**
+ * [object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]
+ * @since 8.7.0
+ */
+declare var IdCaptureAioView: React.ForwardRefExoticComponent<{
+  ...IdCaptureAioViewProps,
+  ...React.RefAttributes<IdCaptureAioViewHandle>,
+}>;
+declare export { IdCaptureAioView, internal_d as _internal };
+export type {
+  IdCaptureAioBasicOverlayProps,
+  IdCaptureAioViewHandle,
+  IdCaptureAioViewProps,
+};
