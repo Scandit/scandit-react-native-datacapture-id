@@ -25,11 +25,11 @@ class ScanditDataCaptureIdModuleBase(
 ) {
     companion object {
         const val NAME = "ScanditDataCaptureId"
-        private const val DYNAMIC_DEFAULTS_KEY = "DynamicDefaults"
+        private const val DEFAULTS_KEY = "Defaults"
     }
 
     fun getDefaults(): MutableMap<String, Any> = mutableMapOf(
-        DYNAMIC_DEFAULTS_KEY to idCaptureModule.getDynamicDefaults()
+        DEFAULTS_KEY to idCaptureModule.getDefaults()
     )
 
     fun onInvalidate() {

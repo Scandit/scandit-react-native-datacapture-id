@@ -13,7 +13,6 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.module.annotations.ReactModule
 import com.scandit.datacapture.frameworks.core.FrameworkModule
-import com.scandit.datacapture.frameworks.core.listeners.registry.RegistryEmitter
 import com.scandit.datacapture.frameworks.core.locator.ServiceLocator
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import com.scandit.datacapture.reactnative.core.utils.ReactNativeEventEmitter
@@ -29,7 +28,7 @@ class ScanditDataCaptureIdModule(
     init {
         // Create emitter with bridge-based RCTDeviceEventEmitter and set up IdCaptureModule
         val emitter = ReactNativeEventEmitter(reactContext)
-        val idCaptureModule = IdCaptureModule(RegistryEmitter(emitter)).also {
+        val idCaptureModule = IdCaptureModule(emitter).also {
             it.onCreate(reactContext)
         }
         moduleBase = ScanditDataCaptureIdModuleBase(idCaptureModule, serviceLocator)
