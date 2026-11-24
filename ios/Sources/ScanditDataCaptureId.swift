@@ -30,7 +30,7 @@ public class ScanditDataCaptureIdImpl: NSObject {
         guard let reactEmitter = ScanditDataCaptureCore.ReactNativeEmitterFactory.create(emitter: emitter) else {
             fatalError("Failed to create ReactNativeEmitter")
         }
-        idModule = IdCaptureModule(emitter: reactEmitter)
+        idModule = IdCaptureModule(emitter: RegistryEmitter(platformEmitter: reactEmitter))
         idModule.didStart()
     }
 
@@ -49,7 +49,7 @@ public class ScanditDataCaptureIdImpl: NSObject {
         else {
             fatalError("Failed to create ReactNativeEmitter")
         }
-        idModule = IdCaptureModule(emitter: reactEmitter)
+        idModule = IdCaptureModule(emitter: RegistryEmitter(platformEmitter: reactEmitter))
         idModule.didStart()
     }
 
@@ -62,7 +62,7 @@ public class ScanditDataCaptureIdImpl: NSObject {
             return [:]
         }
         return [
-            "Defaults": module.getDefaults()
+            "DynamicDefaults": module.getDynamicDefaults()
         ]
     }
 

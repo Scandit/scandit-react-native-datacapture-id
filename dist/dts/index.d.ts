@@ -1,126 +1,205 @@
-import { IdCaptureSettings, IdLayoutStyle, IdLayoutLineStyle, TextHintPosition, IdCaptureFeedback, IdCapture, CapturedId, RejectionReason } from './id';
-export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureDocument, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListener, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, PhysicalDocumentScanner, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaIcao } from './id';
+import { IdLayoutStyle, IdLayoutLineStyle, TextHintPosition, CapturedId, RejectionReason, IdCaptureSettings, IdCaptureFeedback } from './id';
+export { AamvaBarcodeVerificationResult, AamvaBarcodeVerificationStatus, ApplicationStatus, BarcodeResult, CapturedId, CapturedSides, DataConsistencyCheck, DataConsistencyResult, DateResult, DriverLicense, DrivingLicenseCategory, DrivingLicenseDetails, Duration, FullDocumentScanner, HealthInsuranceCard, IdAnonymizationMode, IdCapture, IdCaptureDocument, IdCaptureDocumentType, IdCaptureFeedback, IdCaptureListener, IdCaptureOverlay, IdCaptureRegion, IdCaptureScanner, IdCaptureSettings, IdCard, IdFieldType, IdImageType, IdImages, IdLayoutLineStyle, IdLayoutStyle, IdSide, MRZResult, MobileDocumentDataElement, MobileDocumentOCRResult, MobileDocumentResult, MobileDocumentScanner, Passport, PassportType, PhysicalDocumentScanner, ProfessionalDrivingPermit, RegionSpecific, RegionSpecificSubtype, RejectionReason, ResidencePermit, Sex, SingleSideScanner, TextHintPosition, UsRealIdStatus, VIZResult, VehicleRestriction, VerificationResult, VisaDetails, VisaIcao, VisaLetter } from './id';
 import React from 'react';
-import { DataCaptureContext, Brush, CameraSettings, FrameSourceState, CameraPosition, TorchState, TorchSwitchControl, ZoomSwitchControl, _internal, DataCaptureView, Size, Orientation } from 'scandit-react-native-datacapture-core';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { ViewProps } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
+import { Brush, TorchSwitchControl, ZoomSwitchControl } from 'scandit-react-native-datacapture-core';
+import type { ScanditNavigationProp } from 'scandit-react-native-datacapture-core';
 
-interface IdCaptureViewProps$1 {
-    context: DataCaptureContext;
-    isEnabled: boolean;
-    idCaptureSettings?: IdCaptureSettings | null;
-    externalTransactionId?: string | null;
-    capturedBrush?: Brush | null;
-    rejectedBrush?: Brush | null;
-    localizedBrush?: Brush | null;
-    idLayoutStyle?: IdLayoutStyle | null;
-    idLayoutLineStyle?: IdLayoutLineStyle | null;
-    showTextHints?: boolean | null;
-    textHintPosition?: TextHintPosition | null;
-    frontSideTextHint?: string | null;
-    backSideTextHint?: string | null;
-    cameraSettings?: CameraSettings | null;
-    desiredCameraState?: FrameSourceState | null;
-    desiredCameraPosition?: CameraPosition | null;
-    desiredTorchState?: TorchState | null;
-    torchSwitchControl?: TorchSwitchControl | null;
-    zoomSwitchControl?: ZoomSwitchControl | null;
-    feedback?: IdCaptureFeedback;
-    navigation?: NavigationProp<ParamListBase>;
-    didCaptureId?(idCapture: IdCapture, capturedId: CapturedId): void;
-    didRejectId?(idCapture: IdCapture, rejectedId: CapturedId | null, reason: RejectionReason): void;
-}
-interface IdCaptureViewHandle$1 {
-    reset(): void;
-}
-declare const IdCaptureView$1: React.ForwardRefExoticComponent<IdCaptureViewProps$1 & React.RefAttributes<IdCaptureViewHandle$1>>;
+
 
 /**
- * Basic-overlay configuration. The overlay is attached by default; pass
- * `{ enabled: false }` to skip it.
+ * Configuration for the {@link IdCaptureOverlay} that {@link IdCaptureAioView} attaches by default. Every member is optional; omitted members keep the overlay’s own default.
+ *
+ * @since 8.7.0
  */
-interface IdCaptureBasicOverlayProps {
-    /** Whether to attach the basic overlay. Defaults to `true`. */
+interface IdCaptureAioBasicOverlayProps {
+    /**
+     * Whether to attach the basic overlay at all. Defaults to *true*; pass *false* to render the camera preview without an overlay.
+     *
+     * @since 8.7.0
+     */
     enabled?: boolean;
-    /** Brush applied to captured ID documents. */
+    /**
+     * Brush used to draw documents that were captured.
+     *
+     * @since 8.7.0
+     */
     capturedBrush?: Brush;
-    /** Brush applied to rejected ID documents. */
+    /**
+     * Brush used to draw documents that were rejected.
+     *
+     * @since 8.7.0
+     */
     rejectedBrush?: Brush;
-    /** Brush applied to localized but not yet captured ID documents. */
+    /**
+     * Brush used to draw documents that were localized but not yet captured.
+     *
+     * @since 8.7.0
+     */
     localizedBrush?: Brush;
-    /** Layout style for the ID viewfinder frame. */
+    /**
+     * Layout style of the viewfinder frame drawn for the document.
+     *
+     * @since 8.7.0
+     */
     idLayoutStyle?: IdLayoutStyle;
-    /** Line style for the ID viewfinder frame. */
+    /**
+     * Line style of the viewfinder frame drawn for the document.
+     *
+     * @since 8.7.0
+     */
     idLayoutLineStyle?: IdLayoutLineStyle;
-    /** Whether to show scanning hint text. */
+    /**
+     * Whether the overlay shows scanning hint text.
+     *
+     * @since 8.7.0
+     */
     showTextHints?: boolean;
-    /** Position of the hint text relative to the viewfinder. */
+    /**
+     * Position of the hint text relative to the viewfinder.
+     *
+     * @since 8.7.0
+     */
     textHintPosition?: TextHintPosition;
-    /** Hint text shown when scanning the front side of a document. */
+    /**
+     * Hint text shown while the front side of a document is being scanned.
+     *
+     * @since 8.7.0
+     */
     frontSideTextHint?: string;
-    /** Hint text shown when scanning the back side of a document. */
+    /**
+     * Hint text shown while the back side of a document is being scanned.
+     *
+     * @since 8.7.0
+     */
     backSideTextHint?: string;
 }
-interface IdCaptureViewProps extends ViewProps {
+/**
+ * Configuration for {@link IdCaptureAioView}. {@link IdCaptureAioViewProps.idCaptureSettings} is required; every other member is optional.
+ *
+ * @since 8.7.0
+ */
+interface IdCaptureAioViewProps {
     /**
-     * Optional navigation object (e.g. React Navigation's `navigation` prop).
-     * When provided, scanning is suspended (mode + camera off) while the screen
-     * is blurred or the app is backgrounded, and resumed when it returns —
-     * unless `disabled` is set.
+     * Style applied to the view, defaulting to `{ flex: 1 }`. This is the only React Native `View` prop the component forwards — it renders its own {@link DataCaptureView} and passes nothing else through.
+     *
+     * @since 8.7.0
      */
-    navigation?: _internal.ScanditNavigationProp;
+    style?: StyleProp<ViewStyle>;
     /**
-     * Disable the mode. When set, scanning is kept off regardless of whether
-     * automatic navigation-event handling and/or AppState handling is turned on.
-     * You can also use the view handle methods `enable()` / `disable()` to
-     * enable/disable once, but when using those this prop might go out of sync
-     * with the actual state of the component. Setting this to `false` does not
-     * guarantee that scanning is constantly running — automatic event handling
-     * might still turn the mode on and off.
+     * Navigation object for the screen the component is rendered on, for example React Navigation’s `navigation` prop (typed as [ScanditNavigationProp](#)). When it is provided, scanning is suspended — the mode is disabled and the camera turned off — while the screen is blurred or the application is backgrounded, and resumed when the screen regains focus. Ignored while {@link IdCaptureAioViewProps.disabled} is set.
+     *
+     * @since 8.7.0
+     */
+    navigation?: ScanditNavigationProp;
+    /**
+     * Set to *true* to keep scanning off. Leaving it *false* does not keep scanning on — navigation and app-state handling still turn the mode on and off on their own.
+     *
+     * {@link IdCaptureAioViewHandle.enable} and {@link IdCaptureAioViewHandle.disable} change the same state directly. If you call those, this prop no longer reflects whether the component is actually scanning.
+     *
+     * @since 8.7.0
      */
     disabled?: boolean;
     /**
-     * Disable the automatic enabling and disabling of the mode based on AppState.
+     * Turns off the automatic enabling and disabling of the mode in response to the application moving between foreground and background.
+     *
+     * @since 8.7.0
      */
     appStateHandlingDisabled?: boolean;
-    didCaptureId?: (capturedId: CapturedId) => void;
-    didRejectId?: (rejectedId: CapturedId | null, reason: RejectionReason) => void;
-    /** Full settings object. */
-    idCaptureSettings?: IdCaptureSettings | null;
     /**
-     * Basic overlay configuration. Omit (or pass `undefined`) to use defaults.
-     * Pass `{ enabled: false }` to skip the overlay entirely.
+     * Called whenever a document is recognized and parsed.
+     *
+     * @since 8.7.0
      */
-    basicOverlay?: IdCaptureBasicOverlayProps;
-    /** Called when the view's size or orientation changes. */
-    onDidChangeSize?: (view: DataCaptureView, size: Size, orientation: Orientation) => void;
-    /** Native on-view torch toggle control. */
+    didCaptureId?(capturedId: CapturedId): void;
+    /**
+     * Called whenever a document or one of its parts is recognized in a frame but rejected, with the {@link RejectionReason} explaining why.
+     *
+     * @since 8.7.0
+     */
+    didRejectId?(rejectedId: CapturedId | null, reason: RejectionReason): void;
+    /**
+     * The settings applied to the underlying {@link IdCapture} mode. **Required** — the default {@link IdCaptureSettings} accept no documents, so a view without explicit settings would never scan anything. Omitting it is a compile error.
+     *
+     * @since 8.7.0
+     */
+    idCaptureSettings: IdCaptureSettings;
+    /**
+     * Configuration for the basic overlay, described by {@link IdCaptureAioBasicOverlayProps}. The overlay is attached by default, so omitting this prop yields the default overlay. To skip it entirely:
+     *
+     * ```jsx
+     * <IdCaptureAioView
+     *   idCaptureSettings={settings}
+     *   basicOverlay={{ enabled: false }}
+     * />
+     * ```
+     *
+     * @since 8.7.0
+     */
+    basicOverlay?: IdCaptureAioBasicOverlayProps;
+    /**
+     * Adds a torch toggle control drawn on top of the camera preview.
+     *
+     * @since 8.7.0
+     */
     torchSwitchControl?: TorchSwitchControl | null;
-    /** Native on-view zoom toggle control. */
+    /**
+     * Adds a zoom toggle control drawn on top of the camera preview.
+     *
+     * @since 8.7.0
+     */
     zoomSwitchControl?: ZoomSwitchControl | null;
-    /** Feedback configuration for capture and reject events. */
+    /**
+     * Sound and vibration feedback emitted on capture and rejection. Omit to use the SDK default.
+     *
+     * @since 8.7.0
+     */
     feedback?: IdCaptureFeedback;
 }
-interface IdCaptureViewHandle {
-    /** Reset the current capture session. */
+/**
+ * Imperative operations on an {@link IdCaptureAioView}, reached through a `ref` on the component.
+ *
+ * @since 8.7.0
+ */
+interface IdCaptureAioViewHandle {
+    /**
+     * Resets the underlying {@link IdCapture} mode’s capture session, discarding the documents captured so far.
+     *
+     * @since 8.7.0
+     */
     reset(): Promise<void>;
-    /** Turn scanning on now (enable the mode, turn the camera on). */
+    /**
+     * Turns scanning on now: enables the mode and turns the camera on. Automatic navigation and application-state handling may subsequently turn it off again.
+     *
+     * @since 8.7.0
+     */
     enable(): Promise<void>;
-    /** Turn scanning off now (disable the mode, turn the camera off). */
+    /**
+     * Turns scanning off now: disables the mode and turns the camera off.
+     *
+     * @since 8.7.0
+     */
     disable(): Promise<void>;
 }
-declare const IdCaptureView: React.ForwardRefExoticComponent<IdCaptureViewProps & React.RefAttributes<IdCaptureViewHandle>>;
+/**
+ * An all-in-one React component for scanning personal identification documents. Rendering this single element replaces the manual assembly of a {@link DataCaptureContext}, an {@link IdCapture} mode, a {@link DataCaptureView} and an {@link IdCaptureOverlay} — the component owns all four, along with its camera claim and its lifecycle.
+ *
+ * The component must be rendered inside a [ScanditProvider](#), which supplies the {@link DataCaptureContext} and the shared camera. Scanning starts once the component is mounted and enabled, and stops when it unmounts.
+ *
+ * Configuration is passed through {@link IdCaptureAioViewProps}. To gain manual control over the component, attach a React `ref` typed as {@link IdCaptureAioViewHandle}.
+ *
+ * @since 8.7.0
+ */
+declare const IdCaptureAioView: React.ForwardRefExoticComponent<IdCaptureAioViewProps & React.RefAttributes<IdCaptureAioViewHandle>>;
 
-
-
-
-type internal_d_IdCaptureBasicOverlayProps = IdCaptureBasicOverlayProps;
-declare const internal_d_IdCaptureView: typeof IdCaptureView;
-type internal_d_IdCaptureViewHandle = IdCaptureViewHandle;
 declare namespace internal_d {
-  export { internal_d_IdCaptureView as IdCaptureView };
-  export type { internal_d_IdCaptureBasicOverlayProps as IdCaptureBasicOverlayProps, internal_d_IdCaptureViewHandle as IdCaptureViewHandle };
+  export {
+  };
 }
 
-export { IdCaptureView$1 as IdCaptureView, internal_d as _internal };
-export type { IdCaptureViewHandle$1 as IdCaptureViewHandle };
+
+
+
+
+export { IdCaptureAioView, internal_d as _internal };
+export type { IdCaptureAioBasicOverlayProps, IdCaptureAioViewHandle, IdCaptureAioViewProps };
